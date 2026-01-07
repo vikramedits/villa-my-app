@@ -24,11 +24,6 @@ const navItems = [
     icon: Home,
   },
   {
-    label: "Why Choose Us",
-    href: "/Why-Choose-Us",
-    icon: Info,
-  },
-  {
     label: "Rooms",
     href: "/rooms",
     icon: BedDouble,
@@ -42,16 +37,6 @@ const navItems = [
     label: "Images & Videos",
     href: "/gallery",
     icon: GalleryHorizontal,
-  },
-  {
-    label: "Location",
-    href: "/location",
-    icon: MapPin,
-  },
-  {
-    label: "Call",
-    href: "/call",
-    icon: Phone,
   },
 ];
 

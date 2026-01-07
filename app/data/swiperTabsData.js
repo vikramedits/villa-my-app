@@ -1,0 +1,53 @@
+export const swiperTabsData = {
+  Luxury: [
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Luxury Villa 1", title: "Luxury Living" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Luxury Villa 2", title: "Premium Design" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Luxury Pool", title: "Private Pool" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Luxury 4", title: "Elegant Space" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Luxury 5", title: "Modern Interior" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Luxury 6", title: "Outdoor Luxury" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Luxury 7", title: "Elite Comfort" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Luxury 8", title: "High-End Finish" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Luxury 9", title: "Resort Feel" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Luxury 10", title: "Exclusive Stay" },
+  ],
+
+  Bedrooms: [
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 1", title: "Master Bedroom" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 2", title: "Luxury Bedroom" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 3", title: "Spacious Room" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 4", title: "Cozy Comfort" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 5", title: "Elegant Sleep" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 6", title: "Premium Bedding" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 7", title: "Calm Interior" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 8", title: "Modern Bedroom" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 9", title: "Relax Space" },
+    { image: "/homenew/Villa-landing-1.jpeg", alt: "Bedroom 10", title: "Peaceful Stay" },
+  ],
+
+  Garden: [
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 1", title: "Green Garden" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 2", title: "Open Lawn" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 3", title: "Outdoor Space" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 4", title: "Fresh Greens" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 5", title: "Relax Area" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 6", title: "Nature View" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 7", title: "Landscape Design" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 8", title: "Morning Walk" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 9", title: "Evening Vibes" },
+    { image: "/homenew/Villa-landing-3.jpeg", alt: "Garden 10", title: "Open Air" },
+  ],
+
+  Pool: [
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 1", title: "Private Pool" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 2", title: "Infinity Pool" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 3", title: "Luxury Swim" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 4", title: "Poolside Relax" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 5", title: "Resort Pool" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 6", title: "Sun Deck" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 7", title: "Evening Dip" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 8", title: "Water Luxury" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 9", title: "Calm Water" },
+    { image: "/homenew/Villa-landing-pool.jpeg", alt: "Pool 10", title: "Premium Pool" },
+  ],
+};
