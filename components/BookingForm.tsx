@@ -1,47 +1,232 @@
 "use client";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import CheckAvailability from "./AvailabilityCalender";
 
-export default function BookingForm() {
+export default function VillaBookingFullScreen() {
+  const PRICE_PER_PERSON = 1500;
+
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(1);
+  const [adults, setAdults] = useState(1);
+  const [kids, setKids] = useState(0);
+  const [totalMembers, setTotalMembers] = useState(1);
+  const [groupName, setGroupName] = useState("");
+  const [contact, setContact] = useState("");
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [showAvailability, setShowAvailability] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
 
-  const nights =
-    checkIn && checkOut
-      ? (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
-        86400000
-      : 0;
+  useEffect(() => {
+    const members = Number(adults) + Number(kids);
+    setTotalMembers(members);
+    setTotalAmount(members * PRICE_PER_PERSON);
+  }, [adults, kids]);
 
-  const total = nights * 8000;
+  const handleNext = (e: React.FormEvent<HTMLFormElement>) => {
 
-  async function sendWhatsApp() {
-    const res = await fetch("/api/whatsapp", {
-      method: "POST",
-      body: JSON.stringify({ checkIn, checkOut, guests, total }),
+    e.preventDefault();
+    // Handle submission & redirect to payment page
+    console.log({
+      checkIn,
+      checkOut,
+      adults,
+      kids,
+      totalMembers,
+      groupName,
+      contact,
     });
-    const data = await res.json();
-    window.open(data.url, "_blank");
-  }
+    // Example redirect: router.push("/payment-page");
+  };
 
   return (
-    <div className="space-y-4">
-      <input type="date" onChange={(e) => setCheckIn(e.target.value)} className="text-blue-950"/>
-      <input type="date" onChange={(e) => setCheckOut(e.target.value)} className="text-blue-950" />
-      <input
-      placeholder="Number of guests"
-        type="number"
-        min={1}
-        value={guests}
-        onChange={(e) => setGuests(+e.target.value)}
-      />
-      <p className="font-semibold">Total: ₹{total}</p>
+    <section className="bg-gray-100">
+      {/* ============================================ TOP ============================================ */}
+      <div className="container-fluid text-center py-3 md:py-6">
+        <h2 className="texprimaryBlue text-lg md:text-2xl font-medium tracking-wide">
+          Book Your Luxury Stay
+        </h2>
+        <p className="text-sm md:text-base tracking-wide">
+          Fill in your details below to reserve your villa with 20% advance
+          payment.
+        </p>
+      </div>
+      {/* ======================================== DESKTOP: LEFT 30%, RIGHT 70% & MOBILE: COLOUMN ========================================== */}
+      <div className="container-fluid flex flex-col md:flex-row md:gap-3 ">
+        {/* ========== LEFT=========== */}
+        <div className="md:w-5/12 w-full bg-gray-50 pb-3">
+          {/* ========== mobile toggle =========== */}
+          <div className="md:hidden mb-4">
+            <button
+              onClick={() => setShowAvailability(!showAvailability)}
+              className="w-full bg-green-900 text-white py-2 rounded-lg font-medium"
+            >
+              {showAvailability ? "Hide Availability" : "Check Availability"}
+            </button>
+          </div>
 
-      <button
-        onClick={sendWhatsApp}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Send Booking Request
-      </button>
-    </div>
+          {/* ========== Show availability only if desktop or toggle is true  =========== */}
+          {(showAvailability || window.innerWidth >= 768) && (
+            <CheckAvailability />
+          )}
+        </div>
+        {/* ========== RIGHT=========== */}
+
+        <div className="md:w-7/12 w-full bg-white p-3 md:p-6 shadow-xl flex flex-col justify-between rounded-sm rounded-b-3xl border-b-4 border-primaryBlue">
+          <p className="text-center mb-3 md:mb-6 text-black text-lg md:text-xl font-bold md:font-medium border-b-2 border-primaryBlue rounded-xl tracking-wide">
+            Enter details to confirm{" "}
+          </p>
+          {/* ========== Top advance info =========== */}
+          <div className="bg-yellow-100 text-yellow-900 p-2 md:p-4 rounded-lg text-start font-medium text-sm md:text-lg tracking-wide">
+            <p> Pay 20% advance to confirm your luxurious stay</p>
+            <p> ₹1500 / per person only</p>
+          </div>
+
+          <form onSubmit={handleNext} className="my-3 md:my-6">
+            {/* ========== Check-in & Check-out =========== */}
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <label className="block font-medium mb-1 text-primaryBlue">
+                  Check-in Date
+                </label>
+                <input
+                  type="date"
+                  value={checkIn}
+                  onChange={(e) => setCheckIn(e.target.value)}
+                  className="w-full border rounded p-3"
+                  required
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block font-medium mb-1 text-primaryBlue">
+                  Check-out Date
+                </label>
+                <input
+                  type="date"
+                  value={checkOut}
+                  onChange={(e) => setCheckOut(e.target.value)}
+                  className="w-full border rounded p-3"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* ========== Adults & Kids =========== */}
+            <div className="flex flex-col md:flex-row gap-4 mt-2 md:mt-4">
+              <div className="flex-1">
+                <label className="block font-medium mb-1 text-primaryBlue">
+                  Adults
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  value={adults}
+                  onChange={(e) => setAdults(Number(e.target.value))}
+                  className="w-full border rounded p-3"
+                  required
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block font-medium mb-1 text-primaryBlue">
+                  Kids
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={kids}
+                  onChange={(e) => setKids(Number(e.target.value))}
+                  className="w-full border rounded p-3"
+                  required
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block font-medium mb-1 text-primaryBlue">
+                  Total Members
+                </label>
+                <input
+                  type="number"
+                  value={totalMembers}
+                  readOnly
+                  className="w-full border rounded p-3 bg-gray-100"
+                />
+              </div>
+            </div>
+
+            {/* ========== Group Name & Contact =========== */}
+            <div className="flex flex-col md:flex-row gap-4 mt-2 md:mt-4">
+              <div className="flex-1">
+                <label className="block font-medium mb-1 text-primaryBlue">
+                  Guest Group Name
+                </label>
+                <input
+                  type="text"
+                  value={groupName}
+                  onChange={(e) => setGroupName(e.target.value)}
+                  className="w-full border rounded p-3"
+                  placeholder="Ex: Sharma Family"
+                  required
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block font-medium mb-1 text-primaryBlue">
+                  Contact Number
+                </label>
+                <input
+                  type="tel"
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
+                  className="w-full border rounded p-3"
+                  placeholder="+91 9876543210"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* ========== Tooltip trigger =========== */}
+            <div className="relative mt-2 md:mt-4">
+              <button
+                type="button"
+                className="flex items-center gap-2 text-blue-600 font-medium"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+                onClick={() => setShowTooltip(!showTooltip)}
+              >
+                Check-in / Check-out Info
+                <AiOutlineInfoCircle size={24} />
+              </button>
+              {showTooltip && (
+                <div className="absolute z-10 top-10 left-0 p-4 bg-gray-100 border rounded shadow-md text-gray-700 text-sm w-full md:w-80">
+                  Check-in time: after 12:00 PM <br />
+                  Check-out time: 11:00 AM <br />
+                  Flexible check-in/check-out available
+                </div>
+              )}
+            </div>
+
+            <p className="text-sm text-gray-500 mt-2">
+              *Please carry ID proof at check-in
+            </p>
+
+            {/* ========== Submit button =========== */}
+            <button
+              type="submit"
+              className="w-full flex items-center justify-between
+             bg-blue-600 text-white font-semibold
+             py-4 px-6 rounded-lg
+             hover:bg-blue-700 transition
+             mt-2 md:mt-4"
+            >
+              <span className="text-lg font-bold">
+                ₹{totalAmount.toLocaleString("en-IN")}/-
+              </span>
+
+              <span className="flex items-center gap-2 text-sm md:text-base">
+                PAYMENT →
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 }

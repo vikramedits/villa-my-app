@@ -72,11 +72,20 @@ export default function CheckAvailability() {
 
       {available !== null && (
         <p
-          className={`mt-2 font-medium ${
+          className={`mt-2 font-medium flex items-center gap-2 ${
             available ? "text-green-700" : "text-red-600"
           }`}
         >
-          {available ? "Dates Available ✅" : "Dates Not Available ❌"}
+          {available ? (
+            <>
+              Dates Available ✅
+              <span className="text-xs font-normal text-green-700/80">
+                (Please fill the booking details below)
+              </span>
+            </>
+          ) : (
+            "Dates Not Available ❌"
+          )}
         </p>
       )}
     </div>

@@ -79,6 +79,8 @@
   --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
   --sidebar-border: oklch(0.928 0.006 264.531);
   --sidebar-ring: oklch(0.707 0.022 261.325);
+  /* ---------------------------------------------------------- */
+   --primaryBlue: #0B1C2D;
 }
 
 .dark {
@@ -152,3 +154,76 @@
   display: inline-block; /* VERY IMPORTANT */
   animation: textPulse 1.8s ease-in-out infinite;
 }
+/* ------------------primaryBlue utilities-------------- */
+@layer utilities {
+  .text-primaryBlue {
+    color: var(--primaryBlue);
+  }
+
+  .bg-primaryBlue {
+    background-color: var(--primaryBlue);
+  }
+
+  .border-primaryBlue {
+    border-color: var(--primaryBlue);
+  }
+}
+
+/* ===============================
+   Global Container (Villa Project)
+   =============================== */
+
+.container-fluid {
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Large screens */
+@media (min-width: 1600px) {
+  .container-fluid {
+    max-width: 1500px;
+  }
+}
+
+@media (min-width: 1500px) {
+  .container-fluid {
+    max-width: 1400px;
+  }
+}
+
+/* Laptop */
+@media (max-width: 1366px) {
+  .container-fluid {
+    max-width: 1250px;
+  }
+}
+
+/* Small laptop */
+@media (max-width: 1212px) {
+  .container-fluid {
+    max-width: 1150px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .container-fluid {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+

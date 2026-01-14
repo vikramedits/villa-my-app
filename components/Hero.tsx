@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import { CalendarCheck } from "lucide-react";
+import VillaExperienceStandard from "./VillaStandards";
 // import { useEffect, useState } from "react";
 
 export default function Hero() {
@@ -96,14 +97,7 @@ export default function Hero() {
             </div>
           </div>
         </div>
-
-        {/* BOTTOM : WHITE INFO AREA */}
-        <div className="bg-white px-6 py-5 text-start border-t border-blue-900/20">
-          <p className="text-base font-semibold md:font-bold text-blue-900">
-            7-BHK Luxirious Private Villa In Udaipur With Pool & garden
-          </p>
-          <p className="text-sm text-gray-600 mt-1"></p>
-        </div>
+        <VillaExperienceStandard />
       </div>
       {/* Desktop */}
       <div className="hidden md:block">
