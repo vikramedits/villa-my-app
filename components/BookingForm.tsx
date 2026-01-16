@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import CheckAvailability from "./AvailabilityCalender";
+import BookingConfirmation from "@/components/BookingConfirmation";
+
 
 export default function VillaBookingFullScreen() {
   const PRICE_PER_PERSON = 1500;
@@ -17,6 +19,10 @@ export default function VillaBookingFullScreen() {
   const [showAvailability, setShowAvailability] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
 
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [formData, setFormData] = useState<any>(null);
+
+
   useEffect(() => {
     const members = Number(adults) + Number(kids);
     setTotalMembers(members);
@@ -24,19 +30,21 @@ export default function VillaBookingFullScreen() {
   }, [adults, kids]);
 
   const handleNext = (e: React.FormEvent<HTMLFormElement>) => {
-
     e.preventDefault();
-    // Handle submission & redirect to payment page
-    console.log({
+
+    const data = {
+      name: groupName,
+      phone: contact,
+      email: "", // optional, baad me add kar sakte ho
       checkIn,
       checkOut,
-      adults,
-      kids,
-      totalMembers,
-      groupName,
-      contact,
-    });
-    // Example redirect: router.push("/payment-page");
+      guests: totalMembers,
+      nights: 1, // abhi simple, baad me date diff se calculate karenge
+      totalAmount,
+    };
+
+    setFormData(data);        // 👈 form data save
+    setOpenConfirm(true);     // 👈 confirmation modal open
   };
 
   return (
@@ -211,20 +219,38 @@ export default function VillaBookingFullScreen() {
             <button
               type="submit"
               className="w-full flex items-center justify-between
-             bg-blue-600 text-white font-semibold
-             py-4 px-6 rounded-lg
-             hover:bg-blue-700 transition
-             mt-2 md:mt-4"
+                        bg-green-900 text-white font-semibold
+                        py-4 px-6 rounded-lg
+                        hover:bg-green-700 transition
+                        mt-2 md:mt-4"
             >
+              {/* LEFT: Total Amount */}
               <span className="text-lg font-bold">
                 ₹{totalAmount.toLocaleString("en-IN")}/-
               </span>
 
+              {/* RIGHT: Reserve Booking */}
               <span className="flex items-center gap-2 text-sm md:text-base">
-                PAYMENT →
+                RESERVE YOUR BOOKING →
               </span>
             </button>
+
           </form>
+          <BookingConfirmation
+            open={openConfirm}
+            data={formData}
+            onClose={() => setOpenConfirm(false)}
+            onConfirm={() => {
+              setOpenConfirm(false);
+
+              // 👉 YAHAN BACKEND API CALL AAYEGA (later)
+              console.log("Booking confirmed:", formData);
+
+              // 👉 Future me:
+              // router.push("/booking/success");
+            }}
+          />
+
         </div>
       </div>
     </section>

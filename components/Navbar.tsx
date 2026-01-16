@@ -69,7 +69,7 @@ export default function Navbar() {
               (one night)
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-white py-2 px-4 rounded-l-full">
+          <div className="flex items-center gap-2 bg-white py-2 px-4 rounded-bl-4xl rounded-sm">
             <Link
               href={"/"}
               className="flex items-center gap-2 tracking-wide text-primaryBlue text-sm md:text-base py-2 px-3 font-medium border-b border-primaryBlue rounded-xl  hover:scale-105 
@@ -126,7 +126,7 @@ export default function Navbar() {
                 onClick={() => setContactOpen(!contactOpen)}
                 className="w-full flex items-center justify-between 
                bg-white text-primaryBlue 
-               px-4 py-2 rounded-full font-medium text-sm
+               px-4 py-2 rounded-bl-xl rounded-sm font-medium text-sm
                shadow-sm active:scale-95 transition"
               >
                 {/* Left side: icons + text */}
@@ -186,7 +186,7 @@ export default function Navbar() {
             <Link
               href="/booking"
               className="w-1/2 text-center bg-white text-green-700
-                       px-4 py-2 rounded-full font-bold text-sm
+                       px-4 py-2 rounded-br-xl rounded-sm font-bold text-sm
                        shadow-md active:scale-95 transition"
             >
               Check Availability
