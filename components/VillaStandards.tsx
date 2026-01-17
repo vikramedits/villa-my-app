@@ -27,16 +27,16 @@ type VillaImage = SingleImage | StackImage;
 
 
 const features = [
-  { icon: "", title: "Personalised Celebrations" },
-  { icon: "", title: "Caretaker Onsite" },
-  { icon: "", title: "In-house Chef" },
-  { icon: "", title: "Local Experiences" },
-  { icon: "", title: "Private Pool" },
-  { icon: "", title: "Butler Service" },
-  { icon: "", title: "Games & Recreation" },
-  { icon: "", title: "Private Pool" },
-  { icon: "", title: "Butler Service" },
-  { icon: "", title: "Games & Recreation" },
+  { icon: "/homenew/icons/celebrations.png", title: "Personalised Celebrations" },
+  { icon: "/homenew/icons/caretaker.png", title: "Caretaker Onsite" },
+  { icon: "/homenew/icons/chef.png", title: "In-house Chef" },
+  { icon: "/homenew/icons/local-experiences.png", title: "Local Experiences" },
+  { icon: "/homenew/icons/pool.png", title: "Private Pool" },
+  { icon: "/homenew/icons/butler-service.png", title: "Butler Service" },
+  { icon: "/homenew/icons/games.png", title: "Games & Recreation" },
+  { icon: "/homenew/icons/garden.png", title: "Two Big Gardens" },
+  { icon: "/homenew/icons/entrance.png", title: "3 Entrance" },
+  { icon: "/homenew/icons/seatings.png", title: "Indoor OutDoor Seating" },
 ];
 
 const villaImages: VillaImage[] = [

@@ -41,8 +41,9 @@ export default function FeaturesCarousel({ features }: FeaturesCarouselProps) {
                 md:basis-1/4
               "
             >
-              <Card className="h-full text-center transition-transform duration-300 hover:scale-[1.04] will-change-transform">
-                <CardContent className="p-4 flex flex-col items-center justify-center gap-2">
+              <Card className="relative h-full text-center transition-transform duration-300 hover:scale-[1.04] will-change-transform rounded-lg overflow-hidden shadow-lg">
+                {/* Icon and main content */}
+                <CardContent className="flex-1 flex flex-col items-center justify-center p-4 gap-2">
                   <div className="relative w-10 h-10">
                     <Image
                       src={item.icon}
@@ -53,11 +54,14 @@ export default function FeaturesCarousel({ features }: FeaturesCarouselProps) {
                       loading="lazy"
                     />
                   </div>
+                </CardContent>
 
-                  <p className="text-sm font-medium text-center">
+                {/* Bottom Text Background */}
+                <div className="absolute bottom-0 left-0 w-full bg-blue-50 py-2 flex justify-center">
+                  <p className="text-sm font-medium text-center truncate px-2">
                     {item.title}
                   </p>
-                </CardContent>
+                </div>
               </Card>
             </CarouselItem>
           ))}
