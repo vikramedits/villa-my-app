@@ -8,6 +8,8 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import { CalendarCheck } from "lucide-react";
 import VillaExperienceStandard from "./VillaStandards";
+import NearByLocations from "./NearByLocation";
+import SafetyAndHygiene from "./SafetyAndHygiene";
 // import { useEffect, useState } from "react";
 
 export default function Hero() {
@@ -98,6 +100,8 @@ export default function Hero() {
           </div>
         </div>
         <VillaExperienceStandard />
+        <NearByLocations/>
+        <SafetyAndHygiene/>
       </div>
       {/* Desktop */}
       <div className="hidden md:block">

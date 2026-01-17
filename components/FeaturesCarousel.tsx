@@ -6,12 +6,10 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-
-import Autoplay from "embla-carousel-auto-scroll";
-import { ReactNode } from "react";
+import Image from "next/image";
 
 type FeatureItem = {
-  icon: ReactNode;
+  icon: string; //  image path
   title: string;
 };
 
@@ -19,9 +17,7 @@ type FeaturesCarouselProps = {
   features: FeatureItem[];
 };
 
-export default function FeaturesCarousel({
-  features,
-}: FeaturesCarouselProps) {
+export default function FeaturesCarousel({ features }: FeaturesCarouselProps) {
   return (
     <div className="relative w-full">
       <Carousel
@@ -31,24 +27,10 @@ export default function FeaturesCarousel({
           dragFree: true,
           containScroll: "trimSnaps",
         }}
-        // plugins={[
-        //   Autoplay({
-        //     speed: 0.8,              
-        //     stopOnInteraction: false,
-        //     stopOnMouseEnter: true,
-        //   }),
-        // ]}
         className="w-full overflow-hidden"
       >
         {/* Padding creates 2.5 / 4.5 card illusion */}
-        <CarouselContent
-          className="
-            -ml-4
-            pl-[20%]        /* mobile → 2.5 cards */
-            sm:pl-[16%]     /* tablet */
-            md:pl-[11%]     /* desktop → 4.5 cards */
-          "
-        >
+        <CarouselContent className="-ml-4 pl-0 pr-[20%] sm:pr-[16%] md:pr-[11%]">
           {features.map((item, index) => (
             <CarouselItem
               key={index}
@@ -61,8 +43,20 @@ export default function FeaturesCarousel({
             >
               <Card className="h-full text-center transition-transform duration-300 hover:scale-[1.04] will-change-transform">
                 <CardContent className="p-4 flex flex-col items-center justify-center gap-2">
-                  <span className="text-3xl">{item.icon}</span>
-                  <p className="text-sm font-medium">{item.title}</p>
+                  <div className="relative w-10 h-10">
+                    <Image
+                      src={item.icon}
+                      alt={item.title}
+                      fill
+                      sizes="40px"
+                      className="object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <p className="text-sm font-medium text-center">
+                    {item.title}
+                  </p>
                 </CardContent>
               </Card>
             </CarouselItem>
