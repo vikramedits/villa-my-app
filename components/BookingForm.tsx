@@ -50,7 +50,7 @@ export default function VillaBookingFullScreen() {
   return (
     <section className="bg-gray-100">
       {/* ============================================ TOP ============================================ */}
-      <div className="container-fluid text-center py-3 md:py-6">
+      <div className="text-center py-3 md:py-6">
         <h2 className="texprimaryBlue text-lg md:text-2xl font-medium tracking-wide">
           Book Your Luxury Stay
         </h2>
