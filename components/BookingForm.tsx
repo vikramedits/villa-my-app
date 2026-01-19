@@ -4,7 +4,6 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import CheckAvailability from "./AvailabilityCalender";
 import BookingConfirmation from "@/components/BookingConfirmation";
 
-
 export default function VillaBookingFullScreen() {
   const PRICE_PER_PERSON = 1500;
 
@@ -21,7 +20,7 @@ export default function VillaBookingFullScreen() {
 
   const [openConfirm, setOpenConfirm] = useState(false);
   const [formData, setFormData] = useState<any>(null);
-
+  const [step, setStep] = useState(1);
 
   useEffect(() => {
     const members = Number(adults) + Number(kids);
@@ -43,8 +42,8 @@ export default function VillaBookingFullScreen() {
       totalAmount,
     };
 
-    setFormData(data);        // 👈 form data save
-    setOpenConfirm(true);     // 👈 confirmation modal open
+    setFormData(data); // 👈 form data save
+    setOpenConfirm(true); // 👈 confirmation modal open
   };
 
   return (
@@ -234,23 +233,38 @@ export default function VillaBookingFullScreen() {
                 RESERVE YOUR BOOKING →
               </span>
             </button>
-
           </form>
           <BookingConfirmation
             open={openConfirm}
             data={formData}
+            step={step}
+            setStep={setStep}
             onClose={() => setOpenConfirm(false)}
-            onConfirm={() => {
-              setOpenConfirm(false);
+            onConfirm={async () => {
+              if (!formData) return;
 
-              // 👉 YAHAN BACKEND API CALL AAYEGA (later)
-              console.log("Booking confirmed:", formData);
+              try {
+                const res = await fetch("/api/bookings", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(formData),
+                });
 
-              // 👉 Future me:
-              // router.push("/booking/success");
+                const result = await res.json(); // { bookingRef: "BP12AB34" }
+
+                if (result.bookingRef) {
+                  // ✅ update formData with bookingRef
+                  setFormData({ ...formData, bookingRef: result.bookingRef });
+                  setStep(2); // Step 2 modal show hoga
+                } else {
+                  alert("Booking failed, please try again");
+                }
+              } catch (err) {
+                console.error(err);
+                alert("Something went wrong, please try again");
+              }
             }}
           />
-
         </div>
       </div>
     </section>

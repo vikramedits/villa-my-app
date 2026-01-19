@@ -76,20 +76,20 @@ const villaImages: VillaImage[] = [
 
 export default function VillaExperienceStandard() {
   return (
-    <section className="bg-gray-100 pb-5 md:pb-10">
+    <section className="bg-gray-100 pb-8 md:pb-10 shadow-md">
       <div className="container-fluid pt-5 md:pt-10">
         {/* Heading */}
         <div className="py-3 md:py-6 ">
-          <h2 className="text-lg md:text-2xl font-medium tracking-wide text-primaryBlue">
+          <h2 className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950">
             The Villa Standard
           </h2>
-          <p className="text-xs md:text-base mt-1 tracking-wider">
+          <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
             Signature experiences crafted to make every stay effortless &
             memorable
           </p>
         </div>
         <FeaturesCarousel features={features} />
-        <div className="mt-3 md:mt-6 flex md:grid md:grid-cols-3 gap-2 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory">
+        <div className="mt-5 md:mt-8 flex md:grid md:grid-cols-3 gap-2 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory">
           {villaImages.map((item, index) => {
             // Single large images (left/right)
             if (item.type === "single") {
