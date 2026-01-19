@@ -40,19 +40,19 @@ export default function SafetyAndHygiene() {
   return (
     <section className="bg-blue-50">
       <div className="container-fluid ">
-        <div className="py-3 md:pt-6 pb-12">
+        <div className="py-6 md:py-10">
           {/* ================= Heading ================= */}
-          <div className="mb-10 md:mb-14">
-            <h2 className="text-lg md:text-2xl font-medium tracking-wide text-primaryBlue">
+          <div className="mb-6 md:mb-10">
+            <h2 className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950">
               Safety & Hygiene
             </h2>
-            <p className="text-xs md:text-base mt-1 tracking-wider">
+            <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
               Your comfort, safety and cleanliness are our top priority
             </p>
           </div>
 
           {/* ================= Cards ================= */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
             {SAFETY_DATA.map((item, index) => (
               <div
                 key={index}

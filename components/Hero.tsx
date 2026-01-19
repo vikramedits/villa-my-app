@@ -3,31 +3,10 @@ import Link from "next/link";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import Image from "next/image";
 import { CalendarCheck } from "lucide-react";
-import VillaExperienceStandard from "./VillaStandards";
-import NearByLocations from "./NearByLocation";
-import SafetyAndHygiene from "./SafetyAndHygiene";
 // import { useEffect, useState } from "react";
 
 export default function Hero() {
-  const data = [
-    {
-      image: "/homenew/banner-1.jpg",
-      alt: "Villa Image 1",
-    },
-    {
-      image: "/homenew/banner-2.png",
-      alt: "Villa Image 2",
-    },
-    {
-      image: "/homenew/mattress-banner.jpg",
-      alt: "Villa Image 3",
-    },
-  ];
-
   //   const text = "Choose Your Package In Just a Few Steps";
   //   const [displayText, setDisplayText] = useState("");
   //   const [index, setIndex] = useState(0);
@@ -55,7 +34,7 @@ export default function Hero() {
   //   }, [index, isDeleting, text]);
   return (
     <section className="items-center">
-      <div className=" mx-auto shadow-md overflow-hidden bg-white mb-4 md:mb-8">
+      <div className=" mx-auto shadow-md overflow-hidden bg-white">
         <div className="relative h-[45vh] md:h-[55vh]">
           <video
             className="absolute inset-0 w-full h-full object-cover"
@@ -99,51 +78,6 @@ export default function Hero() {
             </div>
           </div>
         </div>
-        <VillaExperienceStandard />
-        <NearByLocations/>
-        <SafetyAndHygiene/>
-      </div>
-      {/* Desktop */}
-      <div className="hidden md:block">
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          spaceBetween={20}
-          slidesPerView={1}
-          navigation
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 3000 }}
-          loop
-          className="w-full h-full"
-        >
-          {data.map((item, index) => (
-            <SwiperSlide key={index}>
-              <Image
-                width={600}
-                height={400}
-                src={item.image}
-                alt={item.alt}
-                className="w-full h-auto object-cover rounded-lg"
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-      {/* mobile */}
-      <div className="block md:hidden overflow-x-auto whitespace-nowrap scroll-smooth mt-4">
-        {data.map((item, index) => (
-          <div
-            key={index}
-            className="inline-block w-72 mr-2 shrink-0 rounded-lg overflow-hidden relative"
-          >
-            <Image
-              src={item.image}
-              alt={item.alt}
-              width={300}
-              height={200}
-              className="w-full h-48 object-cover rounded-lg"
-            />
-          </div>
-        ))}
       </div>
     </section>
   );
