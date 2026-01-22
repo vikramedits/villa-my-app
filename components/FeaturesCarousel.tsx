@@ -6,7 +6,8 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+
+import { ReactNode } from "react";
 
 type FeatureItem = {
   icon: string; //  image path
@@ -17,43 +18,27 @@ type FeaturesCarouselProps = {
   features: FeatureItem[];
 };
 
-export default function FeaturesCarousel({ features }: FeaturesCarouselProps) {
+export default function FeaturesCarousel({
+  features,
+}: FeaturesCarouselProps) {
   return (
     <div className="relative w-full">
       <Carousel
         opts={{
           align: "start",
-          loop: false,
-          dragFree: true,
-          containScroll: "trimSnaps",
+          loop: true,
         }}
-        className="w-full overflow-hidden"
+        className="w-full"
       >
-        {/* Padding creates 2.5 / 4.5 card illusion */}
-        <CarouselContent className="-ml-4 pl-0 pr-[20%] sm:pr-[16%] md:pr-[11%]">
+        <CarouselContent>
           {features.map((item, index) => (
             <CarouselItem
               key={index}
-              className="
-                pl-4
-                basis-1/2
-                sm:basis-1/3
-                md:basis-1/4
-              "
-            >
-              <Card className="relative h-full text-center transition-transform duration-300 hover:scale-[1.04] will-change-transform rounded-lg overflow-hidden shadow-lg">
-                {/* Icon and main content */}
-                <CardContent className="flex-1 flex flex-col items-center justify-center p-4 gap-2">
-                  <div className="relative w-10 h-10">
-                    <Image
-                      src={item.icon}
-                      alt={item.title}
-                      fill
-                      sizes="40px"
-                      className="object-contain"
-                      loading="lazy"
-                    />
-                  </div>
+              className=" basis-[40%] /* mobile → 2.5 cards */ sm:basis-1/3  /* tablet → 3 cards */ md:basis-[22.22%] /* desktop → 4.5 cards */ " >
+              <Card className="h-full text-center hover:shadow-md transition">
+                <CardContent className="p-4 flex flex-col items-center justify-center gap-2">
+                  <span className="text-3xl">{item.icon}</span>
+                  <p className="text-sm font-medium">{item.title}</p>
                 </CardContent>
 
                 {/* Bottom Text Background */}
