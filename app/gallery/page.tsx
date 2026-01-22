@@ -41,89 +41,117 @@ const Page: React.FC = () => {
   const chunks = chunkArray(galleryData, 20); // each 20 items = 1 pattern
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-6">Villa Gallery</h1>
+    <div className="bg-fuchsia-100">
+      <div className="text-center mb-8">
+  <p className="text-2xl md:text-3xl font-semibold">
+    Villa Gallery
+  </p>
+  <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">
+    Comfort • Space • Serenity
+  </p>
+</div>
 
-      {/* Outer grid: Desktop 4 patterns per row, mobile stacked */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+      <div className="container-fluid grid grid-cols-1">
         {chunks.map((chunk, chunkIdx) => (
-          <div key={chunkIdx} className="flex flex-col gap-4 w-full">
-            {chunk.map((item, index) => {
-              // Check if item is in a small 4-image group
-              const group = smallGroups.find((g) => g.includes(index));
-              if (group && group[0] === index) {
-                // Render 4-image group as 2x2 grid
-                return (
-                  <div key={index} className="grid grid-cols-2 gap-2">
-                    {group.map((i) => {
-                      const img = chunk[i];
-                      if (!img) return null;
-                      return (
-                        <div
-                          key={img.id}
-                          className="aspect-square relative w-full rounded-xl overflow-hidden shadow-md cursor-pointer"
-                          onClick={() => openModal(img)}
-                        >
-                          {img.type === "image" ? (
-                            <Image
-                              src={img.src}
-                              alt={img.alt || ""}
-                              fill
-                              style={{ objectFit: "cover" }}
-                              quality={75}
-                              loading="lazy"
-                            />
-                          ) : (
-                            <video
-                              src={img.src}
-                              className="w-full h-full object-cover"
-                              muted
-                              loop
-                              controls
-                            />
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              }
+          <div
+            key={chunkIdx}
+            className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full"
+          >
+            {(() => {
+              const usedIndexes = new Set<number>();
 
-              // Big cards
-              if (bigIndexes.includes(index)) {
-                const bigItem = chunk[index];
-                if (!bigItem) return null;
-                return (
-                  <div
-                    key={bigItem.id}
-                    className="w-full h-96 relative rounded-xl overflow-hidden shadow-md cursor-pointer"
-                    onClick={() => openModal(bigItem)}
-                  >
-                    {bigItem.type === "image" ? (
-                      <Image
-                        src={bigItem.src}
-                        alt={bigItem.alt || ""}
-                        style={{ objectFit: "cover" }}
-                        className="w-full h-full"
-                        fill
-                        quality={75}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <video
-                        src={bigItem.src}
-                        className="w-full h-full object-cover"
-                        muted
-                        loop
-                        controls
-                      />
-                    )}
-                  </div>
-                );
-              }
+              return chunk.map((item, index) => {
+                // skip already rendered indexes (prevents ghost cards)
+                if (usedIndexes.has(index)) return null;
 
-              return null; // other items already rendered in small groups
-            })}
+                const group = smallGroups.find((g) =>
+                  g.includes(index)
+                );
+
+                // Small 4-image group
+                if (group && group[0] === index) {
+                  group.forEach((i) => usedIndexes.add(i));
+
+                  return (
+                    <div
+                      key={`group-${index}`}
+                      className="grid grid-cols-2 gap-2"
+                    >
+                      {group.map((i) => {
+                        const img = chunk[i];
+                        if (!img) return null;
+
+                        return (
+                          <div
+                            key={img.id}
+                            className="aspect-square relative w-full rounded-sm overflow-hidden shadow-md cursor-pointer"
+                            onClick={() => openModal(img)}
+                          >
+                            {img.type === "image" ? (
+                              <Image
+                                src={img.src}
+                                alt={img.alt || ""}
+                                fill
+                                style={{ objectFit: "cover" }}
+                                quality={75}
+                                loading="lazy"
+                              />
+                            ) : (
+                              <video
+                                src={img.src}
+                                className="w-full h-full object-cover"
+                                muted
+                                loop
+                                controls
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+
+                // Big cards
+                if (bigIndexes.includes(index)) {
+                  const bigItem = chunk[index];
+                  if (!bigItem) return null;
+
+                  usedIndexes.add(index);
+
+                  return (
+                    <div
+                      key={bigItem.id}
+                      className="w-full h-96 md:h-auto relative rounded-sm overflow-hidden shadow-md cursor-pointer group"
+                      onClick={() => openModal(bigItem)}
+                    >
+                      {bigItem.type === "image" ? (
+                        <Image
+                          src={bigItem.src}
+                          alt={bigItem.alt || ""}
+                          fill
+                          style={{ objectFit: "cover" }}
+                          className="transition-transform duration-300 group-hover:scale-105"
+                          quality={75}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <video
+                          src={bigItem.src}
+                          className="w-full h-full object-cover"
+                          muted
+                          loop
+                          controls
+                        />
+                      )}
+                    </div>
+                  );
+                }
+
+                return null;
+              });
+            })()}
           </div>
         ))}
       </div>
@@ -131,8 +159,8 @@ const Page: React.FC = () => {
       {/* Modal */}
       {modalOpen && activeItem && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="relative w-full max-w-4xl max-h-[80vh] overflow-y-auto bg-white rounded-2xl shadow-lg">
-            {/* Close button */}
+         <div className="relative w-full max-w-[70vh] aspect-square mx-auto bg-white rounded-2xl shadow-lg">
+
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 z-50 text-black bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition"
@@ -140,7 +168,7 @@ const Page: React.FC = () => {
               ✕
             </button>
 
-            <div className="relative w-full h-[70vh]">
+            <div className="relative w-full max-w-[70vh] aspect-square mx-auto">
               {activeItem.type === "image" ? (
                 <Image
                   src={activeItem.src}
@@ -163,7 +191,9 @@ const Page: React.FC = () => {
             </div>
 
             <div className="p-4">
-              <h2 className="text-xl font-bold">{activeItem.title}</h2>
+              <h2 className="text-xl font-bold">
+                {activeItem.title}
+              </h2>
             </div>
           </div>
         </div>
