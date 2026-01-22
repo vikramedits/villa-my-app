@@ -1,14 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import Image from "next/image";
-import "swiper/css";
 import Link from "next/link";
+import "swiper/css";
+type Place = {
+  name: string;
+  image: string;
+  distance: string;
+  time: string;
+  href: string;
+  desc?: string;
+};
+
+type DataType = {
+  lakes: Place[];
+  spiritual: Place[];
+  attractions: Place[];
+};
 
 /* ================= DATA ================= */
-const DATA = {
+const DATA: DataType = {
   lakes: [
     {
       name: "Fateh Sagar Lake",
@@ -16,6 +29,7 @@ const DATA = {
       distance: "5 km",
       time: "12 min drive",
       href: "",
+      desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
     {
       name: "Lake Pichola",
@@ -23,6 +37,7 @@ const DATA = {
       distance: "8 km",
       time: "20 min drive",
       href: "",
+      desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
     {
       name: "Lake Govardhan",
@@ -30,6 +45,7 @@ const DATA = {
       distance: "18 km",
       time: "20 min drive",
       href: "",
+      desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
     {
       name: "Badi Lake",
@@ -37,6 +53,7 @@ const DATA = {
       distance: "2 km",
       time: "5 min drive",
       href: "",
+      desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
     {
       name: "Bahubali Hills",
@@ -44,6 +61,7 @@ const DATA = {
       distance: "2 km",
       time: "5 min drive",
       href: "",
+      desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
   ],
   spiritual: [
@@ -53,6 +71,7 @@ const DATA = {
       distance: "6 km",
       time: "15 min drive",
       href: "",
+      desc: "",
     },
     {
       name: "Karni Mata Temple",
@@ -60,6 +79,7 @@ const DATA = {
       distance: "9 km",
       time: "22 min drive",
       href: "",
+      desc: "",
     },
     {
       name: "Maha-Kaleshwar Temple",
@@ -67,6 +87,7 @@ const DATA = {
       distance: "9 km",
       time: "22 min drive",
       href: "",
+      desc: "",
     },
     {
       name: "Jagdish Temple",
@@ -74,6 +95,7 @@ const DATA = {
       distance: "9 km",
       time: "22 min drive",
       href: "",
+      desc: "",
     },
     {
       name: "Bohra Ganesh Ji Temple",
@@ -81,6 +103,7 @@ const DATA = {
       distance: "9 km",
       time: "22 min drive",
       href: "",
+      desc: "",
     },
   ],
   attractions: [
@@ -90,6 +113,7 @@ const DATA = {
       distance: "4 km",
       time: "10 min drive",
       href: "",
+      desc: "",
     },
     {
       name: "Biological Park",
@@ -97,6 +121,7 @@ const DATA = {
       distance: "6 km",
       time: "10 min drive",
       href: "",
+      desc: "",
     },
     {
       name: "Sajjangarh Fort",
@@ -104,6 +129,7 @@ const DATA = {
       distance: "6 km",
       time: "10 min drive",
       href: "",
+      desc: "",
     },
     {
       name: "City Palace",
@@ -111,6 +137,7 @@ const DATA = {
       distance: "8 km",
       time: "10 min drive",
       href: "",
+      desc: "",
     },
     {
       name: "Fulon Ki Ghati",
@@ -118,17 +145,82 @@ const DATA = {
       distance: "10 km",
       time: "15 min drive",
       href: "",
+      desc: "",
     },
   ],
 };
 
+/* =============== Hook: detect mobile =============== */
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  return isMobile;
+}
+
 export default function NearByLocations() {
-  const [activeTab, setActiveTab] = useState<keyof typeof DATA>("lakes");
+  const [activeTab, setActiveTab] = useState<keyof DataType>("lakes");
+  const isMobile = useIsMobile();
+
+  const renderCard = (place: Place, index: number) => (
+    <Link
+      key={index}
+      href={place.href}
+      className="block h-full rounded-sm bg-gray-50 overflow-hidden
+      shadow-sm transition-shadow duration-300 mb-2 md:mb-4 p-2"
+    >
+      {/* Image */}
+      <div className="relative h-64 w-full rounded-sm overflow-hidden">
+        <Image
+          src={place.image}
+          alt={place.name}
+          fill
+          className="object-cover rounded-sm"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="px-2 py-2 md:px-4 md:py-4">
+        <h4 className="font-semibold text-lg text-primaryBlue">{place.name}</h4>
+
+        {place.desc && (
+          <p className="text-sm font-normal text-gray-500 tracking-wide mt-1 line-clamp-2">
+            {place.desc}
+          </p>
+        )}
+
+        <div className="gap-4 mt-2">
+          <p className="text-sm font-medium text-gray-700 tracking-wide">
+            Distance:
+            <span className="text-sm font-normal text-gray-500 pl-1">
+              {place.distance}
+            </span>
+          </p>
+          <p className="text-sm font-medium text-gray-700 tracking-wide">
+            Time:
+            <span className="text-sm font-normal text-gray-500 pl-1">
+              {place.time}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <p className="pr-4 pb-2 md:pb-4 text-right text-green-700 font-medium underline">
+        Get Directions →
+      </p>
+    </Link>
+  );
 
   return (
     <section className="container-fluid">
       <div className="py-8 md:py-6">
-        {/* ================= Heading ================= */}
+        {/* Heading */}
         <div className="mb-4 md:mb-6">
           <h2 className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950">
             Nearby Locations
@@ -138,75 +230,58 @@ export default function NearByLocations() {
           </p>
         </div>
 
-        {/* ================= Tabs ================= */}
-        <div className="flex justify-center gap-2 md:gap-3 mb-5 md:mb-8 overflow-x-auto ">
-          {[
-            { key: "lakes", label: "Lakes & Nature" },
-            { key: "spiritual", label: "Spiritual" },
-            { key: "attractions", label: "Attractions" },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as keyof typeof DATA)}
-              className={`px-5 py-2 rounded-sm whitespace-nowrap text-sm font-medium border transition
+        {/* Tabs */}
+        <div className="flex justify-center gap-2 md:gap-3 mb-5 md:mb-8 overflow-x-auto">
+          {(["lakes", "spiritual", "attractions"] as (keyof DataType)[]).map(
+            (key) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key)}
+                className={`px-5 py-2 rounded-sm whitespace-nowrap text-sm font-medium border transition
                 ${
-                  activeTab === tab.key
+                  activeTab === key
                     ? "bg-primaryBlue text-white border-primaryBlue"
                     : "bg-white text-black hover:border-primaryBlue"
                 }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+              >
+                {key === "lakes"
+                  ? "Lakes & Nature"
+                  : key === "spiritual"
+                    ? "Spiritual"
+                    : "Attractions"}
+              </button>
+            ),
+          )}
         </div>
 
-        {/* ================= Swiper ================= */}
-        <Swiper
-          slidesPerView={1.2} // mobile
-          spaceBetween={8}
-          breakpoints={{
-            1024: {
-              slidesPerView: 4.5, // desktop
-            },
-          }}
-          className="overflow-visible"
-        >
-          {DATA[activeTab].map((place, index) => (
-            <SwiperSlide key={index}>
-              <Link
-                href={place.href}
-                className="block h-full rounded-sm bg-white overflow-hidden
-             shadow-md hover:shadow-xl transition-shadow duration-300 mb-2 md:mb-4"
-              >
-                {/* ---------- Image ---------- */}
-                <div className="relative h-64 w-full">
-                  <Image
-                    src={place.image}
-                    alt={place.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+        {/* ================= Desktop Swiper ================= */}
+        {!isMobile && (
+          <Swiper
+            slidesPerView={1.2}
+            spaceBetween={8}
+            breakpoints={{
+              1024: {
+                slidesPerView: 4.5,
+              },
+            }}
+            className="overflow-visible"
+          >
+            {DATA[activeTab].map((place: Place, index: number) => (
+              <SwiperSlide key={index}>{renderCard(place, index)}</SwiperSlide>
+            ))}
+          </Swiper>
+        )}
 
-                {/* ---------- Content ---------- */}
-                <div className="px-2 py-2 md:px-4 md:py-4">
-                  <h4 className="font-semibold text-lg text-primaryBlue">
-                    {place.name}
-                  </h4>
-
-                  <div className="flex gap-4 text-sm text-gray-600 mt-1">
-                    <span>📏 {place.distance}</span>
-                    <span>⏱️ {place.time}</span>
-                  </div>
-                </div>
-
-                <p className="pr-4 pb-4 text-right text-green-700 font-medium">
-                  Get Directions →
-                </p>
-              </Link>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {/* ================= Mobile Overflow Scroll ================= */}
+        {isMobile && (
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            {DATA[activeTab].map((place, index) => (
+              <div key={index} className="min-w-[80%]">
+                {renderCard(place, index)}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

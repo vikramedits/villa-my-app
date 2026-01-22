@@ -17,11 +17,13 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.28.1",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
+    "react-masonry-css": "^1.0.16",
     "swiper": "^12.0.3",
     "tailwind-merge": "^3.4.0"
   },

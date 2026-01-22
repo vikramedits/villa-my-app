@@ -8,6 +8,7 @@ type SingleImage = {
   alt: string;
   title: string;
   buttonText: string;
+  href: string; 
 };
 
 type StackImageItem = {
@@ -15,6 +16,7 @@ type StackImageItem = {
   alt: string;
   title: string;
   buttonText: string;
+  href: string; 
 };
 
 type StackImage = {
@@ -25,9 +27,11 @@ type StackImage = {
 
 type VillaImage = SingleImage | StackImage;
 
-
 const features = [
-  { icon: "/homenew/icons/celebrations.png", title: "Personalised Celebrations" },
+  {
+    icon: "/homenew/icons/celebrations.png",
+    title: "Personalised Celebrations",
+  },
   { icon: "/homenew/icons/caretaker.png", title: "Caretaker Onsite" },
   { icon: "/homenew/icons/chef.png", title: "In-house Chef" },
   { icon: "/homenew/icons/local-experiences.png", title: "Local Experiences" },
@@ -46,6 +50,7 @@ const villaImages: VillaImage[] = [
     title: "Images & Videos",
     buttonText: "View all",
     alt: "Villa Pool",
+    href: "/gallery",
   },
   {
     type: "stack", // middle 2 images
@@ -55,12 +60,14 @@ const villaImages: VillaImage[] = [
         title: "Guests Reviews",
         buttonText: "View all",
         alt: "Dining",
+        href: "/",
       },
       {
         src: "/homenew/standard/standard-5.jpeg",
         title: "Rooms",
         buttonText: "View all",
         alt: "Bedroom",
+        href: "/rooms",
       },
     ],
     height: "h-105",
@@ -71,6 +78,7 @@ const villaImages: VillaImage[] = [
     title: "Amenities",
     buttonText: "View all",
     alt: "Celebration",
+    href: "/amenities",
   },
 ];
 
@@ -105,7 +113,7 @@ export default function VillaExperienceStandard() {
                     className="object-cover"
                   />
                   <Link
-                    href="/villa/gallery"
+                    href={item.href}
                     className="absolute bottom-0 left-0 w-full bg-black/50 text-white flex flex-col items-center justify-center py-3 px-4"
                   >
                     <span className="text-lg font-semibold">{item.title}</span>
@@ -136,7 +144,7 @@ export default function VillaExperienceStandard() {
                         className="object-cover"
                       />
                       <Link
-                        href="/villa/gallery"
+                        href={img.href}
                         className="absolute bottom-0 left-0 w-full bg-black/50 text-white flex flex-col items-center justify-center py-3 px-4"
                       >
                         <span className="text-lg font-semibold">

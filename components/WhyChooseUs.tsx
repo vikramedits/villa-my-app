@@ -41,22 +41,22 @@ export default function WhyChooseUs() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!sectionRef.current) return;
+  if (!sectionRef.current) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect(); // run once
-        }
-      },
-      { threshold: 0.2 },
-    );
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true); // animation ON
+        observer.disconnect(); // observer ko disconnect kar do, animation ek baar hi chale
+      }
+    },
+    { threshold: 0.2 } // scroll ka percentage trigger
+  );
 
-    observer.observe(sectionRef.current);
+  observer.observe(sectionRef.current);
 
-    return () => observer.disconnect();
-  }, []);
+  return () => observer.disconnect();
+}, []);
 
   return (
     <section ref={sectionRef} className=" py-8 md:py-12">

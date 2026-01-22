@@ -133,7 +133,9 @@ export default function Navbar() {
                 <span className="flex items-center gap-2">
                   <Mail size={16} />
                   <Phone size={16} />
-                  <span className="font-bold text-primaryBlue">Email & Call</span>
+                  <span className="font-bold text-primaryBlue">
+                    Email & Call
+                  </span>
                 </span>
 
                 {/* Right side: chevron */}
@@ -147,7 +149,7 @@ export default function Navbar() {
               {contactOpen && (
                 <div
                   className="absolute left-0 top-full mt-2 w-full 
-                 bg-white rounded-xl shadow-lg z-[9999] overflow-hidden"
+                 bg-white rounded-xl shadow-lg z-9999 overflow-hidden"
                 >
                   <Link
                     href="mailto:thepushpaheritage0@gmail.com"
@@ -194,7 +196,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-       {/* ===================================================== HEADER : DESKTOP & MOBILE ================================================= */}
+      {/* ===================================================== HEADER : DESKTOP & MOBILE ================================================= */}
       <header className="sticky top-0 z-50 w-full bg-white text-primaryBlue shadow-md">
         <div className="container-fluid mx-auto flex h-12 md:h-16 items-center justify-between">
           {/* =========== LOGO (common)  ========== */}
@@ -207,7 +209,7 @@ export default function Navbar() {
               priority
               className="rounded-xs w-8 md:w-12 h-8 md:h-12 object-cover"
             />
-            <span className="text-sm md:text-lg font-semibold tracking-wide text-primaryBlue ">
+            <span className="text-sm md:text-lg font-bold md:font-semibold tracking-wide text-primaryBlue ">
               The Pushpa Heritage
               <p className="text-xs md:text-sm text-black shadow-2xl rounded-l-full rounded-r-full">
                 7-BHK | Big Pool | 2 Gardens
@@ -290,7 +292,7 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-primaryBlue hover:bg-white/10"
+                  className="text-blue-950 hover:bg-white/10"
                   aria-label="Open Menu"
                 >
                   <Menu />
