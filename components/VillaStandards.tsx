@@ -8,7 +8,7 @@ type SingleImage = {
   alt: string;
   title: string;
   buttonText: string;
-  href: string; 
+  href: string;
 };
 
 type StackImageItem = {
@@ -16,7 +16,7 @@ type StackImageItem = {
   alt: string;
   title: string;
   buttonText: string;
-  href: string; 
+  href: string;
 };
 
 type StackImage = {
@@ -114,12 +114,28 @@ export default function VillaExperienceStandard() {
                   />
                   <Link
                     href={item.href}
-                    className="absolute bottom-0 left-0 w-full bg-black/50 text-white flex flex-col items-center justify-center py-3 px-4"
+                    className="
+                                 absolute bottom-0 left-0 w-full
+                                 text-white
+                                 px-5 pb-4 pt-10
+                                 bg-linear-to-t from-black/80 via-black/40 to-transparent
+                               "
                   >
-                    <span className="text-lg font-semibold">{item.title}</span>
-                    <span className="mt-2 bg-white text-black font-medium px-4 py-1 rounded cursor-pointer inline-block transform transition-transform duration-300 hover:scale-110">
-                      {item.buttonText} <span className="ml-1">→</span>
+                    {/* Title layer */}
+                    <span className="block text-lg md:text-xl font-semibold leading-tight">
+                      {item.title}
                     </span>
+
+                    {/* Micro CTA */}
+                    <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80">
+                      <span>{item.buttonText}</span>
+                      <span className="inline-block transition-transform duration-500 group-hover:translate-x-2">
+                        →
+                      </span>
+                    </span>
+
+                    {/* Bottom accent line */}
+                    <span className="mt-3 block h-px w-10 bg-white/40" />
                   </Link>
                 </div>
               );
@@ -145,14 +161,28 @@ export default function VillaExperienceStandard() {
                       />
                       <Link
                         href={img.href}
-                        className="absolute bottom-0 left-0 w-full bg-black/50 text-white flex flex-col items-center justify-center py-3 px-4"
+                        className="
+                                 absolute bottom-0 left-0 w-full
+                                 text-white
+                                 px-5 pb-4 pt-10
+                                 bg-linear-to-t from-black/80 via-black/40 to-transparent
+                               "
                       >
-                        <span className="text-lg font-semibold">
+                        {/* Title layer */}
+                        <span className="block text-lg md:text-xl font-semibold leading-tight">
                           {img.title}
                         </span>
-                        <span className="mt-2 bg-white text-black font-medium px-4 py-1 rounded cursor-pointer inline-block transform transition-transform duration-300 hover:scale-110">
-                          {img.buttonText} <span className="ml-1">→</span>
+
+                        {/* Micro CTA */}
+                        <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80">
+                          <span>{img.buttonText}</span>
+                          <span className="inline-block transition-transform duration-500 group-hover:translate-x-2">
+                            →
+                          </span>
                         </span>
+
+                        {/* Bottom accent line */}
+                        <span className="mt-3 block h-px w-10 bg-white/40" />
                       </Link>
                     </div>
                   ))}

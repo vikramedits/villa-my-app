@@ -172,48 +172,50 @@ export default function NearByLocations() {
     <Link
       key={index}
       href={place.href}
-      className="block h-full rounded-sm bg-gray-50 overflow-hidden
-      shadow-sm transition-shadow duration-300 mb-2 md:mb-4 p-2"
+      className="
+                group block h-full overflow-hidden rounded-xl
+                bg-white
+                transition-all duration-300
+                hover:-translate-y-1 hover:shadow-xl
+                mb-3
+              "
     >
       {/* Image */}
-      <div className="relative h-64 w-full rounded-sm overflow-hidden">
+      <div className="relative h-64 w-full overflow-hidden">
         <Image
           src={place.image}
           alt={place.name}
           fill
-          className="object-cover rounded-sm"
+          className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
         />
+        <div className="absolute inset-0 bg-linear-to-t from-black/10 via-transparent to-transparent" />
       </div>
 
       {/* Content */}
-      <div className="px-2 py-2 md:px-4 md:py-4">
-        <h4 className="font-semibold text-lg text-primaryBlue">{place.name}</h4>
+      <div className="px-4 pt-3 pb-4">
+        <h4 className="text-[15px] font-medium text-gray-900 leading-snug tracking-[0.01em]">
+          {place.name}
+        </h4>
 
         {place.desc && (
-          <p className="text-sm font-normal text-gray-500 tracking-wide mt-1 line-clamp-2">
+          <p className="mt-1 text-sm text-gray-500 leading-snug line-clamp-2">
             {place.desc}
           </p>
         )}
 
-        <div className="gap-4 mt-2">
-          <p className="text-sm font-medium text-gray-700 tracking-wide">
-            Distance:
-            <span className="text-sm font-normal text-gray-500 pl-1">
-              {place.distance}
-            </span>
-          </p>
-          <p className="text-sm font-medium text-gray-700 tracking-wide">
-            Time:
-            <span className="text-sm font-normal text-gray-500 pl-1">
-              {place.time}
-            </span>
-          </p>
+        <div className="mt-3 flex items-center gap-3 text-sm text-gray-600">
+          <span>{place.distance}</span>
+          <span className="text-gray-400">•</span>
+          <span>{place.time}</span>
+        </div>
+
+        <div className="mt-3 text-sm font-medium text-gray-800 flex items-center gap-1">
+          <span className="opacity-80">Get directions</span>
+          <span className="opacity-40 transition-transform duration-300 group-hover:translate-x-1">
+            →
+          </span>
         </div>
       </div>
-
-      <p className="pr-4 pb-2 md:pb-4 text-right text-green-700 font-medium underline">
-        Get Directions →
-      </p>
     </Link>
   );
 
