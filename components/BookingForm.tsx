@@ -47,7 +47,7 @@ export default function VillaBookingFullScreen() {
   };
 
   return (
-    <section className="bg-gray-100">
+    <section className="bg-gray-100" id="booking-section">
       {/* ============================================ TOP ============================================ */}
       <div className="text-center py-3 md:py-6">
         <h2 className="texprimaryBlue text-lg md:text-2xl font-medium tracking-wide">

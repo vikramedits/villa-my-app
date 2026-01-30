@@ -21,7 +21,7 @@ type FeaturesCarouselProps = {
 
 export default function FeaturesCarousel({ features }: FeaturesCarouselProps) {
   return (
-    <div className="container-fluid">
+    <div className="">
 
       {/* ================= MOBILE / TABLET ================= */}
       <div className="md:hidden overflow-x-auto">

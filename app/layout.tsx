@@ -1,19 +1,30 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BookingCTAGuard from "@/components/BookingCTAGuard";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "My Villa Booking",
   description: "Luxury villa booking with online payment",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
         <Navbar />
-        {children}
+        <main className="pb-24 md:pb-0">
+          {children}
+        </main>
+
         <Footer />
+        <BookingCTAGuard />
       </body>
     </html>
   );

@@ -6,15 +6,15 @@ import { useEffect, useRef, useState } from "react";
 const OWNERS = [
   {
     name: "Shiv Singh Deora",
-    role: "Villa Host",
-    image: "/images/shiv.jpg",
+    role: "Villa Host (+91-9587380255)",
+    image: "/homenew/shiv-host.jpeg",
     message:
       "I personally ensure that every guest enjoys a clean, safe, and unforgettable stay. Your comfort is our priority. We strive to provide a warm, welcoming, and memorable experience for every guest.",
   },
   {
     name: "Vikram Singh Deora",
-    role: "Co-Host",
-    image: "/images/vikram.jpg",
+    role: "Co-Host (+91-9001069033)",
+    image: "/homenew/vikram.jpeg",
     message:
       "We make sure every guest feels at home with personalized care and attention to detail for a memorable experience.",
   },
@@ -24,24 +24,23 @@ export default function OwnersNote() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
 
-   useEffect(() => {
-  if (!sectionRef.current) return;
+  useEffect(() => {
+    if (!sectionRef.current) return;
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        setVisible(true); // animation ON
-        observer.disconnect(); // observer ko disconnect kar do, animation ek baar hi chale
-      }
-    },
-    { threshold: 0.2 } // scroll ka percentage trigger
-  );
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true); // animation ON
+          observer.disconnect(); // observer ko disconnect kar do, animation ek baar hi chale
+        }
+      },
+      { threshold: 0.2 }, // scroll ka percentage trigger
+    );
 
-  observer.observe(sectionRef.current);
+    observer.observe(sectionRef.current);
 
-  return () => observer.disconnect();
-}, []);
-
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section ref={sectionRef} className=" py-8 md:py-12">
@@ -68,8 +67,8 @@ export default function OwnersNote() {
               style={{ transitionDelay: `${idx * 150}ms` }}
             >
               {/* Image */}
-              <div className="shrink-0 mx-auto md:mx-0">
-                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-primaryBlue">
+              <div className="shrink-0 mx-auto md:mx-0 flex gap-10 items-center">
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border border-primaryBlue">
                   <Image
                     src={owner.image}
                     alt={owner.name}
@@ -77,6 +76,15 @@ export default function OwnersNote() {
                     height={128}
                     className="object-cover"
                   />
+                </div>
+                <div>
+                  {/* Name & Role */}
+                  <p className="mt-4 text-primaryBlue font-bold text-base md:text-lg uppercase">
+                    {owner.name}
+                  </p>
+                  <p className="text-gray-500 text-xs md:text-sm">
+                    {owner.role}
+                  </p>
                 </div>
               </div>
 
@@ -89,12 +97,6 @@ export default function OwnersNote() {
                 <p className="text-gray-700 text-sm md:text-base leading-relaxed">
                   {owner.message}
                 </p>
-
-                {/* Name & Role */}
-                <h3 className="mt-4 text-primaryBlue font-semibold text-base md:text-lg">
-                  {owner.name}
-                </h3>
-                <p className="text-gray-500 text-xs md:text-sm">{owner.role}</p>
               </div>
             </div>
           ))}
