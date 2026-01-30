@@ -217,3 +217,35 @@
     max-width: 1500px;
   }
 }
+
+/* ===== SWIPER ARROWS – MINI SQUARE (FORCED) ===== */
+.swiper-button-prev,
+.swiper-button-next {
+  width: 26px !important;
+  height: 26px !important;
+  background: #ffffff !important;
+  border-radius: 1px !important;
+  padding:2px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+
+  color: #3a3838 !important; /* arrow color */
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Arrow icon */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 9px !important;
+  font-weight: 600 !important;
+}
+
+/* Position */
+.swiper-button-prev {
+  left: 8px !important;
+}
+.swiper-button-next {
+  right: 8px !important;
+}

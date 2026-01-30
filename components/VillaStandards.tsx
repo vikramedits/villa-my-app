@@ -28,6 +28,9 @@ type StackImage = {
 type VillaImage = SingleImage | StackImage;
 
 const features = [
+   { icon: "/homenew/icons/games.png", title: "Games & Recreation" },
+  { icon: "/homenew/icons/garden.png", title: "Two Big Gardens" },
+  { icon: "/homenew/icons/entrance.png", title: "3 Entrance" },
   {
     icon: "/homenew/icons/celebrations.png",
     title: "Personalised Celebrations",
@@ -37,9 +40,6 @@ const features = [
   { icon: "/homenew/icons/local-experiences.png", title: "Local Experiences" },
   { icon: "/homenew/icons/pool.png", title: "Private Pool" },
   { icon: "/homenew/icons/butler-service.png", title: "Butler Service" },
-  { icon: "/homenew/icons/games.png", title: "Games & Recreation" },
-  { icon: "/homenew/icons/garden.png", title: "Two Big Gardens" },
-  { icon: "/homenew/icons/entrance.png", title: "3 Entrance" },
   { icon: "/homenew/icons/seatings.png", title: "Indoor OutDoor Seating" },
 ];
 
@@ -84,7 +84,7 @@ const villaImages: VillaImage[] = [
 
 export default function VillaExperienceStandard() {
   return (
-    <section className="bg-gray-100 pb-8 md:pb-10 shadow-md">
+    <section className="bg-gray-100 pb-8 md:pb-10 border-b border-gray-200">
       <div className="container-fluid pt-5 md:pt-10">
         {/* Heading */}
         <div className="py-3 md:py-6 ">
