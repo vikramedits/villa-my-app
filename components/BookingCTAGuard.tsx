@@ -6,10 +6,13 @@ import MobileBookNowCTA from "./MobileBookNowCTA";
 export default function BookingCTAGuard() {
   const pathname = usePathname();
 
-  // 👉 JIN PAGES PAR CTA CHAHIYE
   const SHOW_ON = ["/", "/gallery", "/rooms", "/amenities"];
 
-  if (!SHOW_ON.includes(pathname)) return null;
+  const shouldShow = SHOW_ON.some(
+    (route) => pathname === route || pathname.startsWith(route + "/")
+  );
+
+  if (!shouldShow) return null;
 
   return <MobileBookNowCTA />;
 }

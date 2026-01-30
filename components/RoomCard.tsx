@@ -37,13 +37,13 @@ export default function RoomCard({ room, onClickAction, style }: Props) {
   return (
     <div
       ref={ref}
-      className={`min-w-60 md:min-w-0 bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer transition-all duration-700 ease-out hover:shadow-xl
+      className={`min-w-60 md:min-w-0 bg-white rounded-md shadow-lg overflow-hidden cursor-pointer transition-all duration-700 ease-out hover:shadow-xl
         ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
       `}
       onClick={onClickAction}
       style={style}
     >
-      <div className="relative w-full h-56">
+      <div className="relative w-full h-96">
         {room.media[0].type === "video" ? (
           <video
             src={room.media[0].src}

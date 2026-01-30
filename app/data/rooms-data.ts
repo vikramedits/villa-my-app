@@ -30,7 +30,7 @@ export const roomsData: Room[] = [
     rating: 5.0,
     badge: "Garden Access",
     heroImages: [
-      { type: "image", src: "/rooms/garden1.jpg" },
+      { type: "image", src: "/homenew/room/room-1.jpeg" },
       { type: "image", src: "/rooms/garden2.jpg" },
       { type: "image", src: "/rooms/garden3.jpg" },
       { type: "image", src: "/rooms/garden4.jpg" },
@@ -39,7 +39,7 @@ export const roomsData: Room[] = [
       { type: "image", src: "/rooms/garden7.jpg" },
     ],
     media: [
-      { type: "image", src: "/rooms/garden1.jpg" },
+      { type: "image", src: "/homenew/room/room-1.jpeg" },
       { type: "image", src: "/rooms/garden2.jpg" },
       { type: "image", src: "/rooms/garden3.jpg" },
     ],

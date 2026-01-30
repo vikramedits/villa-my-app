@@ -39,7 +39,7 @@ const SAFETY_DATA = [
   {
     title: "CCTV Surveillance",
     description: "Areas monitored with CCTV cameras for security.",
-    icon: "/homenew/safety/cctv.jpg",
+    icon: "/homenew/safety/cctv-camera.jpg",
   },
   {
     title: "Night Lighting",
