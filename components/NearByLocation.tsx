@@ -28,31 +28,39 @@ const DATA: DataType = {
   lakes: [
     {
       name: "Fateh Sagar Lake",
-      image: "/homenew/lake/fatehsagar.jpg",
+      image: "/homenew/lake/fatehsagar-new.jpg",
       distance: "5 km",
       time: "12 min drive",
       href: "",
       desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
     {
+      name: "Lake Govardhan",
+      image: "/homenew/lake/govardhan.jpg",
+      distance: "18 km",
+      time: "20 min drive",
+      href: "",
+      desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
+    },
+     {
       name: "Lake Pichola",
-      image: "/homenew/lake/pichola.jpg",
+      image: "/homenew/lake/pichola-new.jpg",
       distance: "8 km",
       time: "20 min drive",
       href: "",
       desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
     {
-      name: "Lake Govardhan",
-      image: "/homenew/lake/govardhan-sagar.jpg",
-      distance: "18 km",
-      time: "20 min drive",
+      name: "Ambrai Ghat",
+      image: "/homenew/lake/ambrai-ghat.jpg",
+      distance: "8 km",
+      time: "15 min drive",
       href: "",
       desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
     {
       name: "Badi Lake",
-      image: "/homenew/lake/badi-lake.jpg",
+      image: "/homenew/lake/badi-lake-new.jpg",
       distance: "2 km",
       time: "5 min drive",
       href: "",
@@ -60,7 +68,7 @@ const DATA: DataType = {
     },
     {
       name: "Bahubali Hills",
-      image: "/homenew/lake/bahubali-hills.jpg",
+      image: "/homenew/lake/bahubali-hills-new.jpg",
       distance: "2 km",
       time: "5 min drive",
       href: "",
@@ -68,33 +76,25 @@ const DATA: DataType = {
     },
   ],
   spiritual: [
+     {
+      name: "Jagdish Temple",
+      image: "/homenew/spiritual/jagdish-temple.png",
+      distance: "9 km",
+      time: "22 min drive",
+      href: "",
+      desc: "",
+    },
     {
-      name: "Neemach Mata Temple",
-      image: "/images/nearby/neemach-mata.jpg",
-      distance: "6 km",
-      time: "15 min drive",
+      name: "Jag Mandir Palace",
+      image: "/homenew/spiritual/jag-mandir.jpg",
+      distance: "9 km",
+      time: "22 min drive",
       href: "",
       desc: "",
     },
     {
       name: "Karni Mata Temple",
-      image: "/images/nearby/karni-mata.jpg",
-      distance: "9 km",
-      time: "22 min drive",
-      href: "",
-      desc: "",
-    },
-    {
-      name: "Maha-Kaleshwar Temple",
-      image: "/images/nearby/karni-mata.jpg",
-      distance: "9 km",
-      time: "22 min drive",
-      href: "",
-      desc: "",
-    },
-    {
-      name: "Jagdish Temple",
-      image: "/images/nearby/karni-mata.jpg",
+      image: "/homenew/spiritual/karni.mata.jpg",
       distance: "9 km",
       time: "22 min drive",
       href: "",
@@ -102,7 +102,23 @@ const DATA: DataType = {
     },
     {
       name: "Bohra Ganesh Ji Temple",
-      image: "/images/nearby/karni-mata.jpg",
+      image: "/homenew/spiritual/bohara-ganesh-ji.png",
+      distance: "9 km",
+      time: "22 min drive",
+      href: "",
+      desc: "",
+    },
+    {
+      name: "Neemach Mata Temple",
+      image: "/homenew/spiritual/neemach-mata-mandir.png",
+      distance: "6 km",
+      time: "15 min drive",
+      href: "",
+      desc: "",
+    },
+    {
+      name: "Maha-Kaleshwar Temple",
+      image: "/homenew/spiritual/mahakaleshwar.png",
       distance: "9 km",
       time: "22 min drive",
       href: "",
@@ -111,24 +127,8 @@ const DATA: DataType = {
   ],
   attractions: [
     {
-      name: "Pratap Gaurav Kendra",
-      image: "/images/nearby/pratap-gaurav.jpg",
-      distance: "4 km",
-      time: "10 min drive",
-      href: "",
-      desc: "",
-    },
-    {
-      name: "Biological Park",
-      image: "/images/nearby/pratap-gaurav.jpg",
-      distance: "6 km",
-      time: "10 min drive",
-      href: "",
-      desc: "",
-    },
-    {
       name: "Sajjangarh Fort",
-      image: "/images/nearby/pratap-gaurav.jpg",
+      image: "/homenew/must-visit/palace.jpg",
       distance: "6 km",
       time: "10 min drive",
       href: "",
@@ -136,15 +136,31 @@ const DATA: DataType = {
     },
     {
       name: "City Palace",
-      image: "/images/nearby/pratap-gaurav.jpg",
+      image: "/homenew/must-visit/city-palace.jpg",
       distance: "8 km",
       time: "10 min drive",
       href: "",
       desc: "",
     },
     {
+      name: "Pratap Gaurav Kendra",
+      image: "/homenew/must-visit/pratap.png",
+      distance: "4 km",
+      time: "10 min drive",
+      href: "",
+      desc: "",
+    },
+    {
+      name: "Biological Park",
+      image: "/homenew/must-visit/park.jpg",
+      distance: "6 km",
+      time: "10 min drive",
+      href: "",
+      desc: "",
+    },
+    {
       name: "Fulon Ki Ghati",
-      image: "/images/nearby/pratap-gaurav.jpg",
+      image: "/homenew/must-visit/fulon-ki-ghati.jpg",
       distance: "10 km",
       time: "15 min drive",
       href: "",
@@ -253,10 +269,10 @@ export default function NearByLocations() {
                 }`}
                 >
                   {key === "lakes"
-                    ? "Lakes & Nature"
+                    ? "Lakes & Drive"
                     : key === "spiritual"
                       ? "Spiritual"
-                      : "Attractions"}
+                      : "Must Visit"}
                 </button>
               ),
             )}

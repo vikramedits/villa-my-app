@@ -97,7 +97,7 @@ export default function VillaExperienceStandard() {
           </p>
         </div>
         <FeaturesCarousel features={features} />
-        <div className="mt-5 md:mt-8 flex md:grid md:grid-cols-3 gap-2 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory">
+        <div className="mt-5 md:mt-8 flex md:grid md:grid-cols-3 gap-2 overflow-x-auto md:overflow-x-visible">
           {villaImages.map((item, index) => {
             // Single large images (left/right)
             if (item.type === "single") {

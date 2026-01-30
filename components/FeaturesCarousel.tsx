@@ -21,11 +21,11 @@ type FeaturesCarouselProps = {
 
 export default function FeaturesCarousel({ features }: FeaturesCarouselProps) {
   return (
-    <div className="w-full">
+    <div className="container-fluid">
 
       {/* ================= MOBILE / TABLET ================= */}
-      <div className="md:hidden overflow-x-auto no-scrollbar">
-        <div className="flex gap-3 w-max px-1">
+      <div className="md:hidden overflow-x-auto">
+        <div className="flex gap-3">
           {features.map((item, index) => (
             <div
               key={index}
