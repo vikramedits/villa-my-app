@@ -9,13 +9,9 @@ export default function MonthlyOccupancy() {
         <span className="text-2xl font-bold text-slate-900">72%</span>
       </div>
 
-      <p className="text-gray-500 mt-4 text-sm">
-        18 booked nights out of 25
-      </p>
+      <p className="text-gray-500 mt-4 text-sm">18 booked nights out of 25</p>
 
-      <p className="text-xs text-green-600 mt-1">
-        ↑ Better than last month
-      </p>
+      <p className="text-xs text-green-600 mt-1">↑ Better than last month</p>
     </div>
   );
 }

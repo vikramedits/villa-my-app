@@ -260,3 +260,26 @@ body {
   overscroll-behavior: none;
   touch-action: pan-y;
 }
+/* globals.css or imported CSS */
+.calendar-container .fc .fc-toolbar-title {
+  font-size: 1.25rem;       /* default desktop */
+  line-height: 1.5rem;      /* proper vertical spacing */
+  display: inline-block;     /* ensures alignment with arrows */
+  vertical-align: middle;    /* aligns with prev/next buttons */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .calendar-container .fc .fc-toolbar-title {
+    font-size: 0.875rem;    /* smaller month text */
+    line-height: 1.25rem;   /* adjust spacing */
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* Optional: shrink prev/next buttons a bit */
+  .calendar-container .fc .fc-toolbar-chunk button {
+    padding: 0.25rem 0.5rem; 
+    font-size: 0.875rem;
+  }
+}

@@ -7,8 +7,8 @@ export default function RecentBookings() {
   const [openId, setOpenId] = useState<number | null>(null);
 
   return (
-    <div className="bg-white text-slate-800 rounded-2xl p-6 shadow-sm">
-      <div className="flex justify-between mb-6">
+    <div className="bg-white text-gray-950 rounded-2xl p-3 md:p-6 shadow-sm">
+      <div className="flex justify-between mb-3 md:mb-6">
         <h2 className="font-semibold text-lg">Recent Bookings</h2>
         <span className="text-sm text-red-500 cursor-pointer">View all</span>
       </div>

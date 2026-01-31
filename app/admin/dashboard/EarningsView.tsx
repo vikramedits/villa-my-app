@@ -2,7 +2,7 @@
 
 export default function EarningsOverview() {
   return (
-    <div className="bg-white text-slate-800 rounded-2xl p-6 col-span-2 shadow-sm">
+    <div className="bg-gray-50 text-slate-800 rounded-2xl p-6 col-span-2 shadow-sm">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold text-lg">Earnings Overview</h2>
         <span className="text-sm text-gray-500 cursor-pointer">
