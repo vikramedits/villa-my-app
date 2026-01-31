@@ -67,7 +67,7 @@ export default function RoomMediaViewer({ room, onCloseAction }: Props) {
           spaceBetween={10}
           slidesPerView={1}
         >
-          {room.media.map((media, idx) => (
+          {room.heroImages.map((media, idx) => (
             <SwiperSlide key={idx}>
               <div
                 className={`relative w-full ${isMobile ? "h-[70vh]" : "h-[60vh] md:h-[70vh]"}`}

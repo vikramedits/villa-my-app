@@ -1,12 +1,40 @@
-import AdminCalendar from "@/components/AdminCalender";
+
+import { connectDB } from "@/lib/db";
+import Booking from "@/lib/models/Booking";
+import DashboardPage from "./dashboard/page";
+
+interface IBooking {
+  name: string;
+  totalAmount: number;
+  checkIn: string;
+  status: string;
+  createdAt: Date;
+}
 
 
-export default function AdminPage() {
+export default async function AdminDashboard() {
+  await connectDB();
+
+const allBookings: IBooking[] = await Booking.find().sort({ createdAt: -1 }).limit(5);
+
+  const today = new Date().toISOString().split("T")[0];
+  const totalRevenue = allBookings.reduce((sum, b) => sum + (b.totalAmount || 0), 0);
+  const todayCheckins = allBookings.filter(b => b.checkIn === today).length;
+  const pending = allBookings.filter(b => b.status === "Pending").length;
+  const confirmed = allBookings.filter(b => b.status === "Approved").length;
+
+  const stats = {
+    total: allBookings.length,
+    pending,
+    confirmed,
+    revenue: totalRevenue,
+    todayCheckins,
+  };
+
+  // Pass DB data to Client Component
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-        <AdminCalendar />
-      <p>Bookings & availability control</p>
-    </div>
-  );
+    <>
+    <DashboardPage/>
+    </>
+  ) 
 }

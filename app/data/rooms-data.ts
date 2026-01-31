@@ -23,7 +23,7 @@ export const roomsData: Room[] = [
   // ================= GROUND / FIRST FLOOR =================
   {
     id: 1,
-    name: "Garden Bliss Suite",
+    name: "(1) Garden Bliss Suite",
     tagline: "Wake up with greenery & fresh air",
     floor: "First Floor",
     view: "Private Garden View",
@@ -46,7 +46,7 @@ export const roomsData: Room[] = [
   },
   {
     id: 2,
-    name: "Green Haven Suite",
+    name: "(2) Green Haven Suite",
     tagline: "Your private hideaway in nature",
     floor: "First Floor",
     view: "Back Garden & Privacy View",
@@ -62,7 +62,7 @@ export const roomsData: Room[] = [
       { type: "image", src: "/rooms/haven7.jpg" },
     ],
     media: [
-      { type: "image", src: "/rooms/haven1.jpg" },
+      { type: "image", src: "/homenew/room/room-2.jpeg" },
       { type: "image", src: "/rooms/haven2.jpg" },
       { type: "image", src: "/rooms/haven3.jpg" },
     ],
@@ -71,7 +71,7 @@ export const roomsData: Room[] = [
   // ================= SECOND FLOOR FRONT (SUNRISE + POOL) =================
   {
     id: 3,
-    name: "Sunrise Royal Suite",
+    name: "(3) Sunrise Royal Suite",
     tagline: "Golden mornings with pool & hills",
     floor: "Second Floor",
     view: "Pool View · Sunrise Balcony",
@@ -87,14 +87,14 @@ export const roomsData: Room[] = [
       { type: "video", src: "/rooms/sunrise.mp4" }, // video in hero
     ],
     media: [
-      { type: "image", src: "/rooms/sunrise1.jpg" },
+      { type: "image", src: "/homenew/room/room-3.jpeg" },
       { type: "image", src: "/rooms/sunrise2.jpg" },
       { type: "video", src: "/rooms/sunrise.mp4" },
     ],
   },
   {
     id: 4,
-    name: "Aqua Dawn Suite",
+    name: "(4) Aqua Dawn Suite",
     tagline: "Luxury mornings by the water",
     floor: "Second Floor",
     view: "Pool Facing · Sunrise Balcony",
@@ -110,7 +110,7 @@ export const roomsData: Room[] = [
       { type: "image", src: "/rooms/aqua7.jpg" },
     ],
     media: [
-      { type: "image", src: "/rooms/aqua1.jpg" },
+      { type: "image", src: "/homenew/room/room-4.jpeg" },
       { type: "image", src: "/rooms/aqua2.jpg" },
       { type: "image", src: "/rooms/aqua3.jpg" },
     ],
@@ -119,7 +119,7 @@ export const roomsData: Room[] = [
   // ================= SECOND FLOOR BACK (SUNSET + MOUNTAIN) =================
   {
     id: 5,
-    name: "Sunset Serenity Suite",
+    name: "(5) Sunset Serenity Suite",
     tagline: "Evenings painted in gold & silence",
     floor: "Second Floor",
     view: "Mountain View · Sunset Balcony",
@@ -135,14 +135,14 @@ export const roomsData: Room[] = [
       { type: "image", src: "/rooms/sunset7.jpg" },
     ],
     media: [
-      { type: "image", src: "/rooms/sunset1.jpg" },
+      { type: "image", src: "/homenew/room/room-5.jpeg" },
       { type: "image", src: "/rooms/sunset2.jpg" },
       { type: "image", src: "/rooms/sunset3.jpg" },
     ],
   },
   {
     id: 6,
-    name: "Mountain Whisper Suite",
+    name: "(6) Mountain Whisper Suite",
     tagline: "Where mountains speak & you relax",
     floor: "Second Floor",
     view: "Mountain View · Back Balcony",
@@ -158,16 +158,16 @@ export const roomsData: Room[] = [
       { type: "image", src: "/rooms/mountain7.jpg" },
     ],
     media: [
-      { type: "image", src: "/rooms/mountain1.jpg" },
+      { type: "image", src: "/homenew/room/room-6.jpeg" },
       { type: "image", src: "/rooms/mountain2.jpg" },
-      { type: "image", src: "/rooms/mountain3.jpg" },
+      { type: "image", src: "/rooms/mountain3.jpg" }, 
     ],
   },
 
   // ================= TOP FLOOR SIGNATURE ROOM =================
   {
     id: 7,
-    name: "Sky Signature Suite",
+    name: "(7) Sky Signature Suite",
     tagline: "Above all, beyond luxury",
     floor: "Top Floor",
     view: "Mountain · Pool · Terrace View",
@@ -183,7 +183,7 @@ export const roomsData: Room[] = [
       { type: "image", src: "/rooms/sky7.jpg" },
     ],
     media: [
-      { type: "image", src: "/rooms/sky1.jpg" },
+      { type: "image", src: "/homenew/room/room-7.jpeg" },
       { type: "image", src: "/rooms/sky2.jpg" },
       { type: "image", src: "/rooms/sky3.jpg" },
     ],
