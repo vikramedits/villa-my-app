@@ -1,50 +1,29 @@
-// import mongoose from "mongoose";
-
-// const MONGODB_URI = process.env.MONGODB_URI;
-
-// if (!MONGODB_URI) {
-//   throw new Error("MONGODB_URI is not defined in .env.local");
-// }
-
-// let isConnected = false;
-
-// export async function connectDB() {
-//   if (isConnected || mongoose.connection.readyState >= 1) {
-//     console.log("MongoDB already connected ✅");
-//     return;
-//   }
-
-//   try {
-//     await mongoose.connect(MONGODB_URI);
-//     isConnected = true;
-//     console.log("MongoDB connected ✅");
-//   } catch (error) {
-//     console.error("MongoDB connection failed ❌", error);
-//     throw error;
-//   }
-// }
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+// Cached connection for hot reload / dev
+let cached: { conn: any; promise: Promise<any> | null } = (global as any).mongoose;
 
-if (!MONGODB_URI) {
-  throw new Error("MONGODB_URI is not defined in .env.local");
+if (!cached) {
+  cached = (global as any).mongoose = { conn: null, promise: null };
 }
 
-let isConnected = false;
-
 export async function connectDB() {
-  if (isConnected || mongoose.connection.readyState >= 1) {
-    console.log("MongoDB already connected ✅");
-    return;
+  const MONGODB_URI = process.env.MONGODB_URI;
+
+  if (!MONGODB_URI) {
+    console.error("❌ MONGODB_URI is missing in .env.local");
+    return null; // Crash nahi hoga
   }
 
-  try {
-    await mongoose.connect(MONGODB_URI);
-    isConnected = true;
-    console.log("MongoDB connected ✅");
-  } catch (error) {
-    console.error("MongoDB connection failed ❌", error);
-    throw error;
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(MONGODB_URI)
+      .then((mongoose) => mongoose);
   }
+
+  cached.conn = await cached.promise;
+  console.log("✅ MongoDB connected");
+  return cached.conn;
 }
