@@ -7,24 +7,37 @@ import {
   AiOutlineClockCircle,
 } from "react-icons/ai";
 
+/* ===================== TYPES ===================== */
+type BookingStatus = "waiting" | "accepted" | "denied";
+
 type Booking = {
   id: string;
   name: string;
   phone: string;
   email?: string;
-  checkIn: string;
-  checkOut: string;
+  checkIn: string; // ISO date string
+  checkOut: string; // ISO date string
   guests: number;
   nights: number;
   totalAmount: number;
   bookingRef?: string;
-  status: "waiting" | "accepted" | "denied";
+  status: BookingStatus;
 };
 
+/* ===================== COMPONENT ===================== */
 const AcceptBooking = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [activeTab, setActiveTab] = useState<"current" | "previous">("current");
+  const [loading, setLoading] = useState(true);
 
+  /* ===================== FETCH BOOKINGS =====================
+     👉 FUTURE API INTEGRATION:
+     Replace mockData with:
+     fetch("/api/bookings")
+       .then(res => res.json())
+       .then(data => setBookings(data))
+       .catch(err => console.error(err))
+  ============================================================ */
   useEffect(() => {
     const mockData: Booking[] = [
       {
@@ -54,126 +67,145 @@ const AcceptBooking = () => {
         status: "accepted",
       },
     ];
+
     setBookings(mockData);
+    setLoading(false);
   }, []);
 
-  const updateStatus = (id: string, status: Booking["status"]) => {
+  /* ===================== UPDATE STATUS =====================
+     👉 FUTURE API CALL:
+     await fetch(`/api/bookings/${id}`, {
+       method: "PATCH",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ status })
+     })
+  ========================================================== */
+  const updateStatus = (id: string, status: BookingStatus) => {
     setBookings((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, status } : b))
+      prev.map((b) => (b.id === id ? { ...b, status } : b)),
     );
   };
 
-  // Filter bookings based on tab
-  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-  const currentBookings = bookings.filter((b) => b.checkOut >= today);
-  const previousBookings = bookings.filter((b) => b.checkOut < today);
+  /* ===================== FILTER LOGIC ===================== */
+  const today = new Date();
+
+  const currentBookings = bookings.filter((b) => new Date(b.checkOut) >= today);
+
+  const previousBookings = bookings.filter((b) => new Date(b.checkOut) < today);
 
   const displayedBookings =
     activeTab === "current" ? currentBookings : previousBookings;
 
+  const statusLabel: Record<BookingStatus, string> = {
+    waiting: "Pending",
+    accepted: "Accepted",
+    denied: "Denied",
+  };
+
+  /* ===================== UI ===================== */
+  if (loading) {
+    return <p className="text-center text-gray-500">Loading bookings...</p>;
+  }
+
   return (
-    <section className="pt-4 md:pt-6">
+    <>
       {/* Title */}
-      <p className="mt-0 mb-3 md:mb-5 text-center text-xl md:text-2xl tracking-wider uppercase text-gray-900 shadow-md pb-2 md:pb-3 font-bold md:font-medium rounded-2xl leading-tight">
+      <p className="text-center text-lg md:text-2xl font-semibold text-gray-900 my-2">
         Manage Bookings
       </p>
+      <p className="border-b-2 border-gray-700 w-10 mx-auto"></p>
+      <section className="px-2 md:px-8 pt-4 md:pt-6">
+        {/* Tabs */}
+        <div className="flex justify-center mb-6 gap-4">
+          {["current", "previous"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as any)}
+              className={`px-5 py-2 rounded-full transition ${
+                activeTab === tab
+                  ? "bg-gray-900 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+            >
+              {tab === "current" ? "Current" : "Previous"}
+            </button>
+          ))}
+        </div>
 
-      {/* Tabs */}
-      <div className="flex justify-center mb-4 md:mb-6 gap-4">
-        <button
-          onClick={() => setActiveTab("current")}
-          className={`px-5 py-2 rounded-full font-medium transition ${
-            activeTab === "current"
-              ? "bg-gray-900 text-white"
-              : "bg-gray-200 text-gray-800"
-          }`}
-        >
-          Current
-        </button>
-        <button
-          onClick={() => setActiveTab("previous")}
-          className={`px-5 py-2 rounded-full font-medium transition ${
-            activeTab === "previous"
-              ? "bg-gray-900 text-white"
-              : "bg-gray-200 text-gray-800"
-          }`}
-        >
-          Previous
-        </button>
-      </div>
-
-      {/* Booking list */}
-      {displayedBookings.length === 0 ? (
-        <p className="text-center text-gray-500 text-lg">No bookings available.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {displayedBookings.map((booking) => (
-            <div
-              key={booking.id}
-              className={`bg-gray-950 rounded-lg shadow-md border-l-4 p-5 flex flex-col justify-between
+        {/* Booking Cards */}
+        {displayedBookings.length === 0 ? (
+          <p className="text-center text-gray-500">No bookings found.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {displayedBookings.map((booking) => (
+              <div
+                key={booking.id}
+                className={`bg-gray-950 text-white rounded-lg border-l-4 p-5
                 ${
                   booking.status === "accepted"
                     ? "border-green-500"
                     : booking.status === "denied"
-                    ? "border-red-500"
-                    : "border-yellow-500"
+                      ? "border-red-500"
+                      : "border-yellow-500"
                 }`}
-            >
-              <div>
-                <p className="text-xl font-semibold mb-2 uppercase">{booking.name}</p>
-                {booking.bookingRef && (
-                  <p className="text-sm text-gray-300 mb-1">Booking Ref: {booking.bookingRef}</p>
-                )}
-                {booking.email && (
-                  <p className="text-sm text-gray-300 mb-1">Email: {booking.email}</p>
-                )}
-                <p className="text-sm text-gray-300 mb-1">Phone: {booking.phone}</p>
-                <p className="text-sm text-gray-300 mb-1">Check-in: {booking.checkIn}</p>
-                <p className="text-sm text-gray-300 mb-1">Check-out: {booking.checkOut}</p>
-                <p className="text-sm text-gray-300 mb-1">Guests: {booking.guests}</p>
-                <p className="text-sm text-gray-300 mb-1">Nights: {booking.nights}</p>
-                <p className="text-sm text-gray-300 mb-3 font-medium">
+              >
+                <p className="text-lg font-semibold mb-2">{booking.name}</p>
+
+                <p className="text-sm text-gray-300">
+                  Ref: {booking.bookingRef}
+                </p>
+                <p className="text-sm text-gray-300">Phone: {booking.phone}</p>
+                <p className="text-sm text-gray-300">
+                  Check-in: {booking.checkIn}
+                </p>
+                <p className="text-sm text-gray-300">
+                  Check-out: {booking.checkOut}
+                </p>
+
+                <p className="mt-2 font-medium">
                   Total: ₹{booking.totalAmount.toLocaleString("en-IN")}
                 </p>
 
-                <p
-                  className={`font-semibold mb-3 ${
-                    booking.status === "accepted"
-                      ? "text-green-600"
-                      : booking.status === "denied"
-                      ? "text-red-600"
-                      : "text-yellow-600"
-                  }`}
-                >
-                  Status: {booking.status.toUpperCase()}
+                <p className="mt-2 font-semibold">
+                  Status: {statusLabel[booking.status]}
                 </p>
-              </div>
 
-              <div className="flex gap-2">
-                <button
-                  onClick={() => updateStatus(booking.id, "accepted")}
-                  className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition"
-                >
-                  <AiOutlineCheck size={20} /> Accept
-                </button>
-                <button
-                  onClick={() => updateStatus(booking.id, "denied")}
-                  className="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2 rounded-md transition"
-                >
-                  <AiOutlineClose size={20} /> Deny
-                </button>
-                <button
-                  onClick={() => updateStatus(booking.id, "waiting")}
-                  className="flex-1 flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white py-2 rounded-md transition"
-                >
-                  <AiOutlineClockCircle size={20} /> Wait
-                </button>
+                {/* Actions only for CURRENT bookings */}
+                {activeTab === "current" && (
+                  <div className="flex gap-2 mt-4">
+                    <button
+                      onClick={() => updateStatus(booking.id, "accepted")}
+                      disabled={booking.status === "accepted"}
+                      className="flex-1 bg-green-500 hover:bg-green-600 py-2 rounded-md disabled:opacity-50"
+                    >
+                      <AiOutlineCheck className="inline mr-1" />
+                      Accept
+                    </button>
+
+                    <button
+                      onClick={() => updateStatus(booking.id, "denied")}
+                      disabled={booking.status === "denied"}
+                      className="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded-md disabled:opacity-50"
+                    >
+                      <AiOutlineClose className="inline mr-1" />
+                      Deny
+                    </button>
+
+                    <button
+                      onClick={() => updateStatus(booking.id, "waiting")}
+                      className="flex-1 bg-yellow-500 hover:bg-yellow-600 py-2 rounded-md"
+                    >
+                      <AiOutlineClockCircle className="inline mr-1" />
+                      Wait
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </section>
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 };
 

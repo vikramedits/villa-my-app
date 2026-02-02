@@ -6,7 +6,12 @@ import Modal from "./components/Modal";
 import RecentBookings from "./RecentBookings";
 import MonthlyOccupancy from "./MonthlyOccupancy";
 import EarningsOverview from "./EarningsView";
-import { BedDouble, CalendarCheck, TrendingUp, IndianRupee } from "lucide-react";
+import {
+  BedDouble,
+  CalendarCheck,
+  TrendingUp,
+  IndianRupee,
+} from "lucide-react";
 import CountUp from "react-countup"; // ✅ animated numbers
 
 interface Stat {
@@ -64,7 +69,9 @@ export default function StatisticsView() {
             highlight: true,
             details: (
               <div>
-                <p className="text-gray-700 font-semibold">Bookings this month:</p>
+                <p className="text-gray-700 font-semibold">
+                  Bookings this month:
+                </p>
                 <ul className="list-disc pl-5 mt-2 text-gray-600">
                   <li>Michael - 2 nights</li>
                   <li>Sarah - 3 nights</li>
@@ -82,7 +89,9 @@ export default function StatisticsView() {
             highlight: true,
             details: (
               <div>
-                <p className="text-gray-700 font-semibold">Revenue breakdown:</p>
+                <p className="text-gray-700 font-semibold">
+                  Revenue breakdown:
+                </p>
                 <ul className="list-disc pl-5 mt-2 text-gray-600">
                   <li>Room A: ₹40,000</li>
                   <li>Room B: ₹35,000</li>
@@ -100,7 +109,9 @@ export default function StatisticsView() {
             highlight: true,
             details: (
               <div>
-                <p className="text-gray-700 font-semibold">Occupancy details:</p>
+                <p className="text-gray-700 font-semibold">
+                  Occupancy details:
+                </p>
                 <ul className="list-disc pl-5 mt-2 text-gray-600">
                   <li>Room A: 90%</li>
                   <li>Room B: 65%</li>
@@ -122,66 +133,70 @@ export default function StatisticsView() {
 
   // ==================== Render ====================
   return (
-    <div className="flex flex-col gap-3 md:gap-10 w-full pt-5 md:pt-10">
-      <p className="text-center text-xl md:text-2xl tracking-wider uppercase text-gray-900 shadow-md pb-2 md:pb-4 font-bold md:font-medium rounded-2xl">
+    <>
+      <p className="text-center text-lg md:text-2xl font-semibold text-gray-900 my-2">
         Statistics
       </p>
+      <p className="border-b-2 border-gray-700 w-10 mx-auto"></p>
 
-      {/* ===== Analytics: Occupancy + Earnings ===== */}
-      <div className="grid grid-cols-1 md:flex gap-6">
-        <div className="w-full md:w-1/4">
-          <MonthlyOccupancy />
+      <div className="px-2 md:px-8 flex flex-col gap-3 md:gap-10 w-full pt-4 md:pt-6 ">
+        {/* ===== Analytics: Occupancy + Earnings ===== */}
+        <div className="grid grid-cols-1 md:flex gap-6">
+          <div className="w-full md:w-1/4">
+            <MonthlyOccupancy />
+          </div>
+          <div className="w-full md:w-9/12">
+            <EarningsOverview />
+          </div>
         </div>
-        <div className="w-full md:w-9/12">
-          <EarningsOverview />
-        </div>
-      </div>
 
-      {/* ===== Stat Cards ===== */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-6">
-        {loading ? (
-          <p className="text-gray-400 text-center col-span-4">Loading stats...</p>
-        ) : (
-          stats.map((stat) => (
-            <WhiteStatCard
-              key={stat.title}
-              title={stat.title}
-              icon={stat.icon}
-              info={stat.info}
-              highlight={stat.highlight}
-              onClick={() => setSelectedCard(stat)}
-            >
-              {/* 🔹 Animated number */}
-              <span
-                className={`text-xl font-bold ${
-                  stat.trend === "up" ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {typeof stat.value === "number" ? (
-                  <CountUp end={stat.value} duration={1.5} separator="," />
-                ) : (
-                  stat.value
-                )}
-                {stat.title === "Occupancy Rate" ? "%" : ""}
-              </span>
-            </WhiteStatCard>
-          ))
+        {/* ===== Stat Cards ===== */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-6">
+          {loading ? (
+            <p className="text-gray-400 text-center col-span-4">
+              Loading stats...
+            </p>
+          ) : (
+            stats.map((stat) => (
+              <WhiteStatCard
+                key={stat.title}
+                title={stat.title}
+                icon={stat.icon}
+                info={stat.info}
+                highlight={stat.highlight}
+                onClick={() => setSelectedCard(stat)} value={""}              >
+                {/* 🔹 Animated number */}
+                <span
+                  className={`text-xl font-bold ${
+                    stat.trend === "up" ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {typeof stat.value === "number" ? (
+                    <CountUp end={stat.value} duration={1.5} separator="," />
+                  ) : (
+                    stat.value
+                  )}
+                  {stat.title === "Occupancy Rate" ? "%" : ""}
+                </span>
+              </WhiteStatCard>
+            ))
+          )}
+        </div>
+
+        {/* ===== Recent Bookings ===== */}
+        <RecentBookings />
+
+        {/* ===== Modal for card details ===== */}
+        {selectedCard && (
+          <Modal
+            isOpen={!!selectedCard}
+            closeModal={() => setSelectedCard(null)}
+            title={selectedCard.title}
+          >
+            {selectedCard.details}
+          </Modal>
         )}
       </div>
-
-      {/* ===== Recent Bookings ===== */}
-      <RecentBookings />
-
-      {/* ===== Modal for card details ===== */}
-      {selectedCard && (
-        <Modal
-          isOpen={!!selectedCard}
-          closeModal={() => setSelectedCard(null)}
-          title={selectedCard.title}
-        >
-          {selectedCard.details}
-        </Modal>
-      )}
-    </div>
+    </>
   );
 }

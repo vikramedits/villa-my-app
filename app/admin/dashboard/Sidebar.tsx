@@ -14,7 +14,7 @@ import MobilePortal from "@/components/MobilePortal";
 const MAIN_MENU = [
   { name: "Statistics", icon: Home },
   { name: "Bookings", icon: Calendar },
-  { name: "Calender", icon: Users },
+  { name: "Calendar", icon: Users },
   { name: "Earnings", icon: IndianRupee },
 ];
 
@@ -29,7 +29,7 @@ export default function Sidebar({ activeMenu, setActiveMenu }: any) {
   return (
     <>
       {/* =========================== Desktop ============================= */}
-      <aside className=" hidden md:flex bg-gray-950 p-6 pb-72 flex-col justify-between">
+      <aside className="hidden md:flex w-full h-screen sticky top-0 bg-gray-950 p-6 flex-col">
         <div>
           <p className="text-2xl font-bold mb-10">
             VILLA <span className="text-red-500">ADMIN</span>
@@ -51,7 +51,7 @@ export default function Sidebar({ activeMenu, setActiveMenu }: any) {
         </div>
       </aside>
 
-     {/* ======================= Mobile ===================== */}
+      {/* ======================= Mobile ===================== */}
       <MobilePortal>
         <div
           className="fixed inset-x-0 bottom-0 w-full md:hidden
