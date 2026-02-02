@@ -13,14 +13,14 @@ export default function DashboardPage() {
 
   return (
     <div className=" pb-10">
-      <div className="flex flex-col md:flex-row md:min-h-screen ">
+      <div className="flex flex-col md:flex-row min-h-screen ">
         {/* ============== Left ============ */}
         <div className="md:w-1/5 text-white">
           <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
         </div>
         {/* ============ Right ============ */}
 
-        <main className="md:w-4/5 pb-12 bg-white">
+        <main className="md:w-4/5 flex-1  bg-white">
           {activeMenu === "Statistics" && <StatisticsView />}
           {activeMenu === "Bookings" && <BookingsView />}
           {activeMenu === "Calendar" && <CalenderTab />}

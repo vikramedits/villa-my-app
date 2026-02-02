@@ -109,7 +109,7 @@ export default function CalenderTab() {
       <p className="border-b-2 border-gray-700 w-10 mx-auto"></p>
       <div className="px-2 md:px-8 flex flex-col md:flex-row gap-6 pt-4 md:pt-6">
         {/* ---------------- Calendar ---------------- */}
-        <div className="bg-white rounded-2xl shadow p-4 flex-1">
+        <div className="bg-white rounded-2xl shadow-xl p-4 flex-1 ">
           <p className="text-xl font-semibold mb-4 text-gray-800">
             Select Dates
           </p>
@@ -128,7 +128,7 @@ export default function CalenderTab() {
         </div>
 
         {/* ---------------- Booking Details ---------------- */}
-        <div className="bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-6 rounded-2xl shadow flex-1 flex flex-col justify-between">
+        <div className="bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-6 rounded-2xl shadow-xl flex-1 flex flex-col justify-between">
           <div>
             <p className="text-xl font-semibold mb-4">Booking Details</p>
 
@@ -161,8 +161,8 @@ export default function CalenderTab() {
 
           {/* ---------------- Fully booked dates ---------------- */}
           <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-3">Fully Booked Dates</h3>
-            <div className="bg-gray-50 dark:bg-slate-800 p-3 rounded-xl shadow-inner max-h-48 overflow-auto">
+            <p className="text-lg font-semibold mb-3">Fully Booked Dates</p>
+            <div className="bg-gray-50 dark:bg-slate-800 p-3 rounded-xl  shadow-inner max-h-48 overflow-auto">
               <ul className="space-y-2">
                 {bookedDates
                   .sort(

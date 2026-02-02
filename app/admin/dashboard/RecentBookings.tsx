@@ -9,8 +9,8 @@ export default function RecentBookings() {
   return (
     <div className="bg-white text-gray-950 rounded-2xl p-3 md:p-6 shadow-xl">
       <div className="flex justify-between mb-3 md:mb-6">
-        <h2 className="font-semibold text-lg">Recent Bookings</h2>
-        <span className="text-sm text-red-500 cursor-pointer">View all</span>
+        <p className="font-semibold text-lg">Recent Bookings</p>
+        {/* <span className="text-sm text-red-500 cursor-pointer">View all</span> */}
       </div>
 
       <div className="space-y-4">
