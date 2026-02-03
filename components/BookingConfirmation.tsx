@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { X, CreditCard } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ interface BookingData {
   nights: number;
   totalAmount: number;
   bookingRef?: string;
+  status?: "PENDING" | "APPROVED" | "PAYMENT_PENDING" | "PAID";
 }
 
 interface Props {
@@ -24,8 +25,8 @@ interface Props {
   onClose: () => void;
   onConfirm: () => Promise<void> | void;
   data: BookingData | null;
-  step: number;
-  setStep: (val: number) => void;
+  step: number; // parent step
+  setStep: (val: number) => void; // parent step setter
 }
 
 export default function BookingConfirmation({
@@ -33,9 +34,17 @@ export default function BookingConfirmation({
   onClose,
   onConfirm,
   data,
+  step,
+  setStep,
 }: Props) {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
   const router = useRouter();
+
+  // ✅ Helper for safe localStorage usage
+  const saveBookingRef = (ref?: string) => {
+    if (typeof window !== "undefined" && ref) {
+      localStorage.setItem("lastBookingRef", ref);
+    }
+  };
 
   return (
     <Transition appear show={open} as={Fragment}>
@@ -71,6 +80,7 @@ export default function BookingConfirmation({
                   {step === 1 && "Confirm Your Booking"}
                   {step === 2 && "Request Sent"}
                   {step === 3 && "Booking Approved"}
+                  {step === 4 && "Payment Pending"} {/* future */}
                 </Dialog.Title>
                 <button onClick={onClose}>
                   <X className="w-5 h-5 text-gray-500" />
@@ -79,7 +89,7 @@ export default function BookingConfirmation({
 
               {/* CONTENT */}
               <div className="p-6">
-                {/* 🟢 SLIDE 1 – REVIEW BOOKING */}
+                {/* 🟢 STEP 1 – REVIEW BOOKING */}
                 {step === 1 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="rounded-xl border p-4 bg-gray-50">
@@ -140,8 +150,9 @@ export default function BookingConfirmation({
                       <div className="mt-6 flex flex-col gap-3">
                         <button
                           onClick={async () => {
+                            if (!data) return;
                             await onConfirm();
-                            setStep(2);
+                            setStep(2); // move to Request Sent
                           }}
                           disabled={!data}
                           className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold"
@@ -159,20 +170,62 @@ export default function BookingConfirmation({
                   </div>
                 )}
 
-                {/* 🟡 SLIDE 2 – REQUEST SENT */}
+                {/* 🟡 STEP 2 – REQUEST SENT */}
                 {step === 2 && (
-                  <div className="flex flex-col items-center justify-center text-center py-12 space-y-6 max-w-2xl mx-auto">
-                    {/* Success Icon & Heading */}
-                    <CheckCircle2 className="w-16 h-16 text-green-600 mt-6" />
+                  <div
+                    className="
+                                flex flex-col items-center justify-center text-center
+                                py-12 space-y-6 max-w-2xl mx-auto
+                               transition-all duration-500 ease-out
+                                opacity-100 scale-100
+                              "
+                  >
+                    {/* ✅ Animated Success Circle */}
+                   {/* ✅ Success Animation */}
+<div className="relative w-28 h-28 flex items-center justify-center">
+  <svg
+    className="absolute w-full h-full"
+    viewBox="0 0 100 100"
+  >
+    {/* Grey background ring */}
+    <circle
+      cx="50"
+      cy="50"
+      r="30"
+      stroke="#e5e7eb"
+      strokeWidth="6"
+      fill="none"
+    />
+
+    {/* Green animated progress ring */}
+    <circle
+      cx="50"
+      cy="50"
+      r="30"
+      stroke="#16a34a"
+      strokeWidth="6"
+      fill="none"
+      strokeLinecap="round"
+      className="progress-ring"
+      transform="rotate(-90 50 50)"
+    />
+  </svg>
+
+  {/* Tick icon */}
+  <CheckCircle2 className="w-12 h-12 text-green-600 tick-animate" />
+</div>
+
+
                     <h2 className="text-2xl font-bold text-gray-800">
                       Request Sent Successfully!
                     </h2>
+
                     <p className="text-gray-600 max-w-md">
                       Thank you for your booking request. You can check your
                       booking status anytime below.
                     </p>
 
-                    {/* Reference ID with copy option */}
+                    {/* Reference ID */}
                     <div className="flex items-center justify-center space-x-2 bg-gray-100 px-4 py-2 rounded-lg">
                       <span className="font-mono font-semibold text-gray-800">
                         {data?.bookingRef || "N/A"}
@@ -183,19 +236,16 @@ export default function BookingConfirmation({
                           if (data?.bookingRef) {
                             navigator.clipboard.writeText(data.bookingRef);
                             alert("Booking reference copied!");
-                            localStorage.setItem(
-                              "lastBookingRef",
-                              data.bookingRef,
-                            ); // ✅ yeh line add karo
+                            saveBookingRef(data.bookingRef);
                           }
                         }}
                       />
                     </div>
 
-                    {/* Bottom Buttons: Back | Check Status | Close */}
+                    {/* Buttons */}
                     <div className="flex w-full max-w-md gap-2 mt-6">
                       <button
-                        onClick={() => setStep(1)} // Previous step
+                        onClick={() => setStep(1)}
                         className="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-3 rounded-lg font-semibold transition"
                       >
                         Back
@@ -207,12 +257,9 @@ export default function BookingConfirmation({
                             `/check-booking?ref=${data?.bookingRef}`,
                             "_blank",
                           );
-                          localStorage.setItem(
-                            "lastBookingRef",
-                            data?.bookingRef || "",
-                          ); // ✅ yeh bhi add karo
+                          saveBookingRef(data?.bookingRef);
                         }}
-                        className="bg-blue-600 px-4 text-white rounded-lg"
+                        className="w-1/2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition"
                       >
                         Check Status
                       </button>
@@ -220,7 +267,7 @@ export default function BookingConfirmation({
                   </div>
                 )}
 
-                {/* 🔵 SLIDE 3 – PAYMENT ENABLED (Future use after owner approval) */}
+                {/* 🔵 STEP 3 – PAYMENT ENABLED (Future) */}
                 {step === 3 && (
                   <div className="flex flex-col items-center justify-center text-center py-12 space-y-4">
                     <CreditCard className="w-16 h-16 text-blue-600" />
@@ -238,6 +285,14 @@ export default function BookingConfirmation({
                     </button>
                   </div>
                 )}
+
+                {/* 🔵 STEP 4 – PAYMENT PENDING / PAID (future use) */}
+                {/* 
+                  🔹 Future: show detailed payment status, amount breakdown
+                  🔹 Can integrate Razorpay / Stripe
+                  🔹 Add backend API call to confirm payment success
+                  🔹 Optional: receipt download
+                */}
               </div>
             </Dialog.Panel>
           </Transition.Child>

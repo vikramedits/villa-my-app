@@ -7,6 +7,7 @@ import BookingConfirmation from "@/components/BookingConfirmation";
 export default function VillaBookingFullScreen() {
   const PRICE_PER_PERSON = 1500;
 
+  /* ===================== STATES ===================== */
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [adults, setAdults] = useState(1);
@@ -21,29 +22,65 @@ export default function VillaBookingFullScreen() {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [formData, setFormData] = useState<any>(null);
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
 
+  /* ===================== RESPONSIVE SAFE ===================== */
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    setIsDesktop(window.innerWidth >= 768);
+  }, []);
+
+  /* ===================== HELPERS ===================== */
+  const calcNights = (checkIn: string, checkOut: string) => {
+    if (!checkIn || !checkOut) return 1;
+    const inDate = new Date(checkIn);
+    const outDate = new Date(checkOut);
+    const diff = outDate.getTime() - inDate.getTime();
+    return Math.max(diff / (1000 * 60 * 60 * 24), 1);
+  };
+
+  /* ===================== PRICE LOGIC ===================== */
   useEffect(() => {
     const members = Number(adults) + Number(kids);
-    setTotalMembers(members);
-    setTotalAmount(members * PRICE_PER_PERSON);
-  }, [adults, kids]);
+    const nights = calcNights(checkIn, checkOut);
 
+    setTotalMembers(members);
+    setTotalAmount(members * nights * PRICE_PER_PERSON);
+  }, [adults, kids, checkIn, checkOut]);
+
+  /* ===================== SUBMIT ===================== */
   const handleNext = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // ❌ invalid date safety
+    if (new Date(checkOut) <= new Date(checkIn)) {
+      alert("Check-out date must be after check-in");
+      return;
+    }
+
+    const nights = calcNights(checkIn, checkOut);
 
     const data = {
       name: groupName,
       phone: contact,
-      email: "", // optional, baad me add kar sakte ho
+      email: "",
       checkIn,
       checkOut,
       guests: totalMembers,
-      nights: 1, // abhi simple, baad me date diff se calculate karenge
+      nights,
+      pricePerPerson: PRICE_PER_PERSON,
       totalAmount,
+
+      /*
+        ⚠️ IMPORTANT:
+        Backend must re-calculate:
+        nights & totalAmount
+        Never trust client amount
+      */
     };
 
-    setFormData(data); // 👈 form data save
-    setOpenConfirm(true); // 👈 confirmation modal open
+    setFormData(data);
+    setOpenConfirm(true);
   };
 
   return (
@@ -58,11 +95,10 @@ export default function VillaBookingFullScreen() {
           payment.
         </p>
       </div>
-      {/* ======================================== DESKTOP: LEFT 30%, RIGHT 70% & MOBILE: COLOUMN ========================================== */}
+
       <div className="container-fluid flex flex-col md:flex-row md:gap-3 ">
         {/* ========== LEFT=========== */}
         <div className="md:w-5/12 w-full bg-gray-50 pb-3">
-          {/* ========== mobile toggle =========== */}
           <div className="md:hidden mb-4">
             <button
               onClick={() => setShowAvailability(!showAvailability)}
@@ -72,25 +108,22 @@ export default function VillaBookingFullScreen() {
             </button>
           </div>
 
-          {/* ========== Show availability only if desktop or toggle is true  =========== */}
-          {(showAvailability || window.innerWidth >= 768) && (
-            <CheckAvailability />
-          )}
+          {(showAvailability || isDesktop) && <CheckAvailability />}
         </div>
-        {/* ========== RIGHT=========== */}
 
+        {/* ========== RIGHT=========== */}
         <div className="md:w-7/12 w-full bg-white p-3 md:p-6 shadow-xl flex flex-col justify-between rounded-sm rounded-b-3xl border-b-4 border-primaryBlue">
           <p className="text-center mb-3 md:mb-6 text-black text-lg md:text-xl font-bold md:font-medium border-b-2 border-primaryBlue rounded-xl tracking-wide">
             Enter details to confirm{" "}
           </p>
-          {/* ========== Top advance info =========== */}
+
           <div className="bg-yellow-100 text-yellow-900 p-2 md:p-4 rounded-lg text-start font-medium text-sm md:text-lg tracking-wide">
             <p> Pay 20% advance to confirm your luxurious stay</p>
             <p> ₹1500 / per person only</p>
           </div>
 
           <form onSubmit={handleNext} className="my-3 md:my-6">
-            {/* ========== Check-in & Check-out =========== */}
+            {/* Dates */}
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-primaryBlue">
@@ -118,7 +151,7 @@ export default function VillaBookingFullScreen() {
               </div>
             </div>
 
-            {/* ========== Adults & Kids =========== */}
+            {/* Members */}
             <div className="flex flex-col md:flex-row gap-4 mt-2 md:mt-4">
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-primaryBlue">
@@ -159,7 +192,7 @@ export default function VillaBookingFullScreen() {
               </div>
             </div>
 
-            {/* ========== Group Name & Contact =========== */}
+            {/* Group + Contact */}
             <div className="flex flex-col md:flex-row gap-4 mt-2 md:mt-4">
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-primaryBlue">
@@ -189,7 +222,7 @@ export default function VillaBookingFullScreen() {
               </div>
             </div>
 
-            {/* ========== Tooltip trigger =========== */}
+            {/* Tooltip */}
             <div className="relative mt-2 md:mt-4">
               <button
                 type="button"
@@ -214,54 +247,67 @@ export default function VillaBookingFullScreen() {
               *Please carry ID proof at check-in
             </p>
 
-            {/* ========== Submit button =========== */}
+            {/* Submit */}
             <button
               type="submit"
+              disabled={loading}
               className="w-full flex items-center justify-between
                         bg-green-900 text-white font-semibold
                         py-4 px-6 rounded-lg
                         hover:bg-green-700 transition
                         mt-2 md:mt-4"
             >
-              {/* LEFT: Total Amount */}
               <span className="text-lg font-bold">
                 ₹{totalAmount.toLocaleString("en-IN")}/-
               </span>
-
-              {/* RIGHT: Reserve Booking */}
               <span className="flex items-center gap-2 text-sm md:text-base">
-                RESERVE YOUR BOOKING →
+                {loading ? "Processing..." : "RESERVE YOUR BOOKING →"}
               </span>
             </button>
           </form>
+
           <BookingConfirmation
             open={openConfirm}
             data={formData}
             step={step}
             setStep={setStep}
-            onClose={() => setOpenConfirm(false)}
+            onClose={() => {
+              setOpenConfirm(false);
+              setStep(1);
+              setFormData(null);
+            }}
             onConfirm={async () => {
               if (!formData) return;
+              setLoading(true);
 
               try {
+                /*
+                  🔐 API /api/bookings
+                  Backend MUST:
+                  - Recalculate nights
+                  - Recalculate total price
+                  - Prevent duplicate booking
+                  - Return bookingRef
+                */
                 const res = await fetch("/api/bookings", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(formData),
                 });
 
-                const result = await res.json(); // { bookingRef: "BP12AB34" }
+                const result = await res.json();
 
                 if (result.bookingRef) {
-                  // ✅ update formData with bookingRef
                   setFormData({ ...formData, bookingRef: result.bookingRef });
-                  setStep(2); // Step 2 modal show hoga
+                  setStep(2);
                 } else {
-                  alert("Booking failed, please try again");
+                  alert("Booking failed, try again");
                 }
               } catch (err) {
                 console.error(err);
-                alert("Something went wrong, please try again");
+                alert("Something went wrong");
+              } finally {
+                setLoading(false);
               }
             }}
           />
