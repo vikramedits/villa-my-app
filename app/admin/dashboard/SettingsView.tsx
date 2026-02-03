@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 /* ================= Interfaces ================= */
 
@@ -8,7 +8,8 @@ interface MonthlyEntry {
   groupName: string;
   bookingRS: number;
   foodRS: number;
-  date: string;
+  startDate: string;
+  endDate: string;
 }
 
 interface MonthData {
@@ -25,6 +26,9 @@ interface YearData {
 
 export default function SettingsView() {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const currentYear = new Date().getFullYear();
+  const currentMonthIndex = new Date().getMonth(); // 0 = Jan, 11 = Dec
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -50,10 +54,40 @@ export default function SettingsView() {
     }),
   );
 
+  /* ================= Calculations ================= */
+
   const [yearlyData, setYearlyData] = useState<YearData[]>(initialYearlyData);
-  const [expandedYearIndex, setExpandedYearIndex] = useState<number | null>(0);
+  const [expandedYearIndex, setExpandedYearIndex] = useState<number | null>(
+    () => {
+      const idx = currentYear - startYear;
+      return idx >= 0 && idx <= endYear - startYear ? idx : null;
+    },
+  );
+
+  const yearlyTotals = useMemo(() => {
+    return yearlyData.map((year) => ({
+      months: year.months.map((month) => ({
+        bookingRS: month.entries.reduce((acc, e) => acc + e.bookingRS, 0),
+        foodRS: month.entries.reduce((acc, e) => acc + e.foodRS, 0),
+      })),
+      gross: year.months.reduce(
+        (acc, month) => {
+          const mBooking = month.entries.reduce((a, e) => a + e.bookingRS, 0);
+          const mFood = month.entries.reduce((a, e) => a + e.foodRS, 0);
+          return {
+            bookingRS: acc.bookingRS + mBooking,
+            foodRS: acc.foodRS + mFood,
+          };
+        },
+        { bookingRS: 0, foodRS: 0 },
+      ),
+    }));
+  }, [yearlyData]);
 
   /* ================= Dialog State ================= */
+  const [showSaved, setShowSaved] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+  const [animateDialog, setAnimateDialog] = useState(false);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<{
@@ -66,15 +100,25 @@ export default function SettingsView() {
     groupName: "",
     bookingRS: "",
     foodRS: "",
-    date: "",
+    startDate: "",
+    endDate: "",
   });
 
   /* ================= Open Dialogs ================= */
 
   const openAddDialog = (yIdx: number, mIdx: number) => {
     setEditingIndex({ year: yIdx, month: mIdx, entry: null });
-    setFormData({ groupName: "", bookingRS: "", foodRS: "", date: "" });
+    setFormData({
+      groupName: "",
+      bookingRS: "",
+      foodRS: "",
+      startDate: "",
+      endDate: "",
+    });
     setIsDialogOpen(true);
+
+    // delay to trigger transition
+    setTimeout(() => setAnimateDialog(true), 1); // small delay
   };
 
   const openEditDialog = (yIdx: number, mIdx: number, eIdx: number) => {
@@ -84,9 +128,15 @@ export default function SettingsView() {
       groupName: entry.groupName,
       bookingRS: String(entry.bookingRS),
       foodRS: String(entry.foodRS),
-      date: entry.date,
+      startDate: entry.startDate,
+      endDate: entry.endDate,
     });
     setIsDialogOpen(true);
+    setTimeout(() => setAnimateDialog(true), 10);
+  };
+  const closeDialog = () => {
+    setAnimateDialog(false); // start closing animation
+    setTimeout(() => setIsDialogOpen(false), 200); // match transition duration
   };
 
   /* ================= Save Entry ================= */
@@ -101,7 +151,8 @@ export default function SettingsView() {
       groupName: formData.groupName,
       bookingRS: Number(formData.bookingRS),
       foodRS: Number(formData.foodRS),
-      date: formData.date,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
     };
 
     if (entry === null) {
@@ -112,6 +163,13 @@ export default function SettingsView() {
 
     setYearlyData(newData);
     setIsDialogOpen(false);
+
+    //  Trigger saved popup with fade-out
+    setShowSaved(true); // show popup
+    setFadeOut(false); // reset fade state
+
+    setTimeout(() => setFadeOut(true), 1500); // start fade-out after 1.5s
+    setTimeout(() => setShowSaved(false), 2000); // hide completely after 2s
   };
 
   /* ================= Delete Entry ================= */
@@ -123,43 +181,14 @@ export default function SettingsView() {
     setYearlyData(newData);
   };
 
-  /* ================= Calculations ================= */
+  
 
-  const calcMonthlyTotal = (y: number, m: number) =>
-    yearlyData[y].months[m].entries.reduce(
-      (acc, curr) => ({
-        bookingRS: acc.bookingRS + curr.bookingRS,
-        foodRS: acc.foodRS + curr.foodRS,
-      }),
-      { bookingRS: 0, foodRS: 0 },
-    );
-
-  const calcPrevMonthTotal = (y: number, m: number) =>
-    m === 0 ? { bookingRS: 0, foodRS: 0 } : calcMonthlyTotal(y, m - 1);
-
-  const calcYearGross = (y: number) =>
-    yearlyData[y].months.reduce(
-      (acc, month) => {
-        const t = month.entries.reduce(
-          (mAcc, e) => ({
-            bookingRS: mAcc.bookingRS + e.bookingRS,
-            foodRS: mAcc.foodRS + e.foodRS,
-          }),
-          { bookingRS: 0, foodRS: 0 },
-        );
-        return {
-          bookingRS: acc.bookingRS + t.bookingRS,
-          foodRS: acc.foodRS + t.foodRS,
-        };
-      },
-      { bookingRS: 0, foodRS: 0 },
-    );
 
   /* ================= UI ================= */
 
   return (
-    <div className="px-2 md:px-8 bg-slate-900 min-h-screen space-y-6 text-white">
-      <p className="text-center text-lg md:text-2xl font-semibold py-4">
+    <div className="px-2 md:px-8 bg-slate-900 min-h-screen space-y-6 text-white pb-20">
+      <p className="text-center text-lg md:text-2xl font-semibold py-4 mb-0">
         Villa Collection
       </p>
       <p className="border-b-2 border-gray-700 w-10 mx-auto" />
@@ -177,19 +206,41 @@ export default function SettingsView() {
         <div ref={scrollRef} className="overflow-x-auto py-2">
           <div className="flex gap-4 min-w-max">
             {yearlyData.map((year, idx) => {
-              const gross = calcYearGross(idx);
+              const gross = yearlyTotals[idx].gross;
               return (
                 <div
                   key={year.year}
-                  className="min-w-55 bg-slate-700 p-4 rounded-2xl shadow"
+                  className={`min-w-55 bg-slate-700 p-4 rounded-2xl shadow border-2
+                             ${year.year === currentYear ? "border-green-500" : "border-transparent"}`}
                 >
-                  <p className="text-lg tracking-wider font-bold">
+                  <p
+                    className={`text-lg tracking-wider font-bold ${
+                      year.year === currentYear ? "text-green-400" : ""
+                    }`}
+                  >
                     {year.year}
                   </p>
-                  <p>Booking RS: {gross.bookingRS}</p>
-                  <p>Food RS: {gross.foodRS}</p>
-                  <p className="font-semibold border-t mt-2 pt-1">
-                    Gross Total: {gross.bookingRS + gross.foodRS}
+
+                  <p className="flex justify-between">
+                    <span>Booking</span>
+                    <span>
+                      ₹{Number(gross.bookingRS).toLocaleString("en-IN")}
+                    </span>
+                  </p>
+
+                  <p className="flex justify-between">
+                    <span>Food</span>
+                    <span>₹{Number(gross.foodRS).toLocaleString("en-IN")}</span>
+                  </p>
+
+                  <p className="flex justify-between font-semibold border-t mt-2 pt-1">
+                    <span>Gross Total</span>
+                    <span>
+                      ₹
+                      {Number(gross.bookingRS + gross.foodRS).toLocaleString(
+                        "en-IN",
+                      )}
+                    </span>
                   </p>
                 </div>
               );
@@ -208,7 +259,7 @@ export default function SettingsView() {
       {/* ================= Year Cards ================= */}
 
       {yearlyData.map((yearData, yIdx) => {
-        const yearGross = calcYearGross(yIdx);
+        const yearGross = yearlyTotals[yIdx].gross;
         const isExpanded = expandedYearIndex === yIdx;
 
         return (
@@ -220,35 +271,63 @@ export default function SettingsView() {
               className="bg-slate-700 p-3 rounded-xl cursor-pointer flex justify-between"
               onClick={() => setExpandedYearIndex(isExpanded ? null : yIdx)}
             >
-              <p className="font-semibold text-lg">{yearData.year}</p>
+              <p
+                className={`font-bold text-lg tracking-wider
+                              ${
+                                yearData.year === currentYear
+                                  ? "text-green-500" // ✅ Current year (system date)
+                                  : expandedYearIndex === yIdx
+                                    ? "text-blue-400" // 🔹 Clicked/expanded year
+                                    : "text-white" // ⚪ Normal year
+                              }
+                            `}
+              >
+                {yearData.year}
+              </p>
+
               <p>
-                Booking ₹{yearGross.bookingRS} | Food ₹{yearGross.foodRS}
+                Booking ₹{Number(yearGross.bookingRS).toLocaleString("en-IN")} |
+                Food ₹{Number(yearGross.foodRS).toLocaleString("en-IN")}
               </p>
             </div>
 
             {isExpanded &&
               yearData.months.map((month, mIdx) => {
-                const total = calcMonthlyTotal(yIdx, mIdx);
-                const prev = calcPrevMonthTotal(yIdx, mIdx);
+                const isCurrentMonth =
+                  yearData.year === currentYear && mIdx === currentMonthIndex;
+
+                const total = yearlyTotals[yIdx].months[mIdx];
+                // const prev = calcPrevMonthTotal(yIdx, mIdx);
 
                 return (
                   <div
                     key={month.month}
-                    className="bg-slate-700 p-2 md:p-4 mt-4 rounded-xl"
+                    className={`bg-slate-700 p-2 md:p-4 mt-4 rounded-xl ${
+                      isCurrentMonth ? "ring-2 ring-green-400" : ""
+                    }`}
                   >
                     <div className="bg-slate-600 p-3 rounded-lg flex flex-col md:flex-row md:justify-between gap-2">
-                      <span className="font-semibold">{month.month}</span>
+                      <span className="font-semibold flex items-center gap-2">
+                        {month.month}
+                        {isCurrentMonth && (
+                          <span className="text-xs bg-green-600 px-2 py-0.5 rounded">
+                            Current
+                          </span>
+                        )}
+                      </span>
 
                       {/* Month Total */}
                       <div className="">
                         <span className="text-white font-bold mr-4">
                           Total:
-                        </span>{" "}
+                        </span>
+
                         <span className="text-green-300 mr-4">
-                          Booking ₹{total.bookingRS}
-                        </span>{" "}
+                          Booking ₹{total.bookingRS.toLocaleString("en-IN")}
+                        </span>
+
                         <span className="text-yellow-300">
-                          Food ₹{total.foodRS}
+                          Food ₹{total.foodRS.toLocaleString("en-IN")}
                         </span>
                       </div>
                     </div>
@@ -268,14 +347,14 @@ export default function SettingsView() {
                           {month.entries.map((e, i) => (
                             <tr key={i} className="bg-slate-500">
                               <td className="border px-2 py-2">{i + 1}</td>
+
                               <td className="border px-2 py-2 whitespace-nowrap">
-                                {e.date}
+                                {e.startDate}
+                                {e.endDate && <> → {e.endDate}</>}
                               </td>
-                              {/* <td className="border px-2 py-2">
-                                {e.groupName}
-                              </td> */}
+
                               <td className="border px-2 py-2">
-                                {e.bookingRS}
+                                ₹{Number(e.bookingRS).toLocaleString("en-IN")}
                               </td>
 
                               {/* Food + Actions merged */}
@@ -283,12 +362,11 @@ export default function SettingsView() {
                                 <div className="flex items-center justify-between gap-2">
                                   {/* Food amount */}
                                   <span className="whitespace-nowrap">
-                                    {e.foodRS}
+                                    ₹{Number(e.foodRS).toLocaleString("en-IN")}
                                   </span>
 
                                   {/* Action dots */}
                                   <div className="flex gap-2 shrink-0">
-                                    {/* Edit */}
                                     <button
                                       onClick={() =>
                                         openEditDialog(yIdx, mIdx, i)
@@ -297,7 +375,6 @@ export default function SettingsView() {
                                       title="Edit"
                                     />
 
-                                    {/* Delete */}
                                     <button
                                       onClick={() => deleteEntry(yIdx, mIdx, i)}
                                       className="w-4 h-4 rounded-full bg-red-500 hover:scale-110 transition"
@@ -328,32 +405,40 @@ export default function SettingsView() {
       {/* ================= Dialog ================= */}
 
       {isDialogOpen && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-slate-800 p-6 rounded-xl w-full max-w-md space-y-4">
-            <h2 className="text-lg font-semibold">
+        <div className="fixed inset-0  flex items-center justify-center z-50 px-5">
+          <div
+            className={`bg-white  p-6 rounded-xl w-full max-w-md space-y-4 transform transition-all duration-200
+                  ${animateDialog ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+          >
+            <p className="text-lg font-bold text-red-600 uppercase tracking-wide  ">
               {editingIndex?.entry === null ? "Add Entry" : "Edit Entry"}
-            </h2>
+            </p>
 
+            <label className="block mb-1 text-gray-700">Start Date</label>
             <input
               type="date"
-              className="w-full p-2 rounded bg-slate-700"
-              value={formData.date}
+              className="w-full p-2 rounded shadow-md text-black border-2 border-gray-300"
+              value={formData.startDate}
               onChange={(e) =>
-                setFormData({ ...formData, date: e.target.value })
+                setFormData({ ...formData, startDate: e.target.value })
               }
             />
-            {/* <input
-              placeholder="Group Name"
-              className="w-full p-2 rounded bg-slate-700"
-              value={formData.groupName}
+
+            <label className="block mb-1 text-gray-700">End Date</label>
+            <input
+              type="date"
+              className="w-full p-2 rounded shadow-md text-black border-2 border-gray-300"
+              value={formData.endDate}
+              min={formData.startDate}
               onChange={(e) =>
-                setFormData({ ...formData, groupName: e.target.value })
+                setFormData({ ...formData, endDate: e.target.value })
               }
-            /> */}
+            />
+
             <input
               type="number"
-              placeholder="Booking RS"
-              className="w-full p-2 rounded bg-slate-700"
+              placeholder="Booking ₹"
+              className="w-full p-2 rounded shadow-md  text-black border-2 border-gray-300"
               value={formData.bookingRS}
               onChange={(e) =>
                 setFormData({ ...formData, bookingRS: e.target.value })
@@ -361,24 +446,24 @@ export default function SettingsView() {
             />
             <input
               type="number"
-              placeholder="Food RS"
-              className="w-full p-2 rounded bg-slate-700"
+              placeholder="Food ₹"
+              className="w-full p-2 rounded shadow-md  text-black border-2 border-gray-300 "
               value={formData.foodRS}
               onChange={(e) =>
                 setFormData({ ...formData, foodRS: e.target.value })
               }
             />
 
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-between gap-3">
               <button
-                onClick={() => setIsDialogOpen(false)}
-                className="bg-gray-600 px-4 py-2 rounded"
+                onClick={closeDialog}
+                className="bg-gray-600 px-4 py-2 w-24 rounded uppercase hover:bg-gray-700 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={saveEntry}
-                className="bg-blue-600 px-4 py-2 rounded"
+                className="bg-blue-600 px-4 py-2 w-24 rounded uppercase hover:bg-blue-700 transition-colors"
               >
                 Save
               </button>
@@ -386,6 +471,9 @@ export default function SettingsView() {
           </div>
         </div>
       )}
+
+      {/* ================= Saved Popup ================= */}
+      {showSaved && <div className="saved-popup">Saved!</div>}
     </div>
   );
 }

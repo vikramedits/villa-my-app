@@ -147,7 +147,7 @@ export default function Navbar() {
               {contactOpen && (
                 <div
                   className="absolute left-0 top-full mt-2 w-full 
-                 bg-white rounded-xl shadow-lg z-[9999] overflow-hidden"
+                 bg-white rounded-xl shadow-lg z-9999 overflow-hidden"
                 >
                   <Link
                     href="mailto:thepushpaheritage0@gmail.com"
@@ -207,7 +207,7 @@ export default function Navbar() {
               priority
               className="rounded-xs w-8 md:w-12 h-8 md:h-12 object-cover"
             />
-            <span className="text-sm md:text-lg font-semibold tracking-wide text-primaryBlue ">
+            <span className="text-sm md:text-lg font-bold md:font-semibold tracking-wide text-primaryBlue ">
               The Pushpa Heritage
               <p className="text-xs md:text-sm text-black shadow-2xl rounded-l-full rounded-r-full">
                 7-BHK | Big Pool | 2 Gardens
@@ -293,7 +293,7 @@ export default function Navbar() {
                   className="text-primaryBlue hover:bg-white/10"
                   aria-label="Open Menu"
                 >
-                  <Menu />
+                  <Menu size={28} />
                 </Button>
               </SheetTrigger>
 

@@ -4,7 +4,7 @@ import { Instagram, Youtube, Phone, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-primaryBlue text-white mt-16">
+    <footer className="bg-primaryBlue text-white ">
       {/* ================= TOP GRID ================= */}
       <div className="container mx-auto px-4 py-12 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-10">
         {/* Company */}

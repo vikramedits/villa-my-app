@@ -283,3 +283,26 @@ body {
     font-size: 0.875rem;
   }
 }
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.95); }
+  10% { opacity: 1; transform: scale(1); }
+  90% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.95); }
+}
+
+.saved-popup {
+  animation: fadeInOut 1.5s ease-in-out forwards;
+  position: fixed;
+  top: 50%;
+  left: 35%; /* center horizontally */
+  transform: translate(-50%, -50%); /* move back by half width & height */
+  background-color: #16a34a; 
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
