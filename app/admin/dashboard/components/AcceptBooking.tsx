@@ -8,22 +8,21 @@ import {
 } from "react-icons/ai";
 
 /* ===================== TYPES ===================== */
-type BookingStatus = "PENDING" | "APPROVED" | "DENIED";
+type BookingStatus = "pending" | "confirmed" | "cancelled";
 
 type Booking = {
-  id: string;
+  _id: string;
   name: string;
   phone: string;
   email?: string;
-  checkIn: string; // ISO date string
-  checkOut: string; // ISO date string
+  checkIn: string;
+  checkOut: string;
   guests: number;
   nights: number;
   totalAmount: number;
-  bookingRef?: string;
+  bookingRef: string;
   status: BookingStatus;
 };
-
 /* ===================== COMPONENT ===================== */
 const AcceptBooking = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -38,39 +37,21 @@ const AcceptBooking = () => {
        .then(data => setBookings(data))
        .catch(err => console.error(err))
   ============================================================ */
-  useEffect(() => {
-    const mockData: Booking[] = [
-      {
-        id: "1",
-        name: "Sharma Family",
-        phone: "+91 9876543210",
-        email: "sharma@example.com",
-        checkIn: "2026-02-10",
-        checkOut: "2026-02-12",
-        guests: 4,
-        nights: 2,
-        totalAmount: 6000,
-        bookingRef: "BP12AB34",
-        status: "PENDING",
-      },
-      {
-        id: "2",
-        name: "Verma Group",
-        phone: "+91 9123456780",
-        email: "verma@example.com",
-        checkIn: "2026-01-20",
-        checkOut: "2026-01-22",
-        guests: 6,
-        nights: 2,
-        totalAmount: 9000,
-        bookingRef: "BP56CD78",
-        status: "APPROVED",
-      },
-    ];
+ useEffect(() => {
+  const fetchBookings = async () => {
+    try {
+      const res = await fetch("/api/bookings");
+      const data = await res.json();
+      setBookings(data);
+    } catch (err) {
+      console.error("Failed to fetch bookings", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    setBookings(mockData);
-    setLoading(false);
-  }, []);
+  fetchBookings();
+}, []);
 
   /* ===================== UPDATE STATUS =====================
      👉 FUTURE API CALL:
@@ -81,21 +62,22 @@ const AcceptBooking = () => {
      })
 
 /* ===================== UPDATE STATUS ===================== */
-  const updateStatus = async (id: string, status: BookingStatus) => {
-    try {
-      await fetch("/api/bookings/update-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookingId: id, status }),
-      });
+ const updateStatus = async (_id: string, status: BookingStatus) => {
+  try {
+    await fetch("/api/bookings/update-status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ bookingId: _id, status }),
+    });
 
-      setBookings((prev) =>
-        prev.map((b) => (b.id === id ? { ...b, status } : b)),
-      );
-    } catch {
-      alert("Failed to update booking");
-    }
-  };
+    setBookings((prev) =>
+      prev.map((b) => (b._id === _id ? { ...b, status } : b))
+    );
+  } catch {
+    alert("Failed to update booking");
+  }
+};
+
 
   /* ===================== FILTER LOGIC ===================== */
   const today = new Date();
@@ -107,11 +89,12 @@ const AcceptBooking = () => {
   const displayedBookings =
     activeTab === "current" ? currentBookings : previousBookings;
 
-  const statusLabel: Record<BookingStatus, string> = {
-    PENDING: "Pending",
-    APPROVED: "Accepted",
-    DENIED: "Denied",
-  };
+  const statusLabel = {
+  pending: "Pending",
+  confirmed: "Accepted",
+  cancelled: "Denied",
+};
+
 
   /* ===================== UI ===================== */
   if (loading) {
@@ -147,74 +130,77 @@ const AcceptBooking = () => {
         {displayedBookings.length === 0 ? (
           <p className="text-center text-gray-500">No bookings found.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {displayedBookings.map((booking) => (
-              <div
-                key={booking.id}
-                className={`bg-gray-950 text-white rounded-lg border-l-4 p-5
-                ${
-                  booking.status === "APPROVED"
-                    ? "border-green-500"
-                    : booking.status === "DENIED"
-                      ? "border-red-500"
-                      : "border-yellow-500"
-                }`}
-              >
-                <p className="text-lg font-semibold mb-2">{booking.name}</p>
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+  {displayedBookings.map((booking) => (
+    <div
+      key={booking._id}
+      className={`bg-gray-950 text-white rounded-lg border-l-4 p-5
+        ${
+          booking.status === "confirmed"
+            ? "border-green-500"
+            : booking.status === "cancelled"
+              ? "border-red-500"
+              : "border-yellow-500"
+        }`}
+    >
+      <p className="text-lg font-semibold mb-2">{booking.name}</p>
 
-                <p className="text-sm text-gray-300">
-                  Ref: {booking.bookingRef}
-                </p>
-                <p className="text-sm text-gray-300">Phone: {booking.phone}</p>
-                <p className="text-sm text-gray-300">
-                  Check-in: {booking.checkIn}
-                </p>
-                <p className="text-sm text-gray-300">
-                  Check-out: {booking.checkOut}
-                </p>
+      <p className="text-sm text-gray-300">
+        Ref: {booking.bookingRef}
+      </p>
+      <p className="text-sm text-gray-300">
+        Phone: {booking.phone}
+      </p>
+      <p className="text-sm text-gray-300">
+        Check-in: {booking.checkIn}
+      </p>
+      <p className="text-sm text-gray-300">
+        Check-out: {booking.checkOut}
+      </p>
 
-                <p className="mt-2 font-medium">
-                  Total: ₹{booking.totalAmount.toLocaleString("en-IN")}
-                </p>
+      <p className="mt-2 font-medium">
+        Total: ₹{booking.totalAmount.toLocaleString("en-IN")}
+      </p>
 
-                <p className="mt-2 font-semibold">
-                  Status: {statusLabel[booking.status]}
-                </p>
+      <p className="mt-2 font-semibold">
+        Status: {statusLabel[booking.status]}
+      </p>
 
-                {/* Actions only for CURRENT bookings */}
-                {activeTab === "current" && (
-                  <div className="flex gap-2 mt-4">
-                    <button
-                      onClick={() => updateStatus(booking.id, "APPROVED")}
-                      disabled={booking.status === "APPROVED"}
-                      className="flex-1 bg-green-500 hover:bg-green-600 py-2 rounded-md disabled:opacity-50"
-                    >
-                      <AiOutlineCheck className="inline mr-1" />
-                      Accept
-                    </button>
+      {/* Actions only for CURRENT bookings */}
+      {activeTab === "current" && (
+        <div className="flex gap-2 mt-4">
+          <button
+            onClick={() => updateStatus(booking._id, "confirmed")}
+            disabled={booking.status === "confirmed"}
+            className="flex-1 bg-green-500 hover:bg-green-600 py-2 rounded-md disabled:opacity-50"
+          >
+            <AiOutlineCheck className="inline mr-1" />
+            Accept
+          </button>
 
-                    <button
-                      onClick={() => updateStatus(booking.id, "DENIED")}
-                      disabled={booking.status === "DENIED"}
-                      className="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded-md disabled:opacity-50"
-                    >
-                      <AiOutlineClose className="inline mr-1" />
-                      Deny
-                    </button>
+          <button
+            onClick={() => updateStatus(booking._id, "cancelled")}
+            disabled={booking.status === "cancelled"}
+            className="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded-md disabled:opacity-50"
+          >
+            <AiOutlineClose className="inline mr-1" />
+            Deny
+          </button>
 
-                    <button
-                      onClick={() => updateStatus(booking.id, "PENDING")}
-                      disabled={booking.status === "PENDING"}
-                      className="flex-1 bg-yellow-500 hover:bg-yellow-600 py-2 rounded-md disabled:opacity-50"
-                    >
-                      <AiOutlineClockCircle className="inline mr-1" />
-                      Wait
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          <button
+            onClick={() => updateStatus(booking._id, "pending")}
+            disabled={booking.status === "pending"}
+            className="flex-1 bg-yellow-500 hover:bg-yellow-600 py-2 rounded-md disabled:opacity-50"
+          >
+            <AiOutlineClockCircle className="inline mr-1" />
+            Wait
+          </button>
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
         )}
       </section>
     </>
