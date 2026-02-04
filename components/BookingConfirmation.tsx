@@ -5,6 +5,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { X, CreditCard, CheckCircle2, ClipboardCopy } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+const [loading, setLoading] = useState(false);
+
 /* ============================================================
    TYPES
 ============================================================ */
@@ -104,7 +106,9 @@ export default function BookingConfirmation({
           {/* ===== LEFT : TITLE + INFO ===== */}
           <div className="md:col-span-1 flex flex-col justify-between">
             <div>
-              <p className="text-xl font-bold mb-2 text-center">Confirm Your Booking</p>
+              <p className="text-xl font-bold mb-2 text-center">
+                Confirm Your Booking
+              </p>
 
               <p className="text-sm text-center text-gray-600 mb-4">
                 Please review your booking details carefully before sending the
@@ -121,12 +125,22 @@ export default function BookingConfirmation({
 
             <button
               onClick={async () => {
-                await onConfirm();
-                setStep(2);
+                if (!data) return;
+                setLoading(true);
+                try {
+                  await onConfirm();
+                  setStep(2);
+                } catch (err) {
+                  console.error(err);
+                  alert("Failed to send request. Try again.");
+                } finally {
+                  setLoading(false);
+                }
               }}
-              className="mt-6 bg-black hover:bg-gray-700 transition text-white py-3 rounded-lg font-bold tracking-wide uppercase"
+              disabled={loading || !data}
+              className={`mt-6 bg-black hover:bg-gray-700 transition text-white py-3 rounded-lg font-bold tracking-wide uppercase ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              Confirm & Send Request
+              {loading ? "Sending..." : "Confirm & Send Request"}
             </button>
           </div>
 
@@ -205,48 +219,6 @@ export default function BookingConfirmation({
           >
             Check Status
           </button>
-        </div>
-      )}
-
-      {/* STEP 3 — PAYMENT ENABLED */}
-      {step === 3 && data && (
-        <div className="text-center py-10 space-y-4">
-          <CreditCard className="w-16 h-16 text-blue-600 mx-auto" />
-          <h2 className="text-2xl font-bold">Booking Approved 🎉</h2>
-          <p className="text-gray-600">
-            Complete payment to confirm your booking.
-          </p>
-
-          <div className="text-lg font-bold">
-            Pay ₹{data.totalAmount.toLocaleString("en-IN")}
-          </div>
-
-          <button
-            onClick={() => router.push(`/payment?ref=${data.bookingRef}`)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold"
-          >
-            Proceed to Payment
-          </button>
-
-          {/* FUTURE: Razorpay Integration */}
-          {/*
-            1. Create order
-            2. Open Razorpay
-            3. Verify payment
-            4. Update status → PAID
-            5. setStep(4)
-          */}
-        </div>
-      )}
-
-      {/* STEP 4 — PAYMENT SUCCESS */}
-      {step === 4 && (
-        <div className="text-center py-12 space-y-4">
-          <CheckCircle2 className="w-16 h-16 text-green-600 mx-auto" />
-          <h2 className="text-2xl font-bold">Payment Successful</h2>
-          <p className="text-gray-600">
-            Your booking is fully confirmed. Enjoy your stay!
-          </p>
         </div>
       )}
     </div>

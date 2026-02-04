@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 
 /* ===================== TYPES ===================== */
-type BookingStatus = "waiting" | "accepted" | "denied";
+type BookingStatus = "PENDING" | "APPROVED" | "DENIED";
 
 type Booking = {
   id: string;
@@ -51,7 +51,7 @@ const AcceptBooking = () => {
         nights: 2,
         totalAmount: 6000,
         bookingRef: "BP12AB34",
-        status: "waiting",
+        status: "PENDING",
       },
       {
         id: "2",
@@ -64,7 +64,7 @@ const AcceptBooking = () => {
         nights: 2,
         totalAmount: 9000,
         bookingRef: "BP56CD78",
-        status: "accepted",
+        status: "APPROVED",
       },
     ];
 
@@ -79,11 +79,22 @@ const AcceptBooking = () => {
        headers: { "Content-Type": "application/json" },
        body: JSON.stringify({ status })
      })
-  ========================================================== */
-  const updateStatus = (id: string, status: BookingStatus) => {
-    setBookings((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, status } : b)),
-    );
+
+/* ===================== UPDATE STATUS ===================== */
+  const updateStatus = async (id: string, status: BookingStatus) => {
+    try {
+      await fetch("/api/bookings/update-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookingId: id, status }),
+      });
+
+      setBookings((prev) =>
+        prev.map((b) => (b.id === id ? { ...b, status } : b)),
+      );
+    } catch {
+      alert("Failed to update booking");
+    }
   };
 
   /* ===================== FILTER LOGIC ===================== */
@@ -97,9 +108,9 @@ const AcceptBooking = () => {
     activeTab === "current" ? currentBookings : previousBookings;
 
   const statusLabel: Record<BookingStatus, string> = {
-    waiting: "Pending",
-    accepted: "Accepted",
-    denied: "Denied",
+    PENDING: "Pending",
+    APPROVED: "Accepted",
+    DENIED: "Denied",
   };
 
   /* ===================== UI ===================== */
@@ -142,9 +153,9 @@ const AcceptBooking = () => {
                 key={booking.id}
                 className={`bg-gray-950 text-white rounded-lg border-l-4 p-5
                 ${
-                  booking.status === "accepted"
+                  booking.status === "APPROVED"
                     ? "border-green-500"
-                    : booking.status === "denied"
+                    : booking.status === "DENIED"
                       ? "border-red-500"
                       : "border-yellow-500"
                 }`}
@@ -174,8 +185,8 @@ const AcceptBooking = () => {
                 {activeTab === "current" && (
                   <div className="flex gap-2 mt-4">
                     <button
-                      onClick={() => updateStatus(booking.id, "accepted")}
-                      disabled={booking.status === "accepted"}
+                      onClick={() => updateStatus(booking.id, "APPROVED")}
+                      disabled={booking.status === "APPROVED"}
                       className="flex-1 bg-green-500 hover:bg-green-600 py-2 rounded-md disabled:opacity-50"
                     >
                       <AiOutlineCheck className="inline mr-1" />
@@ -183,8 +194,8 @@ const AcceptBooking = () => {
                     </button>
 
                     <button
-                      onClick={() => updateStatus(booking.id, "denied")}
-                      disabled={booking.status === "denied"}
+                      onClick={() => updateStatus(booking.id, "DENIED")}
+                      disabled={booking.status === "DENIED"}
                       className="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded-md disabled:opacity-50"
                     >
                       <AiOutlineClose className="inline mr-1" />
@@ -192,8 +203,9 @@ const AcceptBooking = () => {
                     </button>
 
                     <button
-                      onClick={() => updateStatus(booking.id, "waiting")}
-                      className="flex-1 bg-yellow-500 hover:bg-yellow-600 py-2 rounded-md"
+                      onClick={() => updateStatus(booking.id, "PENDING")}
+                      disabled={booking.status === "PENDING"}
+                      className="flex-1 bg-yellow-500 hover:bg-yellow-600 py-2 rounded-md disabled:opacity-50"
                     >
                       <AiOutlineClockCircle className="inline mr-1" />
                       Wait

@@ -1,34 +1,56 @@
-import { Schema, model, Document, models } from "mongoose";
+import { Schema, model, models, Document } from "mongoose";
 
-// TypeScript interface for Booking
 export interface IBooking extends Document {
   name: string;
   phone: string;
   email?: string;
+
   checkIn: string;
   checkOut: string;
   guests: number;
   nights: number;
   totalAmount: number;
-  status: "Pending" | "Approved" | "Cancelled"; // allowed values
+
   bookingRef: string;
+
+  status: "PENDING" | "APPROVED" | "CANCELLED";
+  paymentStatus: "NOT_STARTED" | "PAYMENT_PENDING" | "PAID";
+
+  approvedAt?: Date;
   createdAt: Date;
+  updatedAt: Date;
 }
 
-// Mongoose schema
-const BookingSchema = new Schema<IBooking>({
-  name: { type: String, required: true },
-  phone: { type: String, required: true },
-  email: String,
-  checkIn: { type: String, required: true },
-  checkOut: { type: String, required: true },
-  guests: { type: Number, required: true },
-  nights: { type: Number, required: true },
-  totalAmount: { type: Number, required: true },
-  status: { type: String, enum: ["Pending", "Approved", "Cancelled"], default: "Pending" },
-  bookingRef: { type: String, required: true, unique: true },
-  createdAt: { type: Date, default: Date.now },
-});
+const BookingSchema = new Schema<IBooking>(
+  {
+    name: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: String,
 
-// Prevent model overwrite issue in Next.js
+    checkIn: { type: String, required: true },
+    checkOut: { type: String, required: true },
+
+    guests: { type: Number, required: true },
+    nights: { type: Number, required: true },
+    totalAmount: { type: Number, required: true },
+
+    bookingRef: { type: String, required: true, unique: true },
+
+    status: {
+      type: String,
+      enum: ["PENDING", "APPROVED", "CANCELLED"],
+      default: "PENDING",
+    },
+
+    paymentStatus: {
+      type: String,
+      enum: ["NOT_STARTED", "PAYMENT_PENDING", "PAID"],
+      default: "NOT_STARTED",
+    },
+
+    approvedAt: Date,
+  },
+  { timestamps: true }
+);
+
 export default models.Booking || model<IBooking>("Booking", BookingSchema);

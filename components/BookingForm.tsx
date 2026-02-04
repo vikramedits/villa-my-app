@@ -32,7 +32,10 @@ export default function VillaBookingFullScreen() {
   /* ===================== RESPONSIVE SAFE ===================== */
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => {
-    setIsDesktop(window.innerWidth >= 768);
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   /* ===================== HELPERS ===================== */
@@ -74,12 +77,23 @@ export default function VillaBookingFullScreen() {
       return;
     }
 
+    // Extra safety checks
+if (totalMembers < 1) {
+  alert("At least 1 guest required");
+  return;
+}
+
+if (advanceAmount <= 0) {
+  alert("Advance amount must be greater than 0");
+  return;
+}
+
+
     const nights = calcNights(checkIn, checkOut);
 
     const data = {
       name: groupName,
       phone: contact,
-      email: "",
       checkIn,
       checkOut,
       guests: totalMembers,
@@ -106,7 +120,7 @@ export default function VillaBookingFullScreen() {
     <section className="bg-gray-100" id="booking-section">
       {/* ============================================ TOP ============================================ */}
       <div className="text-center py-3 md:py-6">
-        <h2 className="texprimaryBlue text-lg md:text-2xl font-medium tracking-wide">
+        <h2 className="text-primaryBlue text-lg md:text-2xl font-medium tracking-wide">
           Book Your Luxury Stay
         </h2>
         <p className="text-sm md:text-base tracking-wide">
@@ -185,7 +199,9 @@ export default function VillaBookingFullScreen() {
                   type="number"
                   min={1}
                   value={adults}
-                  onChange={(e) => setAdults(Number(e.target.value))}
+                  onChange={(e) =>
+                    setAdults(Math.max(1, Number(e.target.value)))
+                  }
                   className="w-full border rounded p-3"
                   required
                 />
@@ -198,7 +214,7 @@ export default function VillaBookingFullScreen() {
                   type="number"
                   min={0}
                   value={kids}
-                  onChange={(e) => setKids(Number(e.target.value))}
+                  onChange={(e) => setKids(Math.max(0, Number(e.target.value)))}
                   className="w-full border rounded p-3"
                   required
                 />
@@ -357,6 +373,7 @@ export default function VillaBookingFullScreen() {
                   body: JSON.stringify(formData),
                 });
 
+                if (!res.ok) throw new Error("Server error");
                 const result = await res.json();
 
                 if (result.bookingRef) {
