@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { X, CreditCard, CheckCircle2, ClipboardCopy } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const [loading, setLoading] = useState(false);
+
 
 /* ============================================================
    TYPES
@@ -45,6 +45,8 @@ export default function BookingConfirmation({
 }: Props) {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   /* ============================================================
      RESPONSIVE DETECTION

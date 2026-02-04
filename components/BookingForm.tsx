@@ -78,16 +78,15 @@ export default function VillaBookingFullScreen() {
     }
 
     // Extra safety checks
-if (totalMembers < 1) {
-  alert("At least 1 guest required");
-  return;
-}
+    if (totalMembers < 1) {
+      alert("At least 1 guest required");
+      return;
+    }
 
-if (advanceAmount <= 0) {
-  alert("Advance amount must be greater than 0");
-  return;
-}
-
+    if (advanceAmount <= 0) {
+      alert("Advance amount must be greater than 0");
+      return;
+    }
 
     const nights = calcNights(checkIn, checkOut);
 
@@ -354,41 +353,39 @@ if (advanceAmount <= 0) {
               setFormData(null);
             }}
             onConfirm={async () => {
-              if (loading || !formData) return; // 👈 YEH LINE ADD KARI
+  if (loading || !formData) return;
 
-              setLoading(true);
+  setLoading(true);
 
-              try {
-                /*
-      🔐 API /api/bookings
-      Backend MUST:
-      - Recalculate nights
-      - Recalculate total price
-      - Prevent duplicate booking
-      - Return bookingRef
-    */
-                const res = await fetch("/api/bookings", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(formData),
-                });
+  try {
+    const res = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-                if (!res.ok) throw new Error("Server error");
-                const result = await res.json();
+    if (!res.ok) throw new Error("Server error");
+    const result = await res.json();
 
-                if (result.bookingRef) {
-                  setFormData({ ...formData, bookingRef: result.bookingRef });
-                  setStep(2);
-                } else {
-                  alert("Booking failed, try again");
-                }
-              } catch (err) {
-                console.error(err);
-                alert("Something went wrong");
-              } finally {
-                setLoading(false);
-              }
-            }}
+    if (result.bookingRef) {
+      // ✅ Pehle formData update karo
+      setFormData((prev) =>
+        prev ? { ...prev, bookingRef: result.bookingRef } : null
+      );
+
+      // ✅ Phir step 2 set karo
+      setStep(2);
+    } else {
+      alert("Booking failed, try again");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+}}
+
           />
         </div>
       </div>
