@@ -6,6 +6,7 @@ import BookingConfirmation from "@/components/BookingConfirmation";
 
 export default function VillaBookingFullScreen() {
   const PRICE_PER_PERSON = 1500;
+  const ADVANCE_PERCENT = 0.2; // 20%
 
   /* ===================== STATES ===================== */
   const [checkIn, setCheckIn] = useState("");
@@ -24,6 +25,10 @@ export default function VillaBookingFullScreen() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const [advanceAmount, setAdvanceAmount] = useState(0);
+
+  const today = new Date().toISOString().split("T")[0];
+
   /* ===================== RESPONSIVE SAFE ===================== */
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => {
@@ -36,21 +41,32 @@ export default function VillaBookingFullScreen() {
     const inDate = new Date(checkIn);
     const outDate = new Date(checkOut);
     const diff = outDate.getTime() - inDate.getTime();
-    return Math.max(diff / (1000 * 60 * 60 * 24), 1);
+    return Math.max(Math.ceil(diff / (1000 * 60 * 60 * 24)), 1);
   };
 
   /* ===================== PRICE LOGIC ===================== */
   useEffect(() => {
-    const members = Number(adults) + Number(kids);
+    const members = Math.max(1, Number(adults) + Number(kids));
+
     const nights = calcNights(checkIn, checkOut);
 
+    const total = members * nights * PRICE_PER_PERSON;
+    const advance = Math.round(total * ADVANCE_PERCENT);
+
     setTotalMembers(members);
-    setTotalAmount(members * nights * PRICE_PER_PERSON);
+    setTotalAmount(total);
+    setAdvanceAmount(advance);
   }, [adults, kids, checkIn, checkOut]);
 
   /* ===================== SUBMIT ===================== */
   const handleNext = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // ❌ invalid mobile number safety
+    if (!/^[6-9]\d{9}$/.test(contact)) {
+      alert("Please enter a valid 10-digit Indian mobile number");
+      return;
+    }
 
     // ❌ invalid date safety
     if (new Date(checkOut) <= new Date(checkIn)) {
@@ -68,8 +84,11 @@ export default function VillaBookingFullScreen() {
       checkOut,
       guests: totalMembers,
       nights,
+
       pricePerPerson: PRICE_PER_PERSON,
       totalAmount,
+      advanceAmount,
+      advancePercent: 20,
 
       /*
         ⚠️ IMPORTANT:
@@ -102,7 +121,7 @@ export default function VillaBookingFullScreen() {
           <div className="md:hidden mb-4">
             <button
               onClick={() => setShowAvailability(!showAvailability)}
-              className="w-full bg-green-900 text-white py-2 rounded-lg font-medium"
+              className="w-full bg-green-800 text-white py-2 rounded-lg font-medium"
             >
               {showAvailability ? "Hide Availability" : "Check Availability"}
             </button>
@@ -132,7 +151,11 @@ export default function VillaBookingFullScreen() {
                 <input
                   type="date"
                   value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
+                  min={today}
+                  onChange={(e) => {
+                    setCheckIn(e.target.value);
+                    setCheckOut("");
+                  }}
                   className="w-full border rounded p-3"
                   required
                 />
@@ -144,6 +167,7 @@ export default function VillaBookingFullScreen() {
                 <input
                   type="date"
                   value={checkOut}
+                  min={checkIn || today}
                   onChange={(e) => setCheckOut(e.target.value)}
                   className="w-full border rounded p-3"
                   required
@@ -213,13 +237,49 @@ export default function VillaBookingFullScreen() {
                 </label>
                 <input
                   type="tel"
+                  inputMode="numeric"
+                  pattern="[0-9]{10}"
+                  maxLength={10}
                   value={contact}
-                  onChange={(e) => setContact(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, ""); // remove non-numbers
+                    if (value.length <= 10) {
+                      setContact(value);
+                    }
+                  }}
                   className="w-full border rounded p-3"
-                  placeholder="+91 9876543210"
+                  placeholder="WhatsApp number"
                   required
                 />
               </div>
+            </div>
+            {/* ================= Payable Amount Summary ================= */}
+            <div className="mt-3 md:mt-4 bg-gray-50 border rounded-lg p-3 md:p-4">
+              <p className="text-xs md:text-sm text-gray-500 mb-1">
+                {calcNights(checkIn, checkOut)} night stay
+              </p>
+
+              <div className="flex justify-between text-lg md:text-base text-gray-900 font-bold">
+                <span>Total Stay Amount</span>
+                <span>₹{totalAmount.toLocaleString("en-IN")}</span>
+              </div>
+
+              <div className="flex justify-between items-center text-sm md:text-base text-green-700 mt-1">
+                <span>Advance (20%)</span>
+                <span className="flex items-center gap-2 font-bold">
+                  ₹{advanceAmount.toLocaleString("en-IN")}
+                  {advanceAmount < totalAmount && (
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                      Pay Now
+                    </span>
+                  )}
+                </span>
+              </div>
+
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
+                ₹{(totalAmount - advanceAmount).toLocaleString("en-IN")} payable
+                at check-in
+              </p>
             </div>
 
             {/* Tooltip */}
@@ -250,18 +310,19 @@ export default function VillaBookingFullScreen() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !checkIn || !checkOut || advanceAmount <= 0}
               className="w-full flex items-center justify-between
-                        bg-green-900 text-white font-semibold
+                        bg-black text-white font-semibold
                         py-4 px-6 rounded-lg
-                        hover:bg-green-700 transition
-                        mt-2 md:mt-4"
+                        hover:bg-gray-700 transition
+                        mt-2 md:mt-4 "
             >
-              <span className="text-lg font-bold">
-                ₹{totalAmount.toLocaleString("en-IN")}/-
+              <span className="text-lg font-bold animate-textPulse ">
+                ₹{advanceAmount.toLocaleString("en-IN")}/-
               </span>
+
               <span className="flex items-center gap-2 text-sm md:text-base">
-                {loading ? "Processing..." : "RESERVE YOUR BOOKING →"}
+                {loading ? "Processing..." : "PAY 20% ADVANCE →"}
               </span>
             </button>
           </form>
@@ -277,18 +338,19 @@ export default function VillaBookingFullScreen() {
               setFormData(null);
             }}
             onConfirm={async () => {
-              if (!formData) return;
+              if (loading || !formData) return; // 👈 YEH LINE ADD KARI
+
               setLoading(true);
 
               try {
                 /*
-                  🔐 API /api/bookings
-                  Backend MUST:
-                  - Recalculate nights
-                  - Recalculate total price
-                  - Prevent duplicate booking
-                  - Return bookingRef
-                */
+      🔐 API /api/bookings
+      Backend MUST:
+      - Recalculate nights
+      - Recalculate total price
+      - Prevent duplicate booking
+      - Return bookingRef
+    */
                 const res = await fetch("/api/bookings", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
