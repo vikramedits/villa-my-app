@@ -1,13 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import CheckAvailability from "./AvailabilityCalender";
 import BookingConfirmation from "@/components/BookingConfirmation";
 
 export default function VillaBookingFullScreen() {
-  const PRICE_PER_PERSON = 1500;
-  const ADVANCE_PERCENT = 0.2; // 20%
-
   /* ===================== STATES ===================== */
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -25,9 +22,18 @@ export default function VillaBookingFullScreen() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const [pricing, setPricing] = useState<any>(null);
+
   const [advanceAmount, setAdvanceAmount] = useState(0);
 
   const today = new Date().toISOString().split("T")[0];
+
+  const [apiError, setApiError] = useState("");
+
+  // ===========================================================
+
+  const PRICE_PER_PERSON = pricing?.pricePerPerson ?? 0;
+  const ADVANCE_PERCENT = (pricing?.advancePercent ?? 0) / 100;
 
   /* ===================== RESPONSIVE SAFE ===================== */
   const [isDesktop, setIsDesktop] = useState(false);
@@ -41,50 +47,57 @@ export default function VillaBookingFullScreen() {
   /* ===================== HELPERS ===================== */
   const calcNights = (checkIn: string, checkOut: string) => {
     if (!checkIn || !checkOut) return 1;
-    const inDate = new Date(checkIn);
-    const outDate = new Date(checkOut);
+
+    const inDate = new Date(checkIn + "T00:00:00");
+    const outDate = new Date(checkOut + "T00:00:00");
+
     const diff = outDate.getTime() - inDate.getTime();
     return Math.max(Math.ceil(diff / (1000 * 60 * 60 * 24)), 1);
   };
 
   /* ===================== PRICE LOGIC ===================== */
-  useEffect(() => {
-    const members = Math.max(1, Number(adults) + Number(kids));
-
+  const priceSummary = useMemo(() => {
+    const members = Math.max(1, adults + kids);
     const nights = calcNights(checkIn, checkOut);
 
     const total = members * nights * PRICE_PER_PERSON;
     const advance = Math.round(total * ADVANCE_PERCENT);
 
-    setTotalMembers(members);
-    setTotalAmount(total);
-    setAdvanceAmount(advance);
-  }, [adults, kids, checkIn, checkOut]);
+    return { members, nights, total, advance };
+  }, [adults, kids, checkIn, checkOut, PRICE_PER_PERSON, ADVANCE_PERCENT]);
+
+  useEffect(() => {
+    setTotalMembers(priceSummary.members);
+    setTotalAmount(priceSummary.total);
+    setAdvanceAmount(priceSummary.advance);
+  }, [priceSummary]);
 
   /* ===================== SUBMIT ===================== */
   const handleNext = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // ❌ invalid mobile number safety
+    setApiError("");
+
     if (!/^[6-9]\d{9}$/.test(contact)) {
-      alert("Please enter a valid 10-digit Indian mobile number");
+      setApiError("Please enter a valid 10-digit Indian mobile number");
       return;
     }
 
     // ❌ invalid date safety
-    if (new Date(checkOut) <= new Date(checkIn)) {
-      alert("Check-out date must be after check-in");
+    if (new Date(checkOut + "T00:00:00") <= new Date(checkIn + "T00:00:00")) {
+      setApiError("Check-out date must be after check-in");
       return;
     }
 
     // Extra safety checks
     if (totalMembers < 1) {
-      alert("At least 1 guest required");
+      setApiError("At least 1 guest is required");
       return;
     }
 
     if (advanceAmount <= 0) {
-      alert("Advance amount must be greater than 0");
+      setApiError("Invalid advance amount");
       return;
     }
 
@@ -114,6 +127,30 @@ export default function VillaBookingFullScreen() {
     setFormData(data);
     setOpenConfirm(true);
   };
+  // ==================== Pricing fetch ==================
+  useEffect(() => {
+    setApiError("");
+
+    fetch("/api/config/pricing")
+      .then((res) => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then(setPricing)
+      .catch(() => {
+        setApiError("Unable to load pricing. Please refresh the page.");
+      });
+  }, []);
+
+  // ================= Max guest fetch =========
+  const MAX_GUESTS = pricing?.maxGuests ?? 12;
+
+  useEffect(() => {
+    if (adults + kids > MAX_GUESTS) {
+      setApiError(`Maximum ${MAX_GUESTS} guests allowed`);
+      setKids(0);
+    }
+  }, [adults, kids, MAX_GUESTS]);
 
   return (
     <section className="bg-gray-100" id="booking-section">
@@ -151,7 +188,7 @@ export default function VillaBookingFullScreen() {
 
           <div className="bg-yellow-100 text-yellow-900 p-2 md:p-4 rounded-lg text-start font-medium text-sm md:text-lg tracking-wide">
             <p> Pay 20% advance to confirm your luxurious stay</p>
-            <p> ₹1500 / per person only</p>
+            <p>₹{PRICE_PER_PERSON.toLocaleString("en-IN")} / per person only</p>
           </div>
 
           <form onSubmit={handleNext} className="my-3 md:my-6">
@@ -166,6 +203,7 @@ export default function VillaBookingFullScreen() {
                   value={checkIn}
                   min={today}
                   onChange={(e) => {
+                    setApiError("");
                     setCheckIn(e.target.value);
                     setCheckOut("");
                   }}
@@ -197,12 +235,13 @@ export default function VillaBookingFullScreen() {
                 <input
                   type="number"
                   min={1}
+                  max={MAX_GUESTS}
                   value={adults}
                   onChange={(e) =>
-                    setAdults(Math.max(1, Number(e.target.value)))
+                    setAdults(
+                      Math.min(MAX_GUESTS, Math.max(1, Number(e.target.value))),
+                    )
                   }
-                  className="w-full border rounded p-3"
-                  required
                 />
               </div>
               <div className="flex-1">
@@ -212,10 +251,13 @@ export default function VillaBookingFullScreen() {
                 <input
                   type="number"
                   min={0}
+                  max={MAX_GUESTS - adults}
                   value={kids}
-                  onChange={(e) => setKids(Math.max(0, Number(e.target.value)))}
-                  className="w-full border rounded p-3"
-                  required
+                  onChange={(e) =>
+                    setKids(
+                      Math.min(MAX_GUESTS - adults, Number(e.target.value)),
+                    )
+                  }
                 />
               </div>
               <div className="flex-1">
@@ -257,6 +299,7 @@ export default function VillaBookingFullScreen() {
                   maxLength={10}
                   value={contact}
                   onChange={(e) => {
+                     setApiError("");
                     const value = e.target.value.replace(/\D/g, ""); // remove non-numbers
                     if (value.length <= 10) {
                       setContact(value);
@@ -321,11 +364,22 @@ export default function VillaBookingFullScreen() {
             <p className="text-sm text-gray-500 mt-2">
               *Please carry ID proof at check-in
             </p>
+            {apiError && (
+              <div className="bg-red-100 text-red-700 p-2 rounded mt-2">
+                {apiError}
+              </div>
+            )}
 
             {/* Submit */}
             <button
               type="submit"
-              disabled={loading || !checkIn || !checkOut || advanceAmount <= 0}
+              disabled={
+                loading ||
+                !pricing ||
+                !checkIn ||
+                !checkOut ||
+                advanceAmount <= 0
+              }
               className="w-full flex items-center justify-between
                         bg-black text-white font-semibold
                         py-4 px-6 rounded-lg
@@ -353,39 +407,40 @@ export default function VillaBookingFullScreen() {
               setFormData(null);
             }}
             onConfirm={async () => {
-  if (loading || !formData) return;
+              if (loading || !formData) return;
+              setApiError("");
+              setLoading(true);
 
-  setLoading(true);
+              try {
+                const res = await fetch("/api/bookings", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(formData),
+                });
 
-  try {
-    const res = await fetch("/api/bookings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+                if (!res.ok) throw new Error("Server error");
+                const result = await res.json();
 
-    if (!res.ok) throw new Error("Server error");
-    const result = await res.json();
+                if (result.bookingRef) {
+                  // ✅ Pehle formData update karo
+                  setFormData((prev) =>
+                    prev ? { ...prev, bookingRef: result.bookingRef } : null,
+                  );
 
-    if (result.bookingRef) {
-      // ✅ Pehle formData update karo
-      setFormData((prev) =>
-        prev ? { ...prev, bookingRef: result.bookingRef } : null
-      );
-
-      // ✅ Phir step 2 set karo
-      setStep(2);
-    } else {
-      alert("Booking failed, try again");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-}}
-
+                  // ✅ Phir step 2 set karo
+                  setStep(2);
+                } else {
+                  setApiError("Booking failed. Please try again.");
+                }
+              } catch (err: any) {
+                setApiError(
+                  err.message ||
+                    "Booking failed. Please try again in a moment.",
+                );
+              } finally {
+                setLoading(false);
+              }
+            }}
           />
         </div>
       </div>
