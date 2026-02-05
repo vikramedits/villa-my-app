@@ -25,6 +25,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import CenteredVillaAnimation from "./NavbarAnimation";
 
 const navItems = [
   {
@@ -110,12 +111,18 @@ export default function Navbar() {
       <div className="bg-gray-950 md:hidden">
         <div className="px-4 py-4 flex flex-col gap-4">
           {/* Price Section */}
-          <div>
-            <p className="text-white text-xs tracking-wide">
-              Prices Starting From
-            </p>
-            <p className="text-white font-semibold text-xl">₹1,500 / Person*</p>
-            <p className="text-white text-xs tracking-wide">(one night)</p>
+          <div className="relative flex justify-between items-center w-full px-2 py-2 text-white">
+            {/* Left text */}
+            <div className="w-1/2">
+              <p className="text-xs tracking-wide">Prices Starting From</p>
+              <p className="font-semibold text-xl">₹1,500 / Person*</p>
+              <p className="text-xs tracking-wide">(one night)</p>
+            </div>
+
+            {/* Right animation */}
+            <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-48 h-40">
+              <CenteredVillaAnimation />
+            </div>
           </div>
 
           {/* Action Buttons */}
@@ -133,7 +140,9 @@ export default function Navbar() {
                 <span className="flex items-center gap-2">
                   <Mail size={16} />
                   <Phone size={16} />
-                  <span className="font-bold text-primaryBlue">Email & Call</span>
+                  <span className="font-bold text-primaryBlue">
+                    Email & Call
+                  </span>
                 </span>
 
                 {/* Right side: chevron */}
@@ -180,8 +189,8 @@ export default function Navbar() {
                   </Link>
                 </div>
               )}
-            </div>``
-
+            </div>
+            ``
             {/* =========== RIGHT: Availability)  ========== */}
             <Link
               href="/booking"
@@ -194,7 +203,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-       {/* ===================================================== HEADER : DESKTOP & MOBILE ================================================= */}
+      {/* ===================================================== HEADER : DESKTOP & MOBILE ================================================= */}
       <header className="sticky top-0 z-50 w-full bg-white text-primaryBlue shadow-md">
         <div className="container-fluid mx-auto flex h-12 md:h-16 items-center justify-between">
           {/* =========== LOGO (common)  ========== */}
