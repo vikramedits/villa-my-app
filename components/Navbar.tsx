@@ -119,7 +119,7 @@ export default function Navbar() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center">
             {/* LEFT: Email & Call Dropdown */}
             <div className="relative w-1/2">
               <button

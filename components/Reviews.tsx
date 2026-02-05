@@ -15,9 +15,9 @@ export default function ReviewsSection() {
       <div className="container-fluid">
         {/* ================= Heading ================= */}
         <div className=" mb-8 md:mb-10">
-          <h2 className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950">
+          <p className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2">
             Guest Reviews
-          </h2>
+          </p>
           <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
             What our guests say about their stay
           </p>

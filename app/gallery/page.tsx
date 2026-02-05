@@ -41,16 +41,13 @@ const Page: React.FC = () => {
   const chunks = chunkArray(galleryData, 20); // each 20 items = 1 pattern
 
   return (
-    <div className="bg-fuchsia-100">
-      <div className="text-center mb-8">
-  <p className="text-2xl md:text-3xl font-semibold">
-    Villa Gallery
-  </p>
-  <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">
-    Comfort • Space • Serenity
-  </p>
-</div>
-
+    <div className="pb-5 md:pb-8">
+      <div className="text-center my-4 md:my-8 ">
+        <p className="text-2xl md:text-3xl font-semibold border-x-4 border-black mx-2">Villa Gallery</p>
+        <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">
+          Comfort • Space • Serenity
+        </p>
+      </div>
 
       <div className="container-fluid grid grid-cols-1">
         {chunks.map((chunk, chunkIdx) => (
@@ -65,9 +62,7 @@ const Page: React.FC = () => {
                 // skip already rendered indexes (prevents ghost cards)
                 if (usedIndexes.has(index)) return null;
 
-                const group = smallGroups.find((g) =>
-                  g.includes(index)
-                );
+                const group = smallGroups.find((g) => g.includes(index));
 
                 // Small 4-image group
                 if (group && group[0] === index) {
@@ -159,8 +154,7 @@ const Page: React.FC = () => {
       {/* Modal */}
       {modalOpen && activeItem && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-         <div className="relative w-full max-w-[70vh] aspect-square mx-auto bg-white rounded-2xl shadow-lg">
-
+          <div className="relative w-full max-w-[70vh] aspect-square mx-auto bg-white rounded-2xl shadow-lg">
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 z-50 text-black bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition"
@@ -191,9 +185,7 @@ const Page: React.FC = () => {
             </div>
 
             <div className="p-4">
-              <h2 className="text-xl font-bold">
-                {activeItem.title}
-              </h2>
+              <h2 className="text-xl font-bold">{activeItem.title}</h2>
             </div>
           </div>
         </div>

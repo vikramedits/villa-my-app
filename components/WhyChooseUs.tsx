@@ -73,9 +73,9 @@ export default function WhyChooseUs() {
       <div className="container-fluid">
         {/* ================= Heading ================= */}
         <div className="mb-6 md:mb-10">
-          <h2 className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950">
+          <p className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2">
             Why Choose Our Villa
-          </h2>
+          </p>
           <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
             Comfort, privacy and a memorable stay experience
           </p>

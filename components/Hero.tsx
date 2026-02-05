@@ -4,34 +4,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { CalendarCheck } from "lucide-react";
-// import { useEffect, useState } from "react";
 
 export default function Hero() {
-  //   const text = "Choose Your Package In Just a Few Steps";
-  //   const [displayText, setDisplayText] = useState("");
-  //   const [index, setIndex] = useState(0);
-  //   const [isDeleting, setIsDeleting] = useState(false);
-
-  //   useEffect(() => {
-  //     const typingSpeed = isDeleting ? 0 : 40;
-  //     const pauseAfterComplete = 1600;
-
-  //     const timeout = setTimeout(() => {
-  //       if (!isDeleting && index < text.length) {
-  //         setDisplayText(text.slice(0, index + 1));
-  //         setIndex(index + 1);
-  //       } else if (!isDeleting && index === text.length) {
-  //         setTimeout(() => setIsDeleting(true), pauseAfterComplete);
-  //       } else if (isDeleting && index > 0) {
-  //         setDisplayText(text.slice(0, index - 1));
-  //         setIndex(index - 1);
-  //       } else if (isDeleting && index === 0) {
-  //         setIsDeleting(false);
-  //       }
-  //     }, typingSpeed);
-
-  //     return () => clearTimeout(timeout);
-  //   }, [index, isDeleting, text]);
   return (
     <section className="items-center">
       <div className=" mx-auto shadow-md overflow-hidden bg-white">
@@ -59,7 +33,7 @@ export default function Hero() {
             </div>
 
             <div className="pb-8 flex justify-center mt-2">
-              <Link
+              <Link aria-label="Book your villa now"
                 href="/booking"
                 className="group inline-flex items-center gap-2
                bg-white text-blue-950

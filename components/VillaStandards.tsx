@@ -88,9 +88,9 @@ export default function VillaExperienceStandard() {
       <div className="container-fluid pt-5 md:pt-10">
         {/* Heading */}
         <div className="py-3 md:py-6 ">
-          <h2 className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950">
-            The Villa Standard
-          </h2>
+          <p className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2">
+            Our Prestige
+          </p>
           <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
             Signature experiences crafted to make every stay effortless &
             memorable
