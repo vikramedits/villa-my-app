@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-10">
         {/* Company */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Company</h3>
+          <h3 className="text-lg font-semibold mb-4">Villa</h3>
           <ul className="space-y-2 text-white/80 text-sm">
             <li>
               <Link href="/about" className="hover:text-white transition">
@@ -18,12 +18,12 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/career" className="hover:text-white transition">
-                Career
+                Goolge Profile
               </Link>
             </li>
             <li>
               <Link href="/media" className="hover:text-white transition">
-                Media
+                Insta Profile
               </Link>
             </li>
             <li>
@@ -38,7 +38,7 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/blog" className="hover:text-white transition">
-                Blog
+                Review
               </Link>
             </li>
           </ul>
@@ -73,11 +73,6 @@ export default function Footer() {
                 Location
               </Link>
             </li>
-            <li>
-              <Link href="/policies" className="hover:text-white transition">
-                Policies
-              </Link>
-            </li>
           </ul>
         </div>
       </div>
@@ -85,17 +80,17 @@ export default function Footer() {
       {/* ================= TRUST STRIP ================= */}
       <div className="border-t border-b border-white/20 py-6 flex flex-col items-center gap-4">
         <p className="text-sm tracking-wide text-white/70">Trusted By</p>
-        <div className="flex gap-6 items-center">
-          <Image src="/icons/visa.png" alt="Visa" width={50} height={30} />
+        <div className="flex gap-6 items-center bg-white py-2 px-2 rounded-sm">
+          <Image src="/homenew/visa-card.jpg" alt="Visa" width={50} height={30} />
           <Image
-            src="/icons/mastercard.png"
+            src="/homenew/google.jpg"
             alt="Mastercard"
             width={50}
             height={30}
           />
-          <Image src="/icons/upi.png" alt="UPI" width={50} height={30} />
+          <Image src="/homenew/phonepe.jpg" alt="UPI" width={50} height={30} />
           <Image
-            src="/icons/tripadvisor.png"
+            src="/homenew/paytm.jpg"
             alt="TripAdvisor"
             width={50}
             height={30}

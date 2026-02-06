@@ -25,7 +25,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import CenteredVillaAnimation from "./NavbarAnimation";
+import CenteredVillaAnimation, { MenuLottieIcon } from "./NavbarAnimation";
 
 const navItems = [
   {
@@ -299,10 +299,10 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-primaryBlue hover:bg-white/10"
-                  aria-label="Open Menu"
+                  className="hover:bg-white/10"
+                  aria-label={sheetOpen ? "Close Menu" : "Open Menu"}
                 >
-                  <Menu size={28} />
+                  <MenuLottieIcon open={sheetOpen} />
                 </Button>
               </SheetTrigger>
 

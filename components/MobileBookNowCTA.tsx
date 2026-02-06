@@ -19,7 +19,7 @@ export default function MobileBookNowCTA() {
   }, []);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9999] md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-9999 md:hidden">
       <div className="pb-6 flex justify-center">
         <Link
           href="/booking"
