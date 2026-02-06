@@ -1,9 +1,17 @@
 "use client";
 
-import { Player } from "@lottiefiles/react-lottie-player";
+import dynamic from "next/dynamic";
+import type { ComponentType } from "react";
 
+const Player = dynamic(
+  () =>
+    import("@lottiefiles/react-lottie-player").then(
+      (mod) => mod.Player as ComponentType<any>
+    ),
+  { ssr: false }
+);
 
-/* 🔵 Existing component — NO CHANGE */
+/* 🔵 Default export */
 export default function CenteredVillaAnimation() {
   return (
     <div className="w-full overflow-hidden flex justify-center items-center py-4">
@@ -19,38 +27,18 @@ export default function CenteredVillaAnimation() {
   );
 }
 
- 
-
-
-// ============== Mobile Menu Hanmburger =============
-interface MenuLottieIconProps {
-  open: boolean;
-}
-
-export function MenuLottieIcon({ open }: MenuLottieIconProps) {
+/* 🔵 Named export */
+function MenuLottieIcon({ open }: { open: boolean }) {
   return (
     <div
       className={`w-6 h-6 flex flex-col justify-between transform transition-transform duration-200 ease-in-out
         ${open ? "scale-125" : "scale-100"}`}
     >
-      {/* Top line */}
-      <span
-        className={`h-1 w-full bg-current rounded block transition-all duration-300 ease-in-out ${
-          open ? "rotate-45 translate-y-2" : ""
-        }`}
-      />
-      {/* Middle line */}
-      <span
-        className={`h-1 w-full bg-current rounded block transition-all duration-300 ease-in-out ${
-          open ? "opacity-0" : ""
-        }`}
-      />
-      {/* Bottom line */}
-      <span
-        className={`h-1 w-full bg-current rounded block transition-all duration-300 ease-in-out ${
-          open ? "-rotate-45 -translate-y-2" : ""
-        }`}
-      />
+      <span className={`h-1 w-full bg-current rounded block transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`} />
+      <span className={`h-1 w-full bg-current rounded block transition-all duration-300 ${open ? "opacity-0" : ""}`} />
+      <span className={`h-1 w-full bg-current rounded block transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`} />
     </div>
   );
 }
+
+export { MenuLottieIcon };
