@@ -65,6 +65,11 @@ export default function BookingConfirmation({
 
   useEffect(() => {
     if (step === 2 && data?.bookingRef) {
+      // Save timer start timestamp in localStorage
+      localStorage.setItem("bookingTimerStart", Date.now().toString());
+      localStorage.setItem("lastBookingRef", data.bookingRef);
+      localStorage.setItem("lastBookingPhone", data.phone || "");
+
       // Try auto copy (may fail on some mobiles)
       try {
         navigator.clipboard?.writeText(data.bookingRef);
@@ -350,25 +355,7 @@ export default function BookingConfirmation({
                 Check Booking Status & PAY ➜
               </button>
             </div>
-            {/* ================= What you can do next ======================= */}
-            {/* <div className="md:w-1/2 mt-4 md:mt-0 border-l-4 border-blue-500 pl-4 text-sm">
-              <p className="font-medium text-gray-900 mb-1">
-                What next - Check this!
-              </p>
-              <p className="text-gray-600 mb-2">
-                Your booking request has been sent. You may explore the property
-                details while waiting for approval.
-              </p>
-
-              <ul className="space-y-1 text-gray-700 text-center">
-                <li>• View our luxury amenities</li>
-                <li>• View photos and videos of the property</li>
-                <li>• Check location and nearby places</li>
-              </ul>
-              <p className="mt-4 text-xs text-gray-500">
-                Thank you for your patience. We’ll take care of the rest.
-              </p>
-            </div> */}
+           
           </div>
         </Transition.Child>
       </Transition>

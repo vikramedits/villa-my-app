@@ -214,7 +214,7 @@ export default function Navbar() {
               width={48}
               height={48}
               priority
-              className="rounded-xs w-8 md:w-12 h-8 md:h-12 object-cover"
+              className="rounded-sm w-8 md:w-12 h-8 md:h-12 object-cover"
             />
             <span className="text-sm md:text-lg font-bold md:font-semibold tracking-wide text-primaryBlue ">
               The Pushpa Heritage
@@ -322,7 +322,7 @@ export default function Navbar() {
                         href={item.href}
                         className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-white transition"
                       >
-                        <Icon size={16} />
+                        <Icon size={18} />
                         <span>{item.label}</span>
                       </Link>
                     );

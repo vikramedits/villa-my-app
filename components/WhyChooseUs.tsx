@@ -45,8 +45,11 @@ export default function WhyChooseUs() {
   // Load more state for mobile
   const [visibleCount, setVisibleCount] = useState(4);
 
-  const isMobile =
-    typeof window !== "undefined" ? window.innerWidth < 768 : false;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   const visibleItems = isMobile ? FEATURES.slice(0, visibleCount) : FEATURES;
 
@@ -120,12 +123,11 @@ export default function WhyChooseUs() {
         {/* ================= Load More / Load Less (Mobile Only) ================= */}
         {isMobile && (
           <div className="flex justify-center mt-4 gap-3">
-            {/* Load More */}
             {visibleCount < FEATURES.length && (
               <button
                 className="px-6 py-2 bg-blue-950 text-white rounded-md text-sm
-                   hover:bg-blue-900 active:scale-95
-                   transition-all duration-300"
+           hover:bg-blue-900 active:scale-95
+           transition-all duration-300"
                 onClick={() => setVisibleCount((prev) => prev + 2)}
               >
                 Load More
@@ -135,8 +137,8 @@ export default function WhyChooseUs() {
             {visibleCount > INITIAL_COUNT && (
               <button
                 className="px-6 py-2 border border-blue-950 text-blue-950
-                   rounded-md text-sm hover:bg-blue-50
-                   active:scale-95 transition-all duration-300"
+           rounded-md text-sm hover:bg-blue-50
+           active:scale-95 transition-all duration-300"
                 onClick={() => {
                   setVisibleCount(INITIAL_COUNT);
                   sectionRef.current?.scrollIntoView({

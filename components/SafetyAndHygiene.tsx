@@ -50,22 +50,29 @@ const SAFETY_DATA = [
 ];
 
 export default function SafetyAndHygiene() {
-  const sectionRef = useRef<HTMLDivElement | null>(null);
-  const [visible, setVisible] = useState(false);
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   const INITIAL_COUNT = 6;
-
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
-
-  const isMobile =
-    typeof window !== "undefined" ? window.innerWidth < 768 : false;
-
   const visibleItems = isMobile
     ? SAFETY_DATA.slice(0, visibleCount)
     : SAFETY_DATA;
 
-  // IntersectionObserver for scroll-triggered animation
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  // ================= Client-only animation fix =================
+  useEffect(() => {
+    setVisible(true); // Animation sirf browser me chale
+  }, []);
+
+  // ================= IntersectionObserver (scroll animation) =================
   useEffect(() => {
     if (!sectionRef.current) return;
 
@@ -106,7 +113,7 @@ export default function SafetyAndHygiene() {
                          relative overflow-hidden rounded-lg border bg-black
                           h-55 md:h-90
                          transition-all duration-700 ease-out
-                         hover:shadow-lg
+                         md:hover:shadow-lg
                          ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
                        `}
               style={{ transitionDelay: `${index * 100}ms` }}
@@ -167,35 +174,25 @@ export default function SafetyAndHygiene() {
           ))}
         </div>
         {/* ================= Load More / Load Less (Mobile Only) ================= */}
-        {isMobile && (
+        {isMobile && visibleCount < SAFETY_DATA.length && (
           <div className="flex justify-center mt-6 gap-3">
-            {/* Load More */}
-            {visibleCount < SAFETY_DATA.length && (
-              <button
-                className="px-6 py-2 bg-blue-950 text-white rounded-md text-sm
-                   hover:bg-blue-900 transition"
-                onClick={() => setVisibleCount((prev) => prev + 2)}
-              >
-                Load More
-              </button>
-            )}
+            <button
+              className="px-6 py-2 bg-blue-950 text-white rounded-md text-sm hover:bg-blue-900 transition"
+              onClick={() => setVisibleCount((prev) => prev + 2)}
+            >
+              Load More
+            </button>
+          </div>
+        )}
 
-            {visibleCount > INITIAL_COUNT && (
-              <button
-                className="px-6 py-2 border bg-blue-950 text-white
-                   rounded-md text-sm hover:bg-blue-50 transition"
-                onClick={() => {
-                  setVisibleCount(INITIAL_COUNT);
-
-                  sectionRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-                }}
-              >
-                Load Less
-              </button>
-            )}
+        {isMobile && visibleCount > INITIAL_COUNT && (
+          <div className="flex justify-center mt-6 gap-3">
+            <button
+              className="px-6 py-2 border bg-blue-950 text-white rounded-md text-sm hover:bg-blue-50 transition"
+              onClick={() => setVisibleCount(INITIAL_COUNT)}
+            >
+              Load Less
+            </button>
           </div>
         )}
       </div>
