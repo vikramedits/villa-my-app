@@ -153,12 +153,12 @@ export default function VillaBookingFullScreen() {
   }, [adults, kids, MAX_GUESTS]);
 
   return (
-    <section className="bg-gray-100" id="booking-section">
+    <section className="bg-gray-100 mb-5 md:mb-10" id="booking-section ">
       {/* ============================================ TOP ============================================ */}
       <div className="text-center py-3 md:py-6">
-        <h2 className="text-primaryBlue text-lg md:text-2xl font-medium tracking-wide">
+        <p className="text-primaryBlue text-lg md:text-2xl font-medium tracking-wide">
           Book Your Luxury Stay
-        </h2>
+        </p>
         <p className="text-sm md:text-base tracking-wide">
           Fill in your details below to reserve your villa with 20% advance
           payment.
@@ -207,10 +207,11 @@ export default function VillaBookingFullScreen() {
                     setCheckIn(e.target.value);
                     setCheckOut("");
                   }}
-                  className="w-full border rounded p-3"
+                  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
                   required
                 />
               </div>
+
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-primaryBlue">
                   Check-out Date
@@ -220,7 +221,7 @@ export default function VillaBookingFullScreen() {
                   value={checkOut}
                   min={checkIn || today}
                   onChange={(e) => setCheckOut(e.target.value)}
-                  className="w-full border rounded p-3"
+                  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
                   required
                 />
               </div>
@@ -242,6 +243,7 @@ export default function VillaBookingFullScreen() {
                       Math.min(MAX_GUESTS, Math.max(1, Number(e.target.value))),
                     )
                   }
+                  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
                 />
               </div>
               <div className="flex-1">
@@ -258,6 +260,7 @@ export default function VillaBookingFullScreen() {
                       Math.min(MAX_GUESTS - adults, Number(e.target.value)),
                     )
                   }
+                  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
                 />
               </div>
               <div className="flex-1">
@@ -299,7 +302,7 @@ export default function VillaBookingFullScreen() {
                   maxLength={10}
                   value={contact}
                   onChange={(e) => {
-                     setApiError("");
+                    setApiError("");
                     const value = e.target.value.replace(/\D/g, ""); // remove non-numbers
                     if (value.length <= 10) {
                       setContact(value);
@@ -328,14 +331,14 @@ export default function VillaBookingFullScreen() {
                   ₹{advanceAmount.toLocaleString("en-IN")}
                   {advanceAmount < totalAmount && (
                     <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
-                      Pay Now
+                    only
                     </span>
                   )}
                 </span>
               </div>
 
-              <p className="text-xs md:text-sm text-gray-500 mt-1">
-                ₹{(totalAmount - advanceAmount).toLocaleString("en-IN")} payable
+              <p className="text-xs md:text-sm text-gray-700 mt-1">
+                ₹{(totalAmount - advanceAmount).toLocaleString("en-IN")} remaining payable
                 at check-in
               </p>
             </div>
@@ -391,7 +394,7 @@ export default function VillaBookingFullScreen() {
               </span>
 
               <span className="flex items-center gap-2 text-sm md:text-base">
-                {loading ? "Processing..." : "PAY 20% ADVANCE →"}
+                {loading ? "Processing..." : "PROCEED →"}
               </span>
             </button>
           </form>
