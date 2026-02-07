@@ -8,8 +8,12 @@ export default function VillaBookingFullScreen() {
   /* ===================== STATES ===================== */
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [adults, setAdults] = useState(1);
-  const [kids, setKids] = useState(0);
+ const [adults, setAdults] = useState<number>(1);
+const [adultsInput, setAdultsInput] = useState<string>("1");
+
+const [kids, setKids] = useState<number>(0);
+const [kidsInput, setKidsInput] = useState<string>("0");
+
   const [totalMembers, setTotalMembers] = useState(1);
   const [groupName, setGroupName] = useState("");
   const [contact, setContact] = useState("");
@@ -233,35 +237,81 @@ export default function VillaBookingFullScreen() {
                 <label className="block font-medium mb-1 text-primaryBlue">
                   Adults
                 </label>
-                <input
-                  type="number"
-                  min={1}
-                  max={MAX_GUESTS}
-                  value={adults}
-                  onChange={(e) =>
-                    setAdults(
-                      Math.min(MAX_GUESTS, Math.max(1, Number(e.target.value))),
-                    )
-                  }
-                  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
-                />
+               <input
+  type="number"
+  min={1}
+  max={MAX_GUESTS}
+  value={adultsInput}
+  onChange={(e) => {
+    const val = e.target.value;
+
+    // allow empty (backspace)
+    if (val === "") {
+      setAdultsInput("");
+      return;
+    }
+
+    // only numbers
+    if (!/^\d+$/.test(val)) return;
+
+    const num = Number(val);
+
+    if (num > MAX_GUESTS) return;
+
+    setAdultsInput(val);
+    setAdults(num);
+  }}
+  onBlur={() => {
+    // user left input empty
+    if (adultsInput === "" || Number(adultsInput) < 1) {
+      setAdults(1);
+      setAdultsInput("1");
+    }
+  }}
+  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
+/>
+
+
+
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-primaryBlue">
                   Kids
                 </label>
-                <input
-                  type="number"
-                  min={0}
-                  max={MAX_GUESTS - adults}
-                  value={kids}
-                  onChange={(e) =>
-                    setKids(
-                      Math.min(MAX_GUESTS - adults, Number(e.target.value)),
-                    )
-                  }
-                  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
-                />
+              <input
+  type="number"
+  min={0}
+  max={MAX_GUESTS - adults}
+  value={kidsInput}
+  onChange={(e) => {
+    const val = e.target.value;
+
+    if (val === "") {
+      setKidsInput("");
+      return;
+    }
+
+    if (!/^\d+$/.test(val)) return;
+
+    const num = Number(val);
+    const maxKids = MAX_GUESTS - adults;
+
+    if (num > maxKids) return;
+
+    setKidsInput(val);
+    setKids(num);
+  }}
+  onBlur={() => {
+    if (kidsInput === "" || Number(kidsInput) < 0) {
+      setKids(0);
+      setKidsInput("0");
+    }
+  }}
+  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
+/>
+
+
+
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-primaryBlue">
@@ -331,7 +381,7 @@ export default function VillaBookingFullScreen() {
                   ₹{advanceAmount.toLocaleString("en-IN")}
                   {advanceAmount < totalAmount && (
                     <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
-                    only
+                      only
                     </span>
                   )}
                 </span>
@@ -438,7 +488,7 @@ export default function VillaBookingFullScreen() {
               } catch (err: any) {
                 setApiError(
                   err.message ||
-                    "Booking failed. Please try again in a moment.",
+                  "Booking failed. Please try again in a moment.",
                 );
               } finally {
                 setLoading(false);

@@ -5,13 +5,13 @@ import { amenitiesCategories } from "../data/amenities-data";
 
 export default function AmenitiesPage() {
   return (
-    <div className="w-full px-4 md:px-12 py-12 bg-gray-50">
+    <div className="container-fluid md:px-12 py-6 md:py-12 bg-gray-50">
       {/* Page Heading */}
-      <div className="mb-12">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2">
+      <div className="mb-5 md:mb-12 text-center border-b border-b-gray-200 pb-2 md:pb-4">
+        <p className="text-lg md:text-4xl font-bold mb-1 md:mb-2 border-x-4 border-black">
           Our Luxury Amenities
-        </h1>
-        <p className="text-gray-600 max-w-2xl">
+        </p>
+        <p className="text-sm md:text-lg text-gray-500">
           Discover comfort, luxury, and premium facilities designed to make your
           stay unforgettable at The Pushpa Heritage.
         </p>
