@@ -157,11 +157,12 @@ export default function CheckBooking() {
 
   /* ================= POLLING ================= */
   useEffect(() => {
-    if (!bookingDetails || bookingDetails.status !== "PENDING") return;
+    if (!bookingDetails) return;
+    if (bookingDetails.status === "PAID") return; // payment ho gaya toh band
 
     const interval = setInterval(() => {
       fetchBooking(bookingDetails.bookingRef, bookingDetails.phone);
-    }, 10000); // every 10 sec
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [bookingDetails]);
@@ -169,7 +170,7 @@ export default function CheckBooking() {
   /* ================= RENDER ================= */
   return (
     <div className="my-5 md:my-10 container mx-auto px-4">
-      <p className="text-xl font-bold mb-5 md:mb-8 text-center md:text-start text-gray-950 border-l-4 border-black pl-2">
+      <p className="text-xl font-bold mb-5 md:mb-8 text-center  text-gray-950 ">
         Check Booking Status
       </p>
 
@@ -330,6 +331,11 @@ export default function CheckBooking() {
                   remaining: <b>{formatTime(timeLeft)}</b>{" "}
                 </div>
               )}
+              {timeLeft === 0 && bookingDetails.status === "PENDING" && (
+                <div className="bg-red-50 border border-red-200 text-red-700 text-center p-2 rounded-lg mt-2">
+                  ⏰ Approval time expired. Please contact the owner.
+                </div>
+              )}
             </div>
 
             {/* COPY REF */}
@@ -355,12 +361,14 @@ export default function CheckBooking() {
               {bookingDetails.status === "APPROVED" && (
                 <button
                   onClick={() =>
-                    (window.location.href = `/payment?ref=${bookingDetails.bookingRef}&amount=${bookingDetails.advanceAmount}`)
+                    (window.location.href = `/payment?ref=${bookingDetails.bookingRef}`)
                   }
                   className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold"
                 >
                   Pay Now ₹
-                  {bookingDetails.advanceAmount.toLocaleString("en-IN")}
+                  {bookingDetails.advanceAmount
+                    ? bookingDetails.advanceAmount.toLocaleString("en-IN")
+                    : "0"}
                 </button>
               )}
 

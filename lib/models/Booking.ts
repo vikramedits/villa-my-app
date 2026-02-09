@@ -10,6 +10,7 @@ export interface IBooking extends Document {
   guests: number;
   nights: number;
   totalAmount: number;
+  advanceAmount: number; 
 
   bookingRef: string;
 
@@ -29,10 +30,11 @@ const BookingSchema = new Schema<IBooking>(
 
     checkIn: { type: String, required: true },
     checkOut: { type: String, required: true },
-
     guests: { type: Number, required: true },
     nights: { type: Number, required: true },
+
     totalAmount: { type: Number, required: true },
+    advanceAmount: { type: Number, required: true },
 
     bookingRef: { type: String, required: true, unique: true },
 
@@ -50,7 +52,7 @@ const BookingSchema = new Schema<IBooking>(
 
     approvedAt: Date,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default models.Booking || model<IBooking>("Booking", BookingSchema);

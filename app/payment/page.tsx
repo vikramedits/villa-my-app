@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import Script from "next/script";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 declare global {
   interface Window {
@@ -14,36 +14,68 @@ export default function PaymentPage() {
   const params = useSearchParams();
   const router = useRouter();
 
+  const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true); // 👈 important
+  const [error, setError] = useState<string | null>(null);
 
-  // Read params safely
-  const advanceAmount = Number(params.get("amount"));
-  const totalAmount = Number(params.get("total"));
-  const members = params.get("members") || "N/A";
-  const name = params.get("name") || "";
-  const contact = params.get("contact") || "";
+  /* ================= FETCH BOOKING SAFELY ================= */
+  useEffect(() => {
+    const ref = params.get("ref");
 
-  const handlePayment = async () => {
-    if (!advanceAmount || !totalAmount) {
-      alert("Invalid payment details");
+    // ⛔ params not ready yet
+    if (ref === null) return;
+
+    // ⛔ missing ref
+    if (!ref) {
+      setError("Invalid payment link");
+      setFetching(false);
       return;
     }
+
+    const fetchBooking = async () => {
+      try {
+        const res = await fetch(`/api/bookings/by-ref?ref=${ref}`);
+
+        if (!res.ok) {
+          throw new Error("Booking not found");
+        }
+
+        const data = await res.json();
+        setBooking(data);
+      } catch (err) {
+        console.error(err);
+        setError("Booking not found or expired");
+      } finally {
+        setFetching(false);
+      }
+    };
+
+    fetchBooking();
+  }, [params]);
+
+  /* ================= HANDLE PAYMENT ================= */
+  const handlePayment = async () => {
+    if (!booking) return;
 
     setLoading(true);
 
     try {
-      // 1️⃣ Create Razorpay order via backend
+      // 1️⃣ Create Razorpay order
       const res = await fetch("/api/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: advanceAmount }),
+        body: JSON.stringify({
+          bookingRef: booking.bookingRef,
+          amount: booking.advanceAmount,
+        }),
       });
 
-      if (!res.ok) throw new Error("Failed to create order");
+      if (!res.ok) throw new Error("Order creation failed");
 
       const order = await res.json();
 
-      // 2️⃣ Razorpay options
+      // 2️⃣ Razorpay Checkout
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -52,20 +84,27 @@ export default function PaymentPage() {
         description: "Villa Booking Advance Payment",
         order_id: order.id,
         prefill: {
-          name,
-          contact,
+          name: booking.name,
+          contact: booking.phone,
         },
         theme: { color: "#0B1C2D" },
-        handler: function (response: any) {
-          // Payment success
-          alert("Payment Successful 🎉");
-          console.log("Razorpay response:", response);
-          router.push(`/booking-success?ref=${params.get("ref")}`);
+
+        handler: async function (response: any) {
+          // 3️⃣ Mark booking as PAID
+          await fetch("/api/bookings/mark-paid", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              bookingRef: booking.bookingRef,
+              paymentId: response.razorpay_payment_id,
+            }),
+          });
+
+          router.replace(`/booking-success?ref=${booking.bookingRef}`);
         },
+
         modal: {
-          ondismiss: function () {
-            setLoading(false);
-          },
+          ondismiss: () => setLoading(false),
         },
       };
 
@@ -73,14 +112,40 @@ export default function PaymentPage() {
       razorpay.open();
     } catch (err) {
       console.error(err);
-      alert("Payment failed. Try again!");
+      alert("Payment failed. Please try again.");
       setLoading(false);
     }
   };
 
-  // Disable button if data missing
-  const isDisabled = !advanceAmount || !totalAmount || loading;
+  /* ================= LOADING STATE ================= */
+  if (fetching) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600 font-medium">
+          Loading booking details…
+        </p>
+      </div>
+    );
+  }
 
+  /* ================= ERROR STATE ================= */
+  if (error || !booking) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <p className="text-red-600 font-semibold">
+          {error ?? "Something went wrong"}
+        </p>
+        <button
+          onClick={() => router.replace("/")}
+          className="px-4 py-2 rounded-lg bg-blue-600 text-white"
+        >
+          Go Home
+        </button>
+      </div>
+    );
+  }
+
+  /* ================= UI ================= */
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
@@ -92,43 +157,49 @@ export default function PaymentPage() {
           </h2>
 
           <p className="text-center text-gray-600 mb-4">
-            You are paying <b>20% advance</b> for your villa booking.
+            Pay <b>30% advance</b> to confirm your booking
           </p>
 
-          {/* Booking / Payment Info */}
-          <div className="space-y-2 text-gray-700 text-sm">
+          {/* BOOKING DETAILS */}
+          <div className="space-y-2 text-sm text-gray-700">
             <p>
-              <strong>Guest(s):</strong> {members}
+              <strong>Name:</strong> {booking.name}
             </p>
             <p>
-              <strong>Total Amount:</strong> ₹{totalAmount.toLocaleString("en-IN")}
+              <strong>Guests:</strong> {booking.guests}
+            </p>
+            <p>
+              <strong>Total Amount:</strong>{" "}
+              ₹{booking.totalAmount?.toLocaleString("en-IN") ?? "0"}
             </p>
             <p className="text-green-700 font-semibold">
-              Advance (20%): ₹{advanceAmount.toLocaleString("en-IN")}
+              Advance Payable: ₹
+              {booking.advanceAmount?.toLocaleString("en-IN") ?? "0"}
             </p>
           </div>
 
-          {/* Pay Button */}
+          {/* PAY BUTTON */}
           <button
             onClick={handlePayment}
-            disabled={isDisabled}
+            disabled={loading}
             className={`w-full mt-6 py-3 rounded-lg font-bold text-white ${
-              isDisabled
+              loading
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-green-600 hover:bg-green-700 transition"
+                : "bg-green-600 hover:bg-green-700"
             }`}
           >
-            {loading ? "Processing..." : `Pay ₹${advanceAmount.toLocaleString("en-IN")} Now`}
+            {loading
+              ? "Processing..."
+              : `Pay ₹${booking.advanceAmount?.toLocaleString("en-IN")} Now`}
           </button>
 
           <p className="text-xs text-gray-500 text-center mt-3">
-            Secure payment powered by Razorpay
+            🔒 Secure payment powered by Razorpay
           </p>
 
-          {/* Optional: Go Back */}
           <button
             onClick={() => router.back()}
-            className="w-full mt-3 py-2 rounded-lg font-semibold text-gray-700 border border-gray-300 hover:bg-gray-100 transition"
+            className="w-full mt-3 py-2 rounded-lg border text-gray-700 hover:bg-gray-100"
           >
             Go Back
           </button>

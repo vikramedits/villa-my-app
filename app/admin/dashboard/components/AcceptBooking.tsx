@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 
 /* ===================== TYPES ===================== */
-type BookingStatus = "pending" | "confirmed" | "cancelled";
+type BookingStatus = "PENDING" | "APPROVED" | "CANCELLED";
 
 type Booking = {
   _id: string;
@@ -107,10 +107,10 @@ const AcceptBooking = () => {
     activeTab === "current" ? currentBookings : previousBookings;
 
   const statusLabel = {
-    pending: "Pending",
-    confirmed: "Accepted",
-    cancelled: "Denied",
-  };
+  PENDING: "Pending",
+  APPROVED: "Accepted",
+  CANCELLED: "Denied",
+};
 
   /* ===================== UI ===================== */
   if (loading) {
@@ -152,9 +152,10 @@ const AcceptBooking = () => {
                 key={booking._id}
                 className={`bg-gray-950 text-white rounded-lg border-l-4 p-5
         ${
-          booking.status === "confirmed"
+          booking.status === "APPROVED"
+
             ? "border-green-500"
-            : booking.status === "cancelled"
+            : booking.status === "CANCELLED"
               ? "border-red-500"
               : "border-yellow-500"
         }`}
@@ -184,8 +185,8 @@ const AcceptBooking = () => {
                 {activeTab === "current" && (
                   <div className="flex gap-2 mt-4">
                     <button
-                      onClick={() => updateStatus(booking._id, "confirmed")}
-                      disabled={booking.status === "confirmed"}
+                      onClick={() => updateStatus(booking._id, "APPROVED")}
+                      disabled={booking.status === "APPROVED"}
                       className="flex-1 bg-green-500 hover:bg-green-600 py-2 rounded-md disabled:opacity-50"
                     >
                       <AiOutlineCheck className="inline mr-1" />
@@ -193,8 +194,8 @@ const AcceptBooking = () => {
                     </button>
 
                     <button
-                      onClick={() => updateStatus(booking._id, "cancelled")}
-                      disabled={booking.status === "cancelled"}
+                      onClick={() => updateStatus(booking._id, "CANCELLED")}
+                      disabled={booking.status === "CANCELLED"}
                       className="flex-1 bg-red-500 hover:bg-red-600 py-2 rounded-md disabled:opacity-50"
                     >
                       <AiOutlineClose className="inline mr-1" />
@@ -202,8 +203,8 @@ const AcceptBooking = () => {
                     </button>
 
                     <button
-                      onClick={() => updateStatus(booking._id, "pending")}
-                      disabled={booking.status !== "pending"}
+                      onClick={() => updateStatus(booking._id, "PENDING")}
+                      disabled={booking.status !== "PENDING"}
                       className="flex-1 bg-yellow-500 hover:bg-yellow-600 py-2 rounded-md disabled:opacity-50"
                     >
                       <AiOutlineClockCircle className="inline mr-1" />

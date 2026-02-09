@@ -28,18 +28,21 @@ export async function GET(req: Request) {
     }
 
     // Return only necessary fields (optional)
-    return NextResponse.json({
-      name: booking.name,
-      phone: booking.phone,
-      email: booking.email || "",
-      checkIn: booking.checkIn,
-      checkOut: booking.checkOut,
-      guests: booking.guests,
-      nights: booking.nights,
-      totalAmount: booking.totalAmount,
-      bookingRef: booking.bookingRef,
-      status: booking.status,
-    });
+   return NextResponse.json({
+  name: booking.name,
+  phone: booking.phone,
+  email: booking.email || "",
+  checkIn: booking.checkIn,
+  checkOut: booking.checkOut,
+  guests: booking.guests,
+  nights: booking.nights,
+  totalAmount: booking.totalAmount,
+  advanceAmount: booking.advanceAmount,
+  bookingRef: booking.bookingRef,
+  status: booking.status,
+  paymentStatus: booking.paymentStatus,
+});
+
   } catch (err) {
     console.error("Booking status API error:", err);
     return NextResponse.json(
