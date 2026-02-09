@@ -150,11 +150,11 @@ export default function PaymentPage() {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
-      <section className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <section className=" container-fluid flex items-center justify-center bg-gray-100 p-4">
         <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-center mb-4">
+          <p className="text-2xl font-bold text-center mb-4">
             Confirm Your Payment
-          </h2>
+          </p>
 
           <p className="text-center text-gray-600 mb-4">
             Pay <b>30% advance</b> to confirm your booking

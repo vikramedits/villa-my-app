@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Clock,
 } from "lucide-react";
+import BookingAction from "@/components/BookingAction";
 
 interface BookingDetails {
   bookingRef: string;
@@ -65,6 +66,18 @@ export default function CheckBooking() {
 
       setBookingDetails(data);
       setOpenDetails(true);
+
+      // ⏱️ Start timer only once for PENDING booking
+      if (data.status === "PENDING") {
+        if (!localStorage.getItem("bookingTimerStart")) {
+          localStorage.setItem("bookingTimerStart", Date.now().toString());
+        }
+      }
+
+      // ✅ Payment done → clear timer
+      if (data.status === "PAID") {
+        localStorage.removeItem("bookingTimerStart");
+      }
 
       // ✅ Save valid booking
       localStorage.setItem("lastBookingRef", data.bookingRef);
@@ -219,6 +232,18 @@ export default function CheckBooking() {
         )}
       </div>
 
+      {/* ===== Booking Action on Main Page ===== */}
+      {bookingDetails && (
+        <div className="max-w-md mx-auto my-6">
+          <BookingAction
+            status={bookingDetails.status}
+            timeLeft={timeLeft}
+            advanceAmount={bookingDetails.advanceAmount}
+            bookingRef={bookingDetails.bookingRef}
+          />
+        </div>
+      )}
+
       {/* ================= What you can do next ======================= */}
       <div className="md:w-1/2 mt-4 md:mt-0 border-l-4 border-blue-500 pl-4 text-sm space-y-3">
         <div className="flex items-center gap-2 mb-2">
@@ -323,19 +348,15 @@ export default function CheckBooking() {
                   {bookingDetails.status}
                 </span>
               </p>
-              {/* TIMER */}{" "}
-              {bookingDetails.status === "PENDING" && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-yellow-800 text-center font-medium mt-2">
-                  {" "}
-                  ⏳ Owner usually responds within <b>30 minutes</b> <br /> Time
-                  remaining: <b>{formatTime(timeLeft)}</b>{" "}
-                </div>
-              )}
-              {timeLeft === 0 && bookingDetails.status === "PENDING" && (
-                <div className="bg-red-50 border border-red-200 text-red-700 text-center p-2 rounded-lg mt-2">
-                  ⏰ Approval time expired. Please contact the owner.
-                </div>
-              )}
+              {/* ===== Booking Action (Sheet) ===== */}
+              <div className="mt-4">
+                <BookingAction
+                  status={bookingDetails.status}
+                  timeLeft={timeLeft}
+                  advanceAmount={bookingDetails.advanceAmount}
+                  bookingRef={bookingDetails.bookingRef}
+                />
+              </div>
             </div>
 
             {/* COPY REF */}
@@ -345,38 +366,6 @@ export default function CheckBooking() {
             >
               <span className="font-mono">{bookingDetails.bookingRef}</span>
               <ClipboardCopy size={16} />
-            </div>
-
-            {/* PAYMENT BUTTON */}
-            <div className="mt-4">
-              {bookingDetails.status === "PENDING" && (
-                <button
-                  disabled
-                  className="w-full bg-gray-400 text-white py-3 rounded-lg font-bold cursor-not-allowed"
-                >
-                  Payment Locked – Waiting for Owner Approval
-                </button>
-              )}
-
-              {bookingDetails.status === "APPROVED" && (
-                <button
-                  onClick={() =>
-                    (window.location.href = `/payment?ref=${bookingDetails.bookingRef}`)
-                  }
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold"
-                >
-                  Pay Now ₹
-                  {bookingDetails.advanceAmount
-                    ? bookingDetails.advanceAmount.toLocaleString("en-IN")
-                    : "0"}
-                </button>
-              )}
-
-              {bookingDetails.status === "PAID" && (
-                <p className="text-center text-green-700 font-semibold mt-2">
-                  🎉 Payment Completed
-                </p>
-              )}
             </div>
           </div>
         </div>
