@@ -29,96 +29,55 @@ export default function StatisticsView() {
   const [loading, setLoading] = useState(true);
   const [selectedCard, setSelectedCard] = useState<Stat | null>(null);
 
+  const [occupancyRate, setOccupancyRate] = useState<number>(0);
+
   // ==================== Fetch Stats (Future API) ====================
+  // 1️⃣ Fetch stats normally
   useEffect(() => {
     const fetchStats = async () => {
       setLoading(true);
       try {
-        // 🔜 FUTURE API integration
-        // const res = await fetch("/api/stats");
-        // const data = await res.json();
-        // setStats(data);
+        const res = await fetch("/api/admin/dashboard/stats", {
+          cache: "no-store",
+        });
+        const data = await res.json();
 
-        // 🔹 Dummy data for now
         setStats([
           {
             title: "Total Bookings",
-            value: 12,
+            value: data.totalBookings,
             icon: BedDouble,
             info: "Villa inventory",
             trend: "up",
             highlight: true,
-            details: (
-              <div>
-                <p className="text-gray-700 font-semibold">All bookings:</p>
-                <ul className="list-disc pl-5 mt-2 text-gray-600">
-                  <li>John Doe - 2 nights</li>
-                  <li>Mary Smith - 3 nights</li>
-                  <li>Ali Khan - 1 night</li>
-                  <li>Emma Johnson - 4 nights</li>
-                </ul>
-              </div>
-            ),
+            details: <p>Total bookings till date</p>,
           },
           {
             title: "Monthly Bookings",
-            value: 7,
+            value: data.monthlyBookings,
             icon: CalendarCheck,
             info: "Current month",
             trend: "up",
             highlight: true,
-            details: (
-              <div>
-                <p className="text-gray-700 font-semibold">
-                  Bookings this month:
-                </p>
-                <ul className="list-disc pl-5 mt-2 text-gray-600">
-                  <li>Michael - 2 nights</li>
-                  <li>Sarah - 3 nights</li>
-                  <li>Ravi - 1 night</li>
-                </ul>
-              </div>
-            ),
+            details: <p>Bookings for current month</p>,
           },
           {
             title: "Monthly Revenue",
-            value: 97475,
+            value: data.monthlyRevenue,
             icon: IndianRupee,
-            info: "+12% from last month",
+            info: "Revenue this month",
             trend: "up",
             highlight: true,
-            details: (
-              <div>
-                <p className="text-gray-700 font-semibold">
-                  Revenue breakdown:
-                </p>
-                <ul className="list-disc pl-5 mt-2 text-gray-600">
-                  <li>Room A: ₹40,000</li>
-                  <li>Room B: ₹35,000</li>
-                  <li>Extras: ₹22,475</li>
-                </ul>
-              </div>
-            ),
+            details: <p>Total paid revenue</p>,
           },
           {
             title: "Occupancy Rate",
-            value: 72,
+            value: 0, // temporary 0, will update later
             icon: TrendingUp,
-            info: "Healthy performance",
+            info: "Monthly occupancy",
             trend: "up",
             highlight: true,
-            details: (
-              <div>
-                <p className="text-gray-700 font-semibold">
-                  Occupancy details:
-                </p>
-                <ul className="list-disc pl-5 mt-2 text-gray-600">
-                  <li>Room A: 90%</li>
-                  <li>Room B: 65%</li>
-                  <li>Room C: 72%</li>
-                </ul>
-              </div>
-            ),
+            details: <p>Calculated from booked nights</p>,
           },
         ]);
       } catch (err) {
@@ -129,6 +88,32 @@ export default function StatisticsView() {
     };
 
     fetchStats();
+  }, []);
+
+  // 2️⃣ Fetch occupancy separately
+  useEffect(() => {
+    const fetchOccupancy = async () => {
+      try {
+        const res = await fetch("/api/admin/dashboard/occupancy", {
+          cache: "no-store",
+        });
+        const data = await res.json();
+        setOccupancyRate(data.occupancyRate);
+
+        // Update stats array with correct occupancyRate
+        setStats((prevStats) =>
+          prevStats.map((stat) =>
+            stat.title === "Occupancy Rate"
+              ? { ...stat, value: data.occupancyRate }
+              : stat,
+          ),
+        );
+      } catch (err) {
+        console.error("Occupancy fetch failed", err);
+      }
+    };
+
+    fetchOccupancy();
   }, []);
 
   // ==================== Render ====================
@@ -164,7 +149,9 @@ export default function StatisticsView() {
                 icon={stat.icon}
                 info={stat.info}
                 highlight={stat.highlight}
-                onClick={() => setSelectedCard(stat)} value={""}              >
+                onClick={() => setSelectedCard(stat)}
+                value={""}
+              >
                 {/* 🔹 Animated number */}
                 <span
                   className={`text-xl font-bold ${

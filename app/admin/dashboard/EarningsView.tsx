@@ -8,7 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Earning {
   date: string;
@@ -19,31 +19,21 @@ export default function EarningsOverview() {
   const [data, setData] = useState<Earning[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Dummy data (API ke bad replace hoga)
-  const dummyData: Earning[] = [
-    { date: "Apr 1", amount: 2500 },
-    { date: "Apr 5", amount: 4200 },
-    { date: "Apr 10", amount: 3800 },
-    { date: "Apr 15", amount: 5100 },
-    { date: "Apr 20", amount: 6400 },
-    { date: "Apr 25", amount: 7800 },
-    { date: "Apr 30", amount: 6900 },
-  ];
-
   useEffect(() => {
-    // 🔜 FUTURE API SETUP
     const fetchEarnings = async () => {
       try {
         setLoading(true);
 
-        // 🔜 Replace this later
-        // const res = await fetch("/api/earnings");
-        // const json = await res.json();
-        // setData(json);
+        const res = await fetch("/api/admin/dashboard/earnings", {
+          cache: "no-store",
+        });
 
-        setData(dummyData); // for now
+        if (!res.ok) throw new Error("Failed to fetch earnings");
+
+        const json = await res.json();
+        setData(json);
       } catch (error) {
-        console.error("Failed to load earnings");
+        console.error("Failed to load earnings", error);
       } finally {
         setLoading(false);
       }
@@ -52,10 +42,17 @@ export default function EarningsOverview() {
     fetchEarnings();
   }, []);
 
-  const amounts = data.map((d) => d.amount);
-  const lowest = Math.min(...amounts);
-  const highest = Math.max(...amounts);
-  const total = amounts.reduce((a, b) => a + b, 0);
+  const { lowest, highest, total } = useMemo(() => {
+    if (!data.length) return { lowest: 0, highest: 0, total: 0 };
+
+    const amounts = data.map((d) => d.amount);
+
+    return {
+      lowest: Math.min(...amounts),
+      highest: Math.max(...amounts),
+      total: amounts.reduce((a, b) => a + b, 0),
+    };
+  }, [data]);
 
   return (
     <>
@@ -71,6 +68,10 @@ export default function EarningsOverview() {
           {loading ? (
             <div className="h-full flex items-center justify-center text-gray-400">
               Loading chart...
+            </div>
+          ) : data.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-gray-400">
+              No earnings data yet
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">

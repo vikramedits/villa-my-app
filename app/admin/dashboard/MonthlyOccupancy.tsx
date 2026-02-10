@@ -6,8 +6,9 @@ interface OccupancyData {
   month: string;
   totalNights: number;
   bookedNights: number;
+  occupancyRate: number;
   lastMonthPercentage: number;
-  targetPercentage: number; // 🔥 NEW (e.g. 80%)
+  targetPercentage: number; 
 }
 
 export default function MonthlyOccupancy() {
@@ -15,40 +16,21 @@ export default function MonthlyOccupancy() {
   const [loading, setLoading] = useState(true);
   const [animatedPercent, setAnimatedPercent] = useState(0);
 
-  // 🔹 Dummy data (API ke baad replace hoga)
-  const dummyData: OccupancyData = {
-    month: "April",
-    totalNights: 25,
-    bookedNights: 18,
-    lastMonthPercentage: 65,
-    targetPercentage: 80,
-  };
-
   useEffect(() => {
     const fetchOccupancy = async () => {
       try {
         setLoading(true);
 
-        // 🔜 FUTURE API MODE
-        // const res = await fetch("/api/occupancy");
-        // const json = await res.json();
-        // setData(json);
+        const res = await fetch("/api/admin/dashboard/occupancy", {
+          cache: "no-store",
+        });
 
-        /*
-          🔜 Backend se data is format mein aayega:
+        if (!res.ok) throw new Error("Failed to fetch occupancy");
 
-          {
-            "month": "April",
-            "totalNights": 30,
-            "bookedNights": 21,
-            "lastMonthPercentage": 68,
-            "targetPercentage": 80
-          }
-        */
-
-        setData(dummyData); // abhi dummy
+        const json = await res.json();
+        setData(json);
       } catch (err) {
-        console.error("Failed to load occupancy");
+        console.error("Failed to load occupancy", err);
       } finally {
         setLoading(false);
       }
@@ -58,8 +40,7 @@ export default function MonthlyOccupancy() {
   }, []);
 
   // 🔹 Percentage calculation
-  const percentage =
-    data ? Math.round((data.bookedNights / data.totalNights) * 100) : 0;
+  const percentage = data?.occupancyRate ?? 0;
 
   // 🔹 Animate percentage on load
   useEffect(() => {
@@ -101,7 +82,7 @@ export default function MonthlyOccupancy() {
 
       {/* CIRCULAR GRAPH */}
       <div className="relative w-32 h-32 group">
-        <svg className="w-full h-full rotate-[-90deg]">
+        <svg className="w-full h-full -rotate-90">
           {/* Background */}
           <circle
             cx="64"
