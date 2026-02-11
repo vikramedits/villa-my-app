@@ -83,54 +83,37 @@ export default function CalendarTab() {
 
   // ---------------- Confirm booking (block selected range) ----------------
   const confirmBooking = async () => {
-    const datesToBook = Array.from(
-      {
-        length:
-          (selectedRange.endDate.getTime() -
-            selectedRange.startDate.getTime()) /
-            (1000 * 60 * 60 * 24) +
-          1,
-      },
-      (_, i) => {
-        const d = new Date(selectedRange.startDate);
-        d.setDate(d.getDate() + i);
-        return d.toISOString().split("T")[0]; // YYYY-MM-DD
-      },
-    );
-
-    // Filter out already blocked dates
-    const newDates = datesToBook.filter(
-      (d) => !bookedDates.some((b) => b.date === d),
-    );
-    if (newDates.length === 0) {
-      toast("All selected dates are already blocked");
-      return;
-    }
-
     try {
       setLoading(true);
-      // Optimistic UI update
-      setBookedDates((prev) => [...prev, ...newDates.map((d) => ({ date: d }))]);
 
-      // POST all new dates
-      await Promise.all(
-        newDates.map((date) =>
-          fetch("/api/bookings/blocked", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ date }),
-          }),
-        ),
-      );
+      const res = await fetch("/api/bookings/blocked", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          startDate: format(selectedRange.startDate, "yyyy-MM-dd"),
+          endDate: format(selectedRange.endDate, "yyyy-MM-dd"),
+        }),
+      });
 
-      toast.success("Dates blocked successfully!");
+      if (!res.ok) {
+        const err = await res.json();
+
+        if (res.status === 409) {
+          toast("Dates already blocked", { icon: "⚠️" });
+          return;
+        }
+
+        throw new Error(err.error || "Block failed");
+      }
+
+      toast.success("Dates blocked successfully");
+
+      // 🔥 DB se fresh data lao (single source of truth)
+      const fresh = await fetch("/api/bookings/blocked");
+      setBookedDates(await fresh.json());
     } catch (err) {
       console.error(err);
       toast.error("Failed to block dates");
-      // Rollback
-      setBookedDates((prev) =>
-        prev.filter((b) => !newDates.includes(b.date)),
-      );
     } finally {
       setLoading(false);
     }
@@ -153,7 +136,10 @@ export default function CalendarTab() {
       const res = await fetch("/api/bookings/blocked", {
         method: booked ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date }),
+        body: JSON.stringify({
+          startDate: date,
+          endDate: date,
+        }),
       });
 
       if (!res.ok) throw new Error("Failed to toggle date");
@@ -188,7 +174,9 @@ export default function CalendarTab() {
               <span className="text-gray-800 font-semibold">Loading...</span>
             </div>
           )}
-          <p className="text-xl font-semibold mb-4 text-gray-800">Select Dates</p>
+          <p className="text-xl font-semibold mb-4 text-gray-800">
+            Select Dates
+          </p>
 
           <DateRange
             ranges={[selectedRange]}
@@ -218,10 +206,13 @@ export default function CalendarTab() {
               </p>
               <p>
                 <span className="font-semibold">Nights:</span>{" "}
-                {Math.ceil(
-                  (selectedRange.endDate.getTime() -
-                    selectedRange.startDate.getTime()) /
-                    (1000 * 60 * 60 * 24),
+                {Math.max(
+                  1,
+                  Math.ceil(
+                    (selectedRange.endDate.getTime() -
+                      selectedRange.startDate.getTime()) /
+                      (1000 * 60 * 60 * 24),
+                  ),
                 )}
               </p>
             </div>
