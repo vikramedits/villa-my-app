@@ -42,7 +42,7 @@ const DATA: DataType = {
       href: "",
       desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
-     {
+    {
       name: "Lake Pichola",
       image: "/homenew/lake/pichola-new.jpg",
       distance: "8 km",
@@ -76,7 +76,7 @@ const DATA: DataType = {
     },
   ],
   spiritual: [
-     {
+    {
       name: "Jagdish Temple",
       image: "/homenew/spiritual/jagdish-temple.png",
       distance: "9 km",
@@ -238,11 +238,21 @@ export default function NearByLocations() {
   );
 
   return (
-    <div
-      className="relative bg-[url('/homenew/bg/cloud.bg.jpg')]
-               bg-cover bg-center bg-no-repeat"
-    >
-      <section className="container-fluid">
+    <div className="relative w-full min-h-100">
+      {/* Background image */}
+      <Image
+        src="/homenew/bg/cloud.bg_.avif"
+        alt="Nearby locations background"
+        fill
+        className="object-cover"
+        priority
+      />
+
+      {/* Semi-transparent overlay */}
+      <div className="absolute inset-0 bg-white/30" />
+
+      {/* Content */}
+      <section className="relative z-10 container-fluid">
         <div className="py-8 md:py-10">
           {/* Heading */}
           <div className="mb-4 md:mb-6">
