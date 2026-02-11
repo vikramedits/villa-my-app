@@ -1,130 +1,127 @@
 "use client";
-import React, { useEffect, useState } from "react";
 
-type BlockedDate = {
-  date: string; // or Date
-};
+import { useEffect, useState } from "react";
+import { DateRange, RangeKeyDict } from "react-date-range";
+import { addDays, format, isSameDay } from "date-fns";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import toast, { Toaster } from "react-hot-toast";
 
-export default function CheckAvailability() {
-  const [blockedDates, setBlockedDates] = useState<BlockedDate[]>([]);
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+interface Booking {
+  date: string; // YYYY-MM-DD
+}
+
+export default function UserCalendar() {
+  // ---------------- Selected range ----------------
+  const [selectedRange, setSelectedRange] = useState({
+    startDate: new Date(),
+    endDate: addDays(new Date(), 1),
+    key: "selection",
+  });
+
+  const [blockedDates, setBlockedDates] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(false);
   const [available, setAvailable] = useState<boolean | null>(null);
 
-  // 1️⃣ Fetch blocked dates on load
+  // ---------------- Fetch blocked dates ----------------
+  const fetchBlockedDates = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/bookings/blocked");
+      if (!res.ok) throw new Error("Failed to fetch blocked dates");
+      const data: Booking[] = await res.json();
+      setBlockedDates(data); // [{date: "YYYY-MM-DD"}, ...]
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load blocked dates");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Initial fetch + polling every 5s
   useEffect(() => {
-    fetch("/api/bookings") // backend GET endpoint
-      .then((res) => res.json())
-      .then((data) => {
-        setBlockedDates(data);
-      });
+    fetchBlockedDates();
+    const interval = setInterval(fetchBlockedDates, 5000); // 5s polling
+    return () => clearInterval(interval);
   }, []);
 
-  // 2️⃣ Check availability
-  const handleCheck = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!checkIn || !checkOut) return alert("Select both dates");
+  // ---------------- Check if date is blocked ----------------
+  const isDateBlocked = (date: Date) =>
+    blockedDates.some((b) => isSameDay(new Date(b.date), date));
 
-    const start = new Date(checkIn);
-    const end = new Date(checkOut);
+  // ---------------- Handle range selection ----------------
+  const handleRangeChange = (ranges: RangeKeyDict) => {
+    const { startDate, endDate } = ranges.selection;
 
+    // Prevent selecting blocked dates
     let conflict = false;
-    let current = new Date(start);
-
-    while (current <= end) {
-      if (
-        blockedDates.find(
-          (b) => new Date(b.date).toDateString() === current.toDateString()
-        )
-      ) {
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      if (isDateBlocked(d)) {
         conflict = true;
         break;
       }
-      current.setDate(current.getDate() + 1);
     }
 
-    setAvailable(!conflict);
+    if (!conflict) {
+      setSelectedRange(ranges.selection);
+      setAvailable(true);
+    } else {
+      toast.error("Some dates are already booked. Please select another range.");
+      setAvailable(false);
+    }
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-2">Check Availability</h3>
-      <form onSubmit={handleCheck} className="flex gap-2 flex-wrap">
-        <input
-          type="date"
-          value={checkIn}
-          onChange={(e) => setCheckIn(e.target.value)}
-          className="border p-2 rounded"
-        />
-        <input
-          type="date"
-          value={checkOut}
-          onChange={(e) => setCheckOut(e.target.value)}
-          className="border p-2 rounded"
-        />
-        <button
-          type="submit"
-          className="bg-green-900 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          Check
-        </button>
-      </form>
+    <div className="p-4 bg-white rounded-xl shadow-md relative">
+      <Toaster position="top-right" reverseOrder={false} />
 
-      {available !== null && (
-        <p
-          className={`mt-2 font-medium flex items-center gap-2 ${
-            available ? "text-green-700" : "text-red-600"
-          }`}
-        >
-          {available ? (
-            <>
-              Dates Available ✅
-              <span className="text-xs font-normal text-green-700/80">
-                (Please fill the booking details below)
-              </span>
-            </>
-          ) : (
-            "Dates Not Available ❌"
+      {loading && (
+        <p className="absolute top-2 right-2 text-gray-700 font-medium">Loading blocked dates...</p>
+      )}
+
+      <h3 className="text-lg font-semibold mb-2">Check Availability</h3>
+
+      {/* ---------------- Calendar ---------------- */}
+      <DateRange
+        ranges={[selectedRange]}
+        onChange={handleRangeChange}
+        minDate={new Date()}
+        rangeColors={["#3b82f6"]}
+        disabledDates={blockedDates.map((b) => new Date(b.date))}
+        moveRangeOnFirstSelection={false}
+        editableDateInputs
+        showMonthAndYearPickers
+      />
+
+      {/* ---------------- Selected Details ---------------- */}
+      <div className="mt-4 space-y-2">
+        <p>
+          <span className="font-semibold">Check-in:</span>{" "}
+          {format(selectedRange.startDate, "yyyy-MM-dd")}
+        </p>
+        <p>
+          <span className="font-semibold">Check-out:</span>{" "}
+          {format(selectedRange.endDate, "yyyy-MM-dd")}
+        </p>
+        <p>
+          <span className="font-semibold">Nights:</span>{" "}
+          {Math.ceil(
+            (selectedRange.endDate.getTime() - selectedRange.startDate.getTime()) /
+              (1000 * 60 * 60 * 24)
           )}
         </p>
-      )}
+
+        {available !== null && (
+          <p
+            className={`font-medium ${
+              available ? "text-green-700" : "text-red-600"
+            }`}
+          >
+            {available ? "Dates Available ✅" : "Dates Not Available ❌"}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
-
-// ------------------------------------------------------------------------------------iske niche very first code hai ---------
-// import { connectDB } from "@/lib/db";
-// import Booking from "@/models/Booking";
-// import { NextResponse } from "next/server";
-
-// // GET blocked dates
-// export async function GET() {
-//   await connectDB();
-//   const bookings = await Booking.find({}).select("checkIn checkOut");
-
-//   const dates: { date: Date }[] = [];
-
-//   bookings.forEach((b) => {
-//     let current = new Date(b.checkIn);
-//     while (current <= b.checkOut) {
-//       dates.push({ date: new Date(current) });
-//       current.setDate(current.getDate() + 1);
-//     }
-//   });
-
-//   return NextResponse.json(dates);
-// }
-
-// // POST block date manually
-// export async function POST(req: Request) {
-//   const { date } = await req.json();
-
-//   await connectDB();
-//   await Booking.create({
-//     checkIn: date,
-//     checkOut: date,
-//     paid: true,
-//   });
-
-//   return NextResponse.json({ success: true });
-// }

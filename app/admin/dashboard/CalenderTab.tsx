@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DateRange, RangeKeyDict } from "react-date-range";
 import { addDays, format, isSameDay } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Booking {
   date: string; // YYYY-MM-DD
 }
 
-export default function CalenderTab() {
+export default function CalendarTab() {
   // ---------------- Selected range ----------------
   const [selectedRange, setSelectedRange] = useState({
     startDate: new Date(),
@@ -19,13 +20,27 @@ export default function CalenderTab() {
   });
 
   // ---------------- Booked dates ----------------
-  const [bookedDates, setBookedDates] = useState<Booking[]>([
-    { date: "2026-05-10" },
-    { date: "2026-05-12" },
-    { date: "2026-05-15" },
-    { date: "2026-05-20" },
-    { date: "2026-05-22" },
-  ]);
+  const [bookedDates, setBookedDates] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // ---------------- Fetch blocked dates ----------------
+  useEffect(() => {
+    const fetchBlockedDates = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/bookings/blocked");
+        if (!res.ok) throw new Error("Failed to fetch booked dates");
+        const data = await res.json(); // [{date: "YYYY-MM-DD"}, ...]
+        setBookedDates(data);
+      } catch (err) {
+        console.error("Error fetching blocked dates:", err);
+        toast.error("Failed to load blocked dates");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlockedDates();
+  }, []);
 
   // ---------------- Check if date is booked ----------------
   const isDateBooked = (date: Date) =>
@@ -33,10 +48,9 @@ export default function CalenderTab() {
 
   // ---------------- Handle range selection ----------------
   const handleRangeChange = (ranges: RangeKeyDict) => {
-    // Prevent selecting booked dates by filtering them
     const { startDate, endDate } = ranges.selection;
 
-    // Check if any date in the selected range is booked
+    // Prevent selecting booked dates
     let blocked = false;
     for (
       let d = new Date(startDate);
@@ -52,8 +66,7 @@ export default function CalenderTab() {
     if (!blocked) {
       setSelectedRange(ranges.selection);
     } else {
-      // Automatically prevent selection, no alert
-      // Optionally, you can adjust the range to first available date
+      // Auto-adjust to first available range
       const nextAvailableStart = new Date(startDate);
       while (isDateBooked(nextAvailableStart)) {
         nextAvailableStart.setDate(nextAvailableStart.getDate() + 1);
@@ -64,55 +77,118 @@ export default function CalenderTab() {
         endDate: nextAvailableEnd,
         key: "selection",
       });
+      toast("Some dates were blocked, adjusted to next available range");
     }
   };
 
-  // ---------------- Toggle booked status (block/unblock) ----------------
-  const toggleDateBooked = (date: string) => {
-    setBookedDates((prev) => {
-      if (prev.find((b) => b.date === date)) {
-        // Unblock
-        return prev.filter((b) => b.date !== date);
-      } else {
-        // Block
-        return [...prev, { date }];
-      }
-    });
+  // ---------------- Confirm booking (block selected range) ----------------
+  const confirmBooking = async () => {
+    const datesToBook = Array.from(
+      {
+        length:
+          (selectedRange.endDate.getTime() -
+            selectedRange.startDate.getTime()) /
+            (1000 * 60 * 60 * 24) +
+          1,
+      },
+      (_, i) => {
+        const d = new Date(selectedRange.startDate);
+        d.setDate(d.getDate() + i);
+        return d.toISOString().split("T")[0]; // YYYY-MM-DD
+      },
+    );
+
+    // Filter out already blocked dates
+    const newDates = datesToBook.filter(
+      (d) => !bookedDates.some((b) => b.date === d),
+    );
+    if (newDates.length === 0) {
+      toast("All selected dates are already blocked");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      // Optimistic UI update
+      setBookedDates((prev) => [...prev, ...newDates.map((d) => ({ date: d }))]);
+
+      // POST all new dates
+      await Promise.all(
+        newDates.map((date) =>
+          fetch("/api/bookings/blocked", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ date }),
+          }),
+        ),
+      );
+
+      toast.success("Dates blocked successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to block dates");
+      // Rollback
+      setBookedDates((prev) =>
+        prev.filter((b) => !newDates.includes(b.date)),
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // ---------------- Confirm booking ----------------
-  const confirmBooking = () => {
-    setBookedDates((prev) => [
-      ...prev,
-      ...Array.from(
-        {
-          length:
-            (selectedRange.endDate.getTime() -
-              selectedRange.startDate.getTime()) /
-              (1000 * 60 * 60 * 24) +
-            1,
-        },
-        (_, i) => {
-          const d = new Date(selectedRange.startDate);
-          d.setDate(d.getDate() + i);
-          return { date: format(d, "yyyy-MM-dd") };
-        },
-      ),
-    ]);
+  // ---------------- Toggle booked status (block/unblock single date) ----------------
+  const toggleDateBooked = async (date: string) => {
+    const booked = bookedDates.find((b) => b.date === date);
+
+    try {
+      setLoading(true);
+      // Optimistic update
+      if (booked) {
+        setBookedDates((prev) => prev.filter((b) => b.date !== date));
+      } else {
+        setBookedDates((prev) => [...prev, { date }]);
+      }
+
+      // Call API
+      const res = await fetch("/api/bookings/blocked", {
+        method: booked ? "DELETE" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date }),
+      });
+
+      if (!res.ok) throw new Error("Failed to toggle date");
+
+      toast.success(booked ? "Date unblocked" : "Date blocked");
+    } catch (err) {
+      console.error(err);
+      toast.error("Action failed");
+      // Rollback
+      if (booked) {
+        setBookedDates((prev) => [...prev, { date }]);
+      } else {
+        setBookedDates((prev) => prev.filter((b) => b.date !== date));
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
+      <Toaster position="top-right" reverseOrder={false} />
       <p className="text-center text-lg md:text-2xl font-semibold text-gray-900 my-2">
-        Calender
+        Calendar
       </p>
       <p className="border-b-2 border-gray-700 w-10 mx-auto"></p>
       <div className="px-2 md:px-8 flex flex-col md:flex-row gap-6 pt-4 md:pt-6">
         {/* ---------------- Calendar ---------------- */}
-        <div className="bg-white rounded-2xl shadow-xl p-4 flex-1 ">
-          <p className="text-xl font-semibold mb-4 text-gray-800">
-            Select Dates
-          </p>
+        <div className="bg-white rounded-2xl shadow-xl p-4 flex-1 relative">
+          {loading && (
+            <div className="absolute inset-0 bg-white/70 flex items-center justify-center rounded-2xl z-10">
+              <span className="text-gray-800 font-semibold">Loading...</span>
+            </div>
+          )}
+          <p className="text-xl font-semibold mb-4 text-gray-800">Select Dates</p>
 
           <DateRange
             ranges={[selectedRange]}
@@ -120,10 +196,10 @@ export default function CalenderTab() {
             minDate={new Date()}
             rangeColors={["#3b82f6"]}
             disabledDates={bookedDates.map((b) => new Date(b.date))}
-            showMonthAndYearPickers={true}
+            showMonthAndYearPickers
             direction="horizontal"
             moveRangeOnFirstSelection={false}
-            editableDateInputs={true}
+            editableDateInputs
           />
         </div>
 
@@ -131,7 +207,6 @@ export default function CalenderTab() {
         <div className="bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-6 rounded-2xl shadow-xl flex-1 flex flex-col justify-between">
           <div>
             <p className="text-xl font-semibold mb-4">Booking Details</p>
-
             <div className="space-y-3 text-gray-700 dark:text-gray-200">
               <p>
                 <span className="font-semibold">Check-in:</span>{" "}
@@ -154,7 +229,8 @@ export default function CalenderTab() {
 
           <button
             onClick={confirmBooking}
-            className="mt-6 w-full py-3 bg-red-500 hover:bg-black text-white font-semibold rounded-lg transition"
+            disabled={loading}
+            className="mt-6 w-full py-3 bg-red-500 hover:bg-black text-white font-semibold rounded-lg transition disabled:opacity-50"
           >
             Booked
           </button>
@@ -162,7 +238,7 @@ export default function CalenderTab() {
           {/* ---------------- Fully booked dates ---------------- */}
           <div className="mt-6">
             <p className="text-lg font-semibold mb-3">Fully Booked Dates</p>
-            <div className="bg-gray-50 dark:bg-slate-800 p-3 rounded-xl  shadow-inner max-h-48 overflow-auto">
+            <div className="bg-gray-50 dark:bg-slate-800 p-3 rounded-xl shadow-inner max-h-48 overflow-auto">
               <ul className="space-y-2">
                 {bookedDates
                   .sort(
