@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import FocusLock from "react-focus-lock";
 import { galleryData, GalleryItem } from "../data/galleryData";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Chunk utility (20 items per 8-card pattern)
 const chunkArray = <T,>(array: T[], size: number): T[][] => {
   const result: T[][] = [];
   for (let i = 0; i < array.length; i += size) {
@@ -13,7 +14,7 @@ const chunkArray = <T,>(array: T[], size: number): T[][] => {
   return result;
 };
 
-// Small group indexes in 20-item pattern
+// ============= Small group indexes in 20-item pattern =============
 const smallGroups = [
   [0, 1, 2, 3],
   [5, 6, 7, 8],
@@ -21,50 +22,124 @@ const smallGroups = [
   [15, 16, 17, 18],
 ];
 
-// Big card indexes
+// ========= Big card indexes ===========
 const bigIndexes = [4, 9, 10, 19];
 
 const Page: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeItem, setActiveItem] = useState<GalleryItem | null>(null);
+  const [videoPlaying, setVideoPlaying] = useState<Record<string, boolean>>({});
+  const [visibleChunks, setVisibleChunks] = useState(1);
+
+  const INITIAL_ITEMS_PER_CHUNK = 12;
+  const CHUNK_INCREMENT = 6;
+
+  const chunks = useMemo(() => chunkArray(galleryData, 20), []);
+  const [visibleItemsPerChunk, setVisibleItemsPerChunk] = useState<number[]>(
+    chunks.map(() => INITIAL_ITEMS_PER_CHUNK),
+  );
+
+  const [modalVideoPlaying, setModalVideoPlaying] = useState(false);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const openModal = (item: GalleryItem) => {
+    setVideoPlaying({}); // pause all grid videos
     setActiveItem(item);
     setModalOpen(true);
   };
-
+  // =============== reset modal video ====================
   const closeModal = () => {
     setModalOpen(false);
     setActiveItem(null);
+    setModalVideoPlaying(false);
   };
 
-  const chunks = chunkArray(galleryData, 20); // each 20 items = 1 pattern
+  // =============== Keyboard Escape ======================
+  const handleKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape") closeModal();
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
+  // ============= IntersectionObserver for infinite scroll ======================
+  useEffect(() => {
+    let ticking = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!ticking && entries[0].isIntersecting) {
+          ticking = true;
+          setVisibleItemsPerChunk((prev) =>
+            prev.map((count, idx) =>
+              idx === visibleChunks - 1 ? count + CHUNK_INCREMENT : count,
+            ),
+          );
+          if (visibleChunks < chunks.length) {
+            setVisibleChunks((prev) => prev + 1);
+          }
+
+          setTimeout(() => (ticking = false), 200);
+        }
+      },
+      { rootMargin: "200px" },
+    );
+
+    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+    return () => {
+      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
+    };
+  }, [visibleChunks, chunks.length]);
+
+  // ============ Click-to-play handler for video thumbnails =================
+  const handleVideoClick = (id: string) => {
+    setVideoPlaying((prev) => {
+      const newState: Record<string, boolean> = {};
+      Object.keys(prev).forEach((key) => {
+        newState[key] = false; // sab videos pause
+      });
+      newState[id] = true; // clicked video play
+      return newState;
+    });
+  };
+  if (!galleryData || galleryData.length === 0) {
+    return (
+      <div className="text-center p-8 text-gray-500">
+        No gallery items found.
+      </div>
+    );
+  }
 
   return (
     <div className="pb-5 md:pb-8">
-      <div className="text-center my-4 md:my-8 ">
-        <p className="text-2xl md:text-3xl font-semibold border-x-4 border-black mx-2">Villa Gallery</p>
+      <div className="text-center my-4 md:my-8">
+        <p className="text-2xl md:text-3xl font-semibold border-x-4 border-black mx-2">
+          Villa Gallery
+        </p>
         <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">
           Comfort • Space • Serenity
         </p>
       </div>
-
-      <div className="container-fluid grid grid-cols-1">
-        {chunks.map((chunk, chunkIdx) => (
+      <div className="container-fluid grid grid-cols-1 gap-4">
+        {chunks.slice(0, visibleChunks).map((chunk, chunkIdx) => (
           <div
             key={chunkIdx}
             className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full"
           >
             {(() => {
               const usedIndexes = new Set<number>();
+              const itemsToRender = chunk.slice(
+                0,
+                visibleItemsPerChunk[chunkIdx],
+              );
 
-              return chunk.map((item, index) => {
-                // skip already rendered indexes (prevents ghost cards)
+              return itemsToRender.map((item, index) => {
                 if (usedIndexes.has(index)) return null;
 
                 const group = smallGroups.find((g) => g.includes(index));
 
-                // Small 4-image group
+                // ==== Small group =====
                 if (group && group[0] === index) {
                   group.forEach((i) => usedIndexes.add(i));
 
@@ -77,30 +152,62 @@ const Page: React.FC = () => {
                         const img = chunk[i];
                         if (!img) return null;
 
+                        if (img.type === "video") {
+                          const isPlaying = videoPlaying[img.id];
+                          return (
+                            <div
+                              key={img.id.toString()}
+                              className="aspect-square relative w-full rounded-sm overflow-hidden shadow-md cursor-pointer group bg-gray-100"
+                              onClick={() =>
+                                handleVideoClick(img.id.toString())
+                              }
+                            >
+                              {!isPlaying ? (
+                                <Image
+                                  src={
+                                    img.thumbnail || "/video-placeholder.jpg"
+                                  }
+                                  alt={img.alt || "Video thumbnail"}
+                                  fill
+                                  style={{ objectFit: "cover" }}
+                                  quality={75}
+                                  placeholder="blur"
+                                  blurDataURL={
+                                    img.thumbnail || "/video-placeholder.jpg"
+                                  }
+                                  loading="lazy"
+                                />
+                              ) : (
+                                <video
+                                  src={img.src}
+                                  className="w-full h-full object-cover"
+                                  muted
+                                  loop
+                                  playsInline
+                                  controls
+                                  preload="none"
+                                />
+                              )}
+                            </div>
+                          );
+                        }
+
                         return (
                           <div
-                            key={img.id}
+                            key={img.id.toString()}
                             className="aspect-square relative w-full rounded-sm overflow-hidden shadow-md cursor-pointer"
                             onClick={() => openModal(img)}
                           >
-                            {img.type === "image" ? (
-                              <Image
-                                src={img.src}
-                                alt={img.alt || ""}
-                                fill
-                                style={{ objectFit: "cover" }}
-                                quality={75}
-                                loading="lazy"
-                              />
-                            ) : (
-                              <video
-                                src={img.src}
-                                className="w-full h-full object-cover"
-                                muted
-                                loop
-                                controls
-                              />
-                            )}
+                            <Image
+                              src={img.src}
+                              alt={img.alt || ""}
+                              fill
+                              style={{ objectFit: "cover" }}
+                              quality={75}
+                              placeholder="blur"
+                              blurDataURL={img.placeholder || img.src}
+                              loading="lazy"
+                            />
                           </div>
                         );
                       })}
@@ -108,38 +215,65 @@ const Page: React.FC = () => {
                   );
                 }
 
-                // Big cards
+                // ==== Big card ====
                 if (bigIndexes.includes(index)) {
+                  usedIndexes.add(index);
                   const bigItem = chunk[index];
                   if (!bigItem) return null;
 
-                  usedIndexes.add(index);
+                  if (bigItem.type === "video") {
+                    const isPlaying = videoPlaying[bigItem.id];
+                    return (
+                      <div
+                        key={bigItem.id.toString()}
+                        className="w-full h-96 md:h-auto relative rounded-sm overflow-hidden shadow-md cursor-pointer group bg-gray-100"
+                        onClick={() => handleVideoClick(bigItem.id.toString())}
+                      >
+                        {!isPlaying ? (
+                          <Image
+                            src={bigItem.thumbnail || "/video-placeholder.jpg"}
+                            alt={bigItem.alt || "Video thumbnail"}
+                            fill
+                            style={{ objectFit: "cover" }}
+                            quality={75}
+                            placeholder="blur"
+                            blurDataURL={
+                              bigItem.thumbnail || "/video-placeholder.jpg"
+                            }
+                            loading="lazy"
+                          />
+                        ) : (
+                          <video
+                            src={bigItem.src}
+                            className="w-full h-full object-cover"
+                            muted
+                            loop
+                            playsInline
+                            controls
+                            preload="none"
+                          />
+                        )}
+                      </div>
+                    );
+                  }
 
                   return (
                     <div
-                      key={bigItem.id}
+                      key={bigItem.id.toString()}
                       className="w-full h-96 md:h-auto relative rounded-sm overflow-hidden shadow-md cursor-pointer group"
                       onClick={() => openModal(bigItem)}
                     >
-                      {bigItem.type === "image" ? (
-                        <Image
-                          src={bigItem.src}
-                          alt={bigItem.alt || ""}
-                          fill
-                          style={{ objectFit: "cover" }}
-                          className="transition-transform duration-300 group-hover:scale-105"
-                          quality={75}
-                          loading="lazy"
-                        />
-                      ) : (
-                        <video
-                          src={bigItem.src}
-                          className="w-full h-full object-cover"
-                          muted
-                          loop
-                          controls
-                        />
-                      )}
+                      <Image
+                        src={bigItem.src}
+                        alt={bigItem.alt || ""}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        className="transition-transform duration-300 group-hover:scale-105 will-change-transform"
+                        quality={75}
+                        placeholder="blur"
+                        blurDataURL={bigItem.placeholder || bigItem.src}
+                        loading="lazy"
+                      />
                     </div>
                   );
                 }
@@ -149,47 +283,90 @@ const Page: React.FC = () => {
             })()}
           </div>
         ))}
+
+        {/* ==== Scroll trigger ===== */}
+        <div ref={loadMoreRef} className="h-4"></div>
       </div>
 
-      {/* Modal */}
-      {modalOpen && activeItem && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="relative w-full max-w-[70vh] aspect-square mx-auto bg-white rounded-2xl shadow-lg">
-            <button
-              onClick={closeModal}
-              className="absolute top-2 right-2 z-50 text-black bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition"
-            >
-              ✕
-            </button>
+      {/* ===== Modal ===== */}
+      <AnimatePresence>
+        {modalOpen && activeItem && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            className="fixed inset-0 z-50 w-full flex items-center justify-center bg-black/70"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <FocusLock>
+              <motion.div
+                className="relative w-full md:max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-lg overflow-hidden"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                <button
+                  onClick={closeModal}
+                  aria-label="Close modal"
+                  className="absolute top-2 right-2 z-50 text-black bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition"
+                >
+                  ✕
+                </button>
+                <div className="w-96 md:w-2xl h-[50vh] md:h-[70vh] relative">
+                  {activeItem.type === "video" && (
+                    <div
+                      className="w-full h-full relative cursor-pointer"
+                      onClick={() => setModalVideoPlaying(true)}
+                    >
+                      {!modalVideoPlaying ? (
+                        <Image
+                          src={activeItem.thumbnail || "/video-placeholder.jpg"}
+                          alt={activeItem.alt || "Video thumbnail"}
+                          fill
+                          style={{ objectFit: "cover" }}
+                          className="rounded-t-2xl"
+                        />
+                      ) : (
+                        <video
+                          src={activeItem.src}
+                          className="w-full h-full object-cover rounded-t-2xl"
+                          muted
+                          autoPlay
+                          loop
+                          playsInline
+                          controls
+                          preload="none"
+                        />
+                      )}
 
-            <div className="relative w-full max-w-[70vh] aspect-square mx-auto">
-              {activeItem.type === "image" ? (
-                <Image
-                  src={activeItem.src}
-                  alt={activeItem.alt || ""}
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-t-2xl"
-                  quality={75}
-                  loading="lazy"
-                />
-              ) : (
-                <video
-                  src={activeItem.src}
-                  className="w-full h-full object-cover rounded-t-2xl"
-                  controls
-                  autoPlay
-                  muted
-                />
-              )}
-            </div>
+                      {!modalVideoPlaying && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <button
+                            className="bg-white p-2 rounded-full shadow-md"
+                            aria-label="Play video"
+                          >
+                            ▶
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
 
-            <div className="p-4">
-              <h2 className="text-xl font-bold">{activeItem.title}</h2>
-            </div>
-          </div>
-        </div>
-      )}
+                <div className="p-4">
+                  <p id="modal-title" className="text-xl font-bold">
+                    {activeItem.title}
+                  </p>
+                </div>
+              </motion.div>
+            </FocusLock>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

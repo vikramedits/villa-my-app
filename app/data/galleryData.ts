@@ -1,13 +1,14 @@
 // app/data/galleryData.ts
 
-export type GalleryItem = {
-  id: number;
-  type: "image" | "video";
+export interface GalleryItem {
+  id: string | number;       // number bhi chal sakta hai
   src: string;
+  type: "image" | "video";
   alt?: string;
   title?: string;
-};
-
+  placeholder?: string;      // blur placeholder ke liye
+  thumbnail?: string;        // video thumbnail ke liye
+}
 // Static demo data (replace with your own local images/videos)
 export const galleryData: GalleryItem[] = [
   { id: 1, type: "image", src: "/homenew/lake/fatehsagar.jpg", title: "Living Room" },

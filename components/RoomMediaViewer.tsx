@@ -38,16 +38,16 @@ export default function RoomMediaViewer({ room, onCloseAction }: Props) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/70 transition-opacity duration-300 ${
+      className={`container-fluid fixed inset-0 z-50 flex items-center justify-center bg-black/70 transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       onClick={handleClose} // tap outside to close
     >
       <div
-        className={`relative w-full max-w-5xl bg-white shadow-lg overflow-hidden
+        className={`relative w-full max-w-2xl bg-transparent shadow-lg overflow-hidden
           transform transition-all duration-300
           ${isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"}
-          ${isMobile ? "absolute bottom-0 h-[80vh] rounded-t-3xl" : "rounded-3xl md:max-h-[90vh]"}
+          ${isMobile ? "absolute bottom-0 h-4/5 rounded-lg" : "rounded-3xl md:max-h-[90vh]"}
         `}
         onClick={(e) => e.stopPropagation()} // prevent close when clicking inside
       >
