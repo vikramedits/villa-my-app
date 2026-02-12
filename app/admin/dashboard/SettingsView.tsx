@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 /* ================= Interfaces ================= */
 
@@ -58,10 +58,7 @@ export default function SettingsView() {
 
   const [yearlyData, setYearlyData] = useState<YearData[]>(initialYearlyData);
   const [expandedYearIndex, setExpandedYearIndex] = useState<number | null>(
-    () => {
-      const idx = currentYear - startYear;
-      return idx >= 0 && idx <= endYear - startYear ? idx : null;
-    },
+    null,
   );
 
   const yearlyTotals = useMemo(() => {
@@ -141,48 +138,121 @@ export default function SettingsView() {
 
   /* ================= Save Entry ================= */
 
-  const saveEntry = () => {
+  const saveEntry = async () => {
     if (!editingIndex) return;
 
     const { year, month, entry } = editingIndex;
-    const newData = [...yearlyData];
 
-    const newEntry: MonthlyEntry = {
-      groupName: formData.groupName,
-      bookingRS: Number(formData.bookingRS),
-      foodRS: Number(formData.foodRS),
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-    };
+    try {
+      const body = {
+        year: yearlyData[year].year,
+        month: yearlyData[year].months[month].month,
+        entryIndex: entry,
+        groupName: formData.groupName,
+        bookingRS: Number(formData.bookingRS),
+        foodRS: Number(formData.foodRS),
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+      };
 
-    if (entry === null) {
-      newData[year].months[month].entries.push(newEntry);
-    } else {
-      newData[year].months[month].entries[entry] = newEntry;
+      const res = await fetch("/api/villa-settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error("Save failed");
+
+      // Local state update (UI instant)
+      const newData = [...yearlyData];
+
+      const entryData = {
+        groupName: body.groupName,
+        bookingRS: body.bookingRS,
+        foodRS: body.foodRS,
+        startDate: body.startDate,
+        endDate: body.endDate,
+      };
+
+      if (entry === null) {
+        newData[year].months[month].entries.push(entryData);
+      } else {
+        newData[year].months[month].entries[entry] = entryData;
+      }
+
+      setYearlyData(newData);
+      setYearlyData(newData);
+      setIsDialogOpen(false);
+
+      setShowSaved(true);
+      setFadeOut(false);
+      setTimeout(() => setFadeOut(true), 1500);
+      setTimeout(() => setShowSaved(false), 2000);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save entry");
     }
-
-    setYearlyData(newData);
-    setIsDialogOpen(false);
-
-    //  Trigger saved popup with fade-out
-    setShowSaved(true); // show popup
-    setFadeOut(false); // reset fade state
-
-    setTimeout(() => setFadeOut(true), 1500); // start fade-out after 1.5s
-    setTimeout(() => setShowSaved(false), 2000); // hide completely after 2s
   };
-
   /* ================= Delete Entry ================= */
 
-  const deleteEntry = (yIdx: number, mIdx: number, eIdx: number) => {
+  const deleteEntry = async (yIdx: number, mIdx: number, eIdx: number) => {
     if (!confirm("Delete this entry?")) return;
-    const newData = [...yearlyData];
-    newData[yIdx].months[mIdx].entries.splice(eIdx, 1);
-    setYearlyData(newData);
+
+    try {
+      const res = await fetch("/api/villa-settings/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          year: yearlyData[yIdx].year,
+          month: yearlyData[yIdx].months[mIdx].month,
+          entryIndex: eIdx,
+        }),
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error("Delete failed");
+
+      const newData = [...yearlyData];
+      newData[yIdx].months[mIdx].entries.splice(eIdx, 1);
+      setYearlyData(newData);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete entry");
+    }
   };
 
-  
+  useEffect(() => {
+    const fetchYearData = async () => {
+      try {
+        const res = await fetch(`/api/villa-settings/${currentYear}`);
+        const months = await res.json();
 
+        const updatedData = yearlyData.map((yearObj) => {
+          if (yearObj.year === currentYear) return { ...yearObj, months };
+          return yearObj;
+        });
+
+        setYearlyData(updatedData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchYearData();
+  }, [currentYear]);
+
+  const autoOpenedRef = useRef(false);
+
+  useEffect(() => {
+    if (autoOpenedRef.current) return;
+
+    const idx = currentYear - startYear;
+    if (idx >= 0 && idx <= endYear - startYear) {
+      setExpandedYearIndex(idx);
+      autoOpenedRef.current = true;
+    }
+  }, [yearlyData]);
 
   /* ================= UI ================= */
 
