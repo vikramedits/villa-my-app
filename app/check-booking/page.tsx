@@ -182,7 +182,7 @@ export default function CheckBooking() {
 
   /* ================= RENDER ================= */
   return (
-    <div className="my-5 md:my-10 container mx-auto px-4">
+    <div className="container-fluid my-5 md:my-10 container mx-auto px-4">
       <p className="text-xl font-bold mb-5 md:mb-8 text-center  text-gray-950 ">
         Check Booking Status
       </p>

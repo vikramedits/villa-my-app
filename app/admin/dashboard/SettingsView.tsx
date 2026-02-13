@@ -155,14 +155,25 @@ export default function SettingsView() {
         endDate: formData.endDate,
       };
 
-      const res = await fetch("/api/villa-settings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+  const res = await fetch("/api/villa-settings", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(body),
+});
 
-      const data = await res.json();
-      if (!data.success) throw new Error("Save failed");
+if (!res.ok) {
+  const errorText = await res.text();
+  console.error("Server error:", errorText);
+  throw new Error("Server responded with error");
+}
+
+const data = await res.json();
+
+if (!data?.success) {
+  console.error("API returned:", data);
+  throw new Error("Save failed");
+}
+
 
       // Local state update (UI instant)
       const newData = [...yearlyData];

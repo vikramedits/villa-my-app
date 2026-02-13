@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const {
       year,
       month,
-      entryIndex,
+      entryIndex, 
       groupName,
       bookingRS,
       foodRS,

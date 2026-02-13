@@ -19,12 +19,13 @@ export interface VillaSettingsDoc {
 /* ================= Schemas ================= */
 
 const MonthlyEntrySchema = new Schema<MonthlyEntry>({
-  groupName: { type: String, required: true },
+  groupName: { type: String, default: "" }, // ✅ not required
   bookingRS: { type: Number, required: true },
   foodRS: { type: Number, required: true },
   startDate: { type: String, required: true },
   endDate: { type: String },
 });
+
 
 const VillaSettingsSchema = new Schema<VillaSettingsDoc>({
   year: { type: Number, required: true },
