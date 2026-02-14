@@ -59,7 +59,7 @@ export default function Navbar() {
       {/* ===================================================== TOP : DESKTOP ================================================= */}
       <div className=" bg-gray-950">
         <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4">
-          <div>
+          {/* <div>
             <p className="text-white font-normal tracking-wide text-xs md:text-sm">
               Prices Sarting From{" "}
             </p>
@@ -69,7 +69,11 @@ export default function Navbar() {
             <p className="text-white tracking-wide text-xs md:text-sm ">
               (one night)
             </p>
-          </div>
+          </div> */}
+           <div>
+              <p className="uppercase text-2xl text-white tracking-widest">Perfect Place</p>
+              <p className="text-gray-300 text-base">Luxury, space, and comfort — all in one.</p>
+            </div>
           <div className="flex items-center gap-2 bg-white py-2 px-4 rounded-bl-4xl rounded-sm">
             <Link
               href={"/"}
@@ -113,10 +117,14 @@ export default function Navbar() {
           {/* Price Section */}
           <div className="relative flex justify-between items-center w-full px-2 py-2 text-white">
             {/* Left text */}
-            <div className="w-1/2">
+            {/* <div className="w-1/2">
               <p className="text-xs tracking-wide">Prices Starting From</p>
               <p className="font-semibold text-xl">₹1,500 / Person*</p>
               <p className="text-xs tracking-wide">(one night)</p>
+            </div> */}
+            <div>
+              <p className="uppercase text-xl text-white tracking-widest">Perfect Place</p>
+              <p className="text-gray-300 text-sm">Luxury, space, and comfort — all in one.</p>
             </div>
 
             {/* Right animation */}

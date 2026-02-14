@@ -239,18 +239,30 @@ export default function NearByLocations() {
 
   return (
     <div className="relative w-full min-h-100">
-      {/* Background image */}
+      
+      {/* ============== Background image ==================== */}
+      <div className="absolute inset-0 bg-linear-to-b from-white/60 via-white/20 to-white/40" />
       <Image
         src="/homenew/bg/cloud.bg_.avif"
-        alt="Nearby locations background"
+        alt=""
         fill
-        className="object-cover"
-        priority
+        loading="lazy"
+        className="object-cover opacity-40"
       />
 
-      {/* Semi-transparent overlay */}
-      <div className="absolute inset-0 bg-white/30" />
+      {/* ========= BG - Gradient =============== */}
 
+      {/* <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-full max-w-3/4 h-64 md:h-96 rounded-full bg-emerald-200/20 blur-3xl " />
+
+        <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-full max-w-3/4 h-72 rounded-full bg-yellow-200/25 blur-3xl " />
+
+        <div className="absolute -bottom-40 left-1/2 -translate-x-full w-full max-w-3/4 h-64 rounded-full bg-orange-300/20 blur-3xl  " />
+
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-full max-w-3/4 h-32 rounded-full bg-white/40 blur-3xl  " />
+      </div> */}
+
+      {/* ============================================================================================================================================== */}
       {/* Content */}
       <section className="relative z-10 container-fluid">
         <div className="py-8 md:py-10">
