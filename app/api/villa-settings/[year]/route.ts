@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/db";
 import VillaSettings from "@/lib/models/VillaSettings";
 import { NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
 
 export async function GET(
   req: Request,
