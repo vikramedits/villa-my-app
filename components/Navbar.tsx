@@ -134,7 +134,7 @@ export default function Navbar() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center">
+          <div className="flex gap-2 items-center">
             {/* LEFT: Email & Call Dropdown */}
             <div className="relative w-1/2">
               <button
@@ -148,7 +148,7 @@ export default function Navbar() {
                 <span className="flex items-center gap-2">
                   <Mail size={16} />
                   <Phone size={16} />
-                  <span className="font-bold text-primaryBlue">
+                  <span className="font-bold text-primaryBlue tracking-wider">
                     Email & Call
                   </span>
                 </span>
@@ -198,13 +198,13 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            ``
+            
             {/* =========== RIGHT: Availability)  ========== */}
             <Link
               href="/booking"
               className="w-1/2 text-center bg-white text-green-700
                        px-4 py-2 rounded-br-xl rounded-sm font-bold text-sm
-                       shadow-md active:scale-95 transition"
+                       shadow-md active:scale-95 transition z-20 tracking-wider"
             >
               Check Availability
             </Link>
