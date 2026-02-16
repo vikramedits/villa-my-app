@@ -32,8 +32,9 @@ export default function Hero() {
               </h1>
             </div>
 
-            <div className="pb-8 flex justify-center mt-2">
-              <Link aria-label="Book your villa now"
+            <div className="pb-8 flex justify-center gap-4 mt-2">
+              <Link
+                aria-label="Book your villa now"
                 href="/booking"
                 className="group inline-flex items-center gap-2
                bg-white text-blue-950
@@ -48,6 +49,18 @@ export default function Hero() {
                 />
 
                 <span className="animate-textPulse">Book Now</span>
+              </Link>
+              {/* Your Bookings link */}
+              <Link
+                href="/check-booking"
+                className="group inline-flex items-center gap-2
+               bg-gray-950 text-white
+               px-8 py-3 rounded-full font-medium
+               transition-all duration-300 ease-out
+               hover:bg-white hover:text-gray-950
+               border border-white"
+              >
+                Your Bookings
               </Link>
             </div>
           </div>

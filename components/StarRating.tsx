@@ -23,7 +23,7 @@ export default function StarRating({
       >
         <span className="text-gray-300 select-none">★★★★★</span>
         <span
-          className="absolute top-0 left-0 overflow-hidden text-[#C8A85D]"
+          className="absolute top-0 left-0 overflow-hidden text-yellow-400"
           style={{ width: `${percentage}%` }}
         >
           ★★★★★

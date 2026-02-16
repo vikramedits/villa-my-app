@@ -61,17 +61,17 @@ const REVIEWS = [
 ======================= */
 function ReviewCard({ review }: any) {
   return (
-    <div className=" w-5/6 sm:w-4/5 md:w-full h-80 shrink-0 rounded-lg bg-white/70 backdrop-blur-xl border border-white/40 p-6 flex flex-col shadow-xs mb-2 ">
+    <div className=" w-5/6 sm:w-4/5 md:w-full h-96 shrink-0 rounded-lg bg-white/70 backdrop-blur-xl border border-white/40 p-6 flex flex-col shadow-xs mb-2 ">
       <div className="text-6xl leading-none text-black/30 font-serif mb-1">
         “
       </div>
 
-      <div className="flex-1 text-sm text-gray-700 leading-relaxed italic overflow-y-auto pr-1">
+      <div className="flex-1 text-sm text-gray-700 shadow-inner rounded-lg px-2 py-2 leading-relaxed italic overflow-y-auto pr-1">
         {review.text}
       </div>
 
-      <div className="mt-4">
-        <div className="flex items-center justify-between">
+      <div className="mt-4  px-2 py-3 bg-purple-100 rounded-lg">
+        <div className="">
           <p className="text-sm font-medium text-gray-900">{review.name}</p>
           <p className="text-xs text-gray-500">{review.meta.join(" → ")}</p>
         </div>
@@ -92,8 +92,8 @@ export default function LuxuryReviewsSection() {
     <section className="relative py-10 md:py-20 overflow-hidden">
       {/* ============ Background  =============== */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 left-1/4 w-105 h-105 bg-indigo-500/10 rounded-full blur-[140px]" />
-        <div className="absolute bottom-0 -right-40 w-105 h-105 bg-purple-500/10 rounded-full blur-[140px]" />
+        <div className="absolute -top-40 left-1/4 w-105 md:w-full h-105 bg-indigo-500/20 rounded-full blur-[140px]" />
+        <div className="absolute bottom-0 -right-40 w-105 md:w-full h-105 bg-purple-500/10 rounded-full blur-[140px]" />
       </div>
 
       {/* =========== Content ============ */}
