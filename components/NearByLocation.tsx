@@ -31,7 +31,7 @@ const DATA: DataType = {
       image: "/homenew/lake/fatehsagar-new.jpg",
       distance: "5 km",
       time: "12 min drive",
-      href: "",
+      href: "https://maps.app.goo.gl/BixKCAcV3UPzW9DS7",
       desc: "Fateh Sagar Lake is a scenic lake in Udaipur, surrounded by hills and known for boating and beautiful sunsets.",
     },
     {
