@@ -70,10 +70,14 @@ export default function Navbar() {
               (one night)
             </p>
           </div> */}
-           <div>
-              <p className="uppercase text-2xl text-white tracking-widest">Perfect Place</p>
-              <p className="text-gray-300 text-base">Luxury, space, and comfort — all in one.</p>
-            </div>
+          <div>
+            <p className="uppercase text-2xl text-white tracking-widest">
+              Perfect Place
+            </p>
+            <p className="text-gray-300 text-base">
+              Luxury, space, and comfort — all in one.
+            </p>
+          </div>
           <div className="flex items-center gap-2 bg-white py-2 px-4 rounded-bl-4xl rounded-sm">
             <Link
               href={"/"}
@@ -123,8 +127,12 @@ export default function Navbar() {
               <p className="text-xs tracking-wide">(one night)</p>
             </div> */}
             <div>
-              <p className="uppercase text-xl text-white tracking-widest">Perfect Place</p>
-              <p className="text-gray-300 text-sm">Luxury, space, and comfort — all in one.</p>
+              <p className="uppercase text-xl text-white tracking-widest">
+                Perfect Place
+              </p>
+              <p className="text-gray-300 text-sm">
+                Luxury, space, and comfort — all in one.
+              </p>
             </div>
 
             {/* Right animation */}
@@ -198,7 +206,7 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            
+
             {/* =========== RIGHT: Availability)  ========== */}
             <Link
               href="/booking"
@@ -212,8 +220,8 @@ export default function Navbar() {
         </div>
       </div>
       {/* ===================================================== HEADER : DESKTOP & MOBILE ================================================= */}
-      <header className="sticky top-0 z-50 w-full bg-white text-primaryBlue shadow-md py-2">
-        <div className="container-fluid mx-auto flex h-12 md:h-16 items-center justify-between">
+      <header className="sticky top-0 z-50 w-full bg-white text-primaryBlue shadow-md py-1">
+        <div className="container-fluid mx-auto flex h-12.5 md:h-16 items-center justify-between overflow-hidden">
           {/* =========== LOGO (common)  ========== */}
           <div className="flex items-center gap-1  px-3 bg-white">
             <Image
@@ -222,7 +230,7 @@ export default function Navbar() {
               width={48}
               height={48}
               priority
-              className="rounded-full w-16 md:w-20 h-16 md:h-20 object-cover pt-1 "
+              className="rounded-full w-16 md:w-20 h-16 md:h-20 object-cover object-center pt-1"
             />
             <span className="text-sm md:text-lg font-bold md:font-semibold tracking-wide text-primaryBlue ">
               The Pushpa Heritage
