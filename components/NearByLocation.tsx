@@ -277,13 +277,13 @@ export default function NearByLocations() {
           </div>
 
           {/* Tabs */}
-          <div className="flex justify-center gap-2 md:gap-3 mb-5 md:mb-8 overflow-x-auto">
+          <div className="flex justify-center gap-2 md:gap-3 mb-5 md:mb-8 overflow-x-auto bg-white py-2 rounded-full shadow">
             {(["lakes", "spiritual", "attractions"] as (keyof DataType)[]).map(
               (key) => (
                 <button
                   key={key}
                   onClick={() => setActiveTab(key)}
-                  className={`px-5 py-2 rounded-sm whitespace-nowrap text-sm font-medium border transition
+                  className={`px-5 py-2 rounded-full whitespace-nowrap text-sm font-medium  transition
                 ${
                   activeTab === key
                     ? "bg-primaryBlue text-white border-primaryBlue"
