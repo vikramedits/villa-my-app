@@ -232,9 +232,9 @@ export default function Navbar() {
               priority
               className="rounded-full w-16 md:w-20 h-16 md:h-20 object-cover object-center pt-1"
             />
-            <span className="text-sm md:text-lg font-bold md:font-semibold tracking-wide text-primaryBlue ">
+            <span className="text-sm md:text-lg font-bold md:font-semibold tracking-wide text-yellow-700 ">
               The Pushpa Heritage
-              <p className="text-xs md:text-sm text-black shadow-2xl rounded-l-full rounded-r-full">
+              <p className="text-xs md:text-sm text-orange-950 shadow-2xl rounded-l-full rounded-r-full">
                 7-BHK | Big Pool | 2 Gardens
               </p>
             </span>
