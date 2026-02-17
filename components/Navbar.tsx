@@ -57,7 +57,7 @@ export default function Navbar() {
   return (
     <>
       {/* ===================================================== TOP : DESKTOP ================================================= */}
-      <div className=" bg-gray-950">
+      <div className=" bg-gray-950 py-2">
         <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4">
           {/* <div>
             <p className="text-white font-normal tracking-wide text-xs md:text-sm">
@@ -212,17 +212,17 @@ export default function Navbar() {
         </div>
       </div>
       {/* ===================================================== HEADER : DESKTOP & MOBILE ================================================= */}
-      <header className="sticky top-0 z-50 w-full bg-white text-primaryBlue shadow-md py-1">
+      <header className="sticky top-0 z-50 w-full bg-white text-primaryBlue shadow-md py-2">
         <div className="container-fluid mx-auto flex h-12 md:h-16 items-center justify-between">
           {/* =========== LOGO (common)  ========== */}
-          <div className="flex items-center gap-3 py-1 px-3 bg-white">
+          <div className="flex items-center gap-1  px-3 bg-white">
             <Image
-              src="/homenew/logo-2.jpeg"
+              src="/homenew/logo-flower.jpeg"
               alt="Villa Logo"
               width={48}
               height={48}
               priority
-              className="rounded-full w-12 md:w-12 h-12 md:h-12 object-cover border border-gray-300 "
+              className="rounded-full w-16 md:w-20 h-16 md:h-20 object-cover pt-1 "
             />
             <span className="text-sm md:text-lg font-bold md:font-semibold tracking-wide text-primaryBlue ">
               The Pushpa Heritage
