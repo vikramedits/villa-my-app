@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { Menu, MessageCircle, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { FaWhatsapp } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +22,7 @@ import {
   GalleryHorizontal,
   MapPin,
   Phone,
+  ArrowRight,
   Mail,
   ChevronDown,
   ChevronUp,
@@ -53,6 +55,11 @@ const navItems = [
 export default function Navbar() {
   const [sheetOpen, setSheetOpen] = useState(false); // sidebar
   const [contactOpen, setContactOpen] = useState(false); // dropdown
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setSheetOpen(false);
+  }, [pathname]);
 
   return (
     <>
@@ -70,14 +77,24 @@ export default function Navbar() {
               (one night)
             </p>
           </div> */}
-          <div>
-            <p className="uppercase text-2xl text-white tracking-widest">
-              Perfect Place
-            </p>
-            <p className="text-gray-300 text-base">
-              Luxury, space, and comfort — all in one.
-            </p>
-          </div>
+          <Link
+            href="https://www.google.com/maps?q=YOUR+LOCATION"
+            target="_blank"
+            aria-label="Open location in Google Maps"
+            className="hover:opacity-90 leading-tight"
+          >
+            <span className=" flex  items-center gap-1 text-red-500">
+              <MapPin size={24} />
+              <span className="text-lg font-medium text-red-500">
+                On-road Location
+              </span>
+            </span>
+
+            <span className="flex items-center gap-1 text-xs pl-7 text-white">
+              Google Maps
+              <ArrowRight size={16} strokeWidth={3} />
+            </span>
+          </Link>
           <div className="flex items-center gap-2 bg-white py-2 px-4 rounded-bl-4xl rounded-sm">
             <Link
               href={"/"}
@@ -119,24 +136,34 @@ export default function Navbar() {
       <div className="bg-gray-950 md:hidden">
         <div className="px-4 py-4 flex flex-col gap-4">
           {/* Price Section */}
-          <div className="relative flex justify-between items-center w-full px-2 py-2 text-white">
+          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-gray-900 rounded-full">
             {/* Left text */}
             {/* <div className="w-1/2">
               <p className="text-xs tracking-wide">Prices Starting From</p>
               <p className="font-semibold text-xl">₹1,500 / Person*</p>
               <p className="text-xs tracking-wide">(one night)</p>
             </div> */}
-            <div>
-              <p className="uppercase text-xl text-white tracking-widest">
-                Perfect Place
-              </p>
-              <p className="text-gray-300 text-sm">
-                Luxury, space, and comfort — all in one.
-              </p>
-            </div>
+
+            <Link
+              href="https://www.google.com/maps?q=YOUR+LOCATION"
+              target="_blank"
+              className=""
+            >
+              <span className=" flex  items-center gap-1 text-red-500">
+                <MapPin size={20} />
+                <span className="text-base font-medium text-red-500">
+                  On-road Location
+                </span>
+              </span>
+
+              <span className="flex items-center gap-1 text-xs pl-7 text-white">
+                Google Maps
+                <ArrowRight size={16} strokeWidth={3} />
+              </span>
+            </Link>
 
             {/* Right animation */}
-            <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-48 h-40">
+            <div className="absolute -right-8 top-9 -translate-y-1/2 w-48 h-40">
               <CenteredVillaAnimation />
             </div>
           </div>
@@ -309,7 +336,7 @@ export default function Navbar() {
           </div>
 
           {/* ========================================= MOBILE : MENU ================================================ */}
-          <div className="lg:hidden">
+          <div className="lg:hidden ">
             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger asChild>
                 <Button
@@ -322,13 +349,15 @@ export default function Navbar() {
                 </Button>
               </SheetTrigger>
 
-              <SheetContent side="right" className="bg-primaryBlue text-white">
-                <SheetHeader>
-                  <SheetTitle>
-                    <span className="sr-only">Navigation Menu</span>
-                  </SheetTitle>
+              <SheetContent
+                side="right"
+                className="bg-gray-950 text-white"
+                onInteractOutside={() => setSheetOpen(false)}
+              >
+                <SheetHeader className="bg-gray-900  shadow shadow-gray-700 pb-10">
+                  <SheetTitle className="sr-only pb-4">Navigation</SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col gap-6 mt-8 px-2">
+                <div className="flex flex-col gap-6 mt-4 px-4">
                   {navItems.map((item) => {
                     const Icon = item.icon;
 
@@ -343,9 +372,9 @@ export default function Navbar() {
                       </Link>
                     );
                   })}
-                  <div className="items-center px-2 pt-4 border-t border-white/20">
+                  <div className="items-center pt-4 border-t border-white/20">
                     {/* WhatsApp */}
-                    <div className="bg-white px-2 py-2 rounded-sm flex gap-2 items-center mb-2">
+                    <div className="bg-white px-2 py-2 rounded-full flex gap-2 items-center mb-2">
                       <Link
                         href="https://wa.me/917983598967"
                         target="_blank"
@@ -355,7 +384,7 @@ export default function Navbar() {
                                text-white shadow-md hover:shadow-lg 
                                transition-all duration-300"
                       >
-                        <Phone size={16} />
+                        <FaWhatsapp size={18} />
                       </Link>
                       <p className="text-primaryBlue font-medium tracking-wide text-sm">
                         Chat On WhatsApp
@@ -363,7 +392,7 @@ export default function Navbar() {
                     </div>
 
                     {/*Instagram */}
-                    <div className="bg-white px-2 py-2 rounded-sm flex gap-2 items-center">
+                    <div className="bg-white px-2 py-2 rounded-full flex gap-2 items-center">
                       <Link
                         href="https://www.instagram.com/yourprofile"
                         target="_blank"
@@ -376,7 +405,7 @@ export default function Navbar() {
                         <Instagram size={16} />
                       </Link>
                       <p className="text-primaryBlue font-medium tracking-wide text-sm">
-                        Follow On Instagram
+                        Follow For Updates
                       </p>
                     </div>
                   </div>
