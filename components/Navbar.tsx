@@ -130,7 +130,7 @@ export default function Navbar() {
       <div className="bg-gray-950 md:hidden">
         <div className="px-4 py-4 flex flex-col gap-4">
           {/* Price Section */}
-          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-gray-900 rounded-full">
+          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-gray-800 rounded-full">
             {/* Left text */}
             {/* <div className="w-1/2">
               <p className="text-xs tracking-wide">Prices Starting From</p>
