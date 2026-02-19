@@ -77,24 +77,29 @@ export default function Navbar() {
               (one night)
             </p>
           </div> */}
-          <Link
-            href="https://www.google.com/maps?q=YOUR+LOCATION"
-            target="_blank"
-            aria-label="Open location in Google Maps"
-            className="hover:opacity-90 leading-tight"
-          >
-            <span className=" flex  items-center gap-1 text-red-500">
-              <MapPin size={24} />
-              <span className="text-lg font-medium text-red-500">
-                On-road Location
+          <div className="bg-gray-800 rounded-full pl-6 pr-28 py-2 flex">
+            <Link
+              href="https://www.google.com/maps?q=YOUR+LOCATION"
+              target="_blank"
+              aria-label="Open location in Google Maps"
+              className="hover:opacity-90  "
+            >
+              <span className=" flex  items-center gap-1 text-red-500">
+                <MapPin size={24} />
+                <span className="text-lg font-medium text-red-500">
+                  On-road Location
+                </span>
               </span>
-            </span>
 
-            <span className="flex items-center gap-1 text-xs pl-7 text-white">
-              Google Maps
-              <ArrowRight size={16} strokeWidth={3} />
-            </span>
-          </Link>
+              <span className="flex items-center gap-1 text-xs pl-7 text-white">
+                Google Maps
+                <ArrowRight size={16} strokeWidth={3} />
+              </span>
+            </Link>
+            <div className=" w-48 h-10 absolute -top-3 ml-32 -translate-y-1/2">
+              <CenteredVillaAnimation />
+            </div>
+          </div>
           <div className="flex items-center gap-2 bg-white py-2 px-4 rounded-bl-4xl rounded-sm">
             <Link
               href={"/"}
@@ -298,7 +303,7 @@ export default function Navbar() {
                text-white shadow-md hover:shadow-lg 
                transition-all duration-300"
               >
-                <Phone size={20} />
+                  <FaWhatsapp size={18} />
               </Link>
               <span
                 className="absolute top-full mt-2 left-1/2 -translate-x-1/2
