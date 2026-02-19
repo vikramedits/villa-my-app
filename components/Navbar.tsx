@@ -64,20 +64,9 @@ export default function Navbar() {
   return (
     <>
       {/* ===================================================== TOP : DESKTOP ================================================= */}
-      <div className=" bg-gray-950 py-2">
-        <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4">
-          {/* <div>
-            <p className="text-white font-normal tracking-wide text-xs md:text-sm">
-              Prices Sarting From{" "}
-            </p>
-            <p className="text-white font-medium text-sm md:text-xl">
-              1,500/Person*
-            </p>
-            <p className="text-white tracking-wide text-xs md:text-sm ">
-              (one night)
-            </p>
-          </div> */}
-          <div className="bg-gray-800 rounded-full pl-6 pr-28 py-2 flex">
+      <div className="bg-gray-950 lg:bg-yellow-50 py-2">
+        <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4 bg-gray-950 rounded-full">
+          <div className=" pl-6 pr-28 py-2 flex">
             <Link
               href="https://www.google.com/maps?q=YOUR+LOCATION"
               target="_blank"
@@ -100,10 +89,10 @@ export default function Navbar() {
               <CenteredVillaAnimation />
             </div>
           </div>
-          <div className="flex items-center gap-2 bg-white py-2 px-4 rounded-bl-4xl rounded-sm">
+          <div className="flex items-center gap-2 bg-blue-950 text-white py-2 px-4 rounded-full ">
             <Link
               href={"/"}
-              className="flex items-center gap-2 tracking-wide text-primaryBlue text-sm md:text-base py-2 px-3 font-medium border-b border-primaryBlue rounded-xl  hover:scale-105 
+              className="flex items-center gap-2 tracking-wide text-white text-sm md:text-base py-2 px-3 font-medium   hover:scale-105 
              transition-transform duration-300 ease-in-out"
             >
               <Mail size={18} /> E-Mail here
@@ -111,25 +100,25 @@ export default function Navbar() {
             <p className="text-3xl items-center pb-2">|</p>
             <Link
               href={"/booking"}
-              className="py-2 px-3 text-primaryBlue font-medium border-b border-primaryBlue rounded-xl hover:scale-105 
+              className="py-2 px-3 text-green-500 font-medium  hover:scale-105 
              transition-transform duration-300 ease-in-out"
             >
               Check Availability
             </Link>
             <p className="text-3xl items-center pb-2">|</p>
-            <p className="text-primaryBlue font-medium text-base">Call:</p>
+            <p className="text-white font-medium text-base">Call:</p>
             <Link
               href="tel:9587380255"
-              className="flex items-center gap-2 text-primaryBlue text-sm font-medium hover:scale-105 
-             transition-transform duration-300 ease-in-out border-2 border-white py-1 px-2 rounded"
+              className="flex items-center gap-2 text-white text-sm font-medium hover:scale-105 
+             transition-transform duration-300 ease-in-out  py-1 px-2 "
             >
               <Phone size={18} />
               9587380255
             </Link>
             <Link
               href="tel:9001069033"
-              className="flex items-center gap-2 text-primaryBlue text-sm font-medium hover:scale-105 
-             transition-transform duration-300 ease-in-out border-2 border-white py-1 px-2 rounded"
+              className="flex items-center gap-2 text-white text-sm font-medium hover:scale-105 
+             transition-transform duration-300 ease-in-out  py-1 px-2 "
             >
               <Phone size={18} />
               9001069033
@@ -255,7 +244,7 @@ export default function Navbar() {
       <header className="sticky top-0 z-50 w-full bg-white text-primaryBlue shadow-md py-1">
         <div className="container-fluid mx-auto flex h-12.5 md:h-16 items-center justify-between overflow-hidden">
           {/* =========== LOGO (common)  ========== */}
-          <div className="flex items-center gap-1  px-3 bg-white">
+          <div className="flex items-center gap-1 bg-white">
             <Image
               src="/homenew/logo-flower.jpeg"
               alt="Villa Logo"
@@ -310,7 +299,7 @@ export default function Navbar() {
              scale-0 group-hover:scale-100 
              bg-black text-white text-xs px-3 py-1 
              rounded-md shadow-lg 
-             transition-all duration-200 origin-top"
+             transition-all duration-200 origin-top "
               >
                 Chat on WhatsApp
               </span>
