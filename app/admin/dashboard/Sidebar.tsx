@@ -10,6 +10,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import MobilePortal from "@/components/MobilePortal";
+import { signOut } from "next-auth/react";
 
 const MAIN_MENU = [
   { name: "Statistics", icon: Home },
@@ -48,6 +49,10 @@ export default function Sidebar({ activeMenu, setActiveMenu }: any) {
               </button>
             ))}
           </nav>
+
+          <button onClick={() => signOut({ callbackUrl: "/login" })}>
+            Logout
+          </button>
         </div>
       </aside>
 

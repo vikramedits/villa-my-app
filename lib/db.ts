@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
 // Cached connection for hot reload / dev
-let cached: { conn: any; promise: Promise<any> | null } = (global as any).mongoose;
+// let cached: { conn: any; promise: Promise<any> | null } = (global as any).mongoose;
+let cached: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null } = (global as any).mongoose;
+
 
 if (!cached) {
   cached = (global as any).mongoose = { conn: null, promise: null };
