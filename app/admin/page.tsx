@@ -1,7 +1,7 @@
 
 import { connectDB } from "@/lib/db";
 import Booking from "@/lib/models/Booking";
-import DashboardPage from "./dashboard/page";
+import DashboardPage from "./dashboard/DashboardUI";
 
 interface IBooking {
   name: string;
