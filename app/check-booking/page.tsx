@@ -130,7 +130,6 @@ export default function CheckBooking() {
     setBookingDetails(null);
     setOpenDetails(false);
 
-    
     try {
       const success = await fetchBooking(trimmedRef, trimmedPhone);
 
@@ -194,17 +193,33 @@ export default function CheckBooking() {
 
   /* ================= RENDER ================= */
   return (
-    <div className="container-fluid my-5 md:my-10 container mx-auto px-4">
-      <p className="text-xl font-bold py-5 md:py-8 text-center  text-gray-950 ">
-        Check Your Booking
+    <div className="container-fluid my-5 md:my-10 container mx-auto ">
+      <p className="text-2xl md:text-3xl font-semibold border-x-4 text-center border-black mx-2 my-2 ">
+        Your Reservations
       </p>
 
       {/* ===== Empty state for direct users ===== */}
       {!bookingDetails && !ref && !phone && (
-        <div className=" mx-auto mb-6 text-center">
-          <p className="text-sm text-red-500 font-medium pb-3">
-            You don’t have any bookings yet.
-          </p>
+        <div className=" mx-auto mb-6 text-center bg-gray-100 rounded-lg my-4 md:my-8 py-3 md:py-6">
+          <div className="flex flex-col mx-3 mb-3 items-center justify-center gap-2 p-4 bg-red-50 rounded-lg border border-red-200">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 16h-1v-4h-1m1-4h.01M12 20.5c4.142 0 7.5-3.358 7.5-7.5S16.142 5.5 12 5.5 4.5 8.858 4.5 13 7.858 20.5 12 20.5z"
+              />
+            </svg>
+            <p className="text-center text-red-600 font-semibold text-base">
+              No reservations yet. Make your booking!
+            </p>
+          </div>
 
           <Link
             aria-label="Book your villa now"
@@ -234,7 +249,7 @@ export default function CheckBooking() {
           <input
             value={ref}
             onChange={(e) => setRef(e.target.value)}
-            placeholder="Booking Reference"
+            placeholder="Booking ID"
             className="w-full border border-gray-200 shadow-md p-3 rounded-lg"
           />
           <input

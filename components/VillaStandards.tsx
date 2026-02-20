@@ -63,7 +63,7 @@ const villaImages: VillaImage[] = [
         href: "/",
       },
       {
-        src: "/homenew/standard/standard-5.jpeg",
+        src: "/homenew/standard/Room-home-image.jpeg",
         title: "Rooms",
         buttonText: "View all",
         alt: "Bedroom",

@@ -63,7 +63,7 @@ export default function RoomCard({ room, onClickAction, style }: Props) {
         )}
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-semibold">{room.name}</h3>
+        <p className="text-lg font-semibold">{room.name}</p>
         <p className="text-sm text-gray-500">{room.view}</p>
         <span className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-sm font-semibold">
           {/* Star SVG */}

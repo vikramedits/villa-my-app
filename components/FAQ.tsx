@@ -6,7 +6,7 @@ const FAQS = [
   {
     question: "What is the check-in and check-out time?",
     answer:
-      "Check-in time is from 2:00 PM and check-out time is until 11:00 AM. Early check-in or late check-out is subject to availability.",
+      "Check-in time is from 12:00 PM and check-out time is until 11:00 AM. Early check-in or late check-out is subject to availability.",
   },
   {
     question: "Is the villa suitable for families?",
@@ -16,7 +16,7 @@ const FAQS = [
   {
     question: "Is parking available at the property?",
     answer:
-      "Yes, free and secure parking space is available for guests inside the villa premises.",
+      "Yes, free and secure parking space is available for guests inside and outside the villa.",
   },
   {
     question: "Are pets allowed in the villa?",
@@ -26,7 +26,7 @@ const FAQS = [
   {
     question: "Is cooking allowed and is the kitchen equipped?",
     answer:
-      "Yes, guests can use the fully equipped kitchen which includes basic utensils, cookware, and a refrigerator.",
+      "Yes, guests can use the fully equipped kitchen which includes basic utensils, cookware, and a refrigerator...but have kitchen charges",
   },
   {
     question: "What is the cancellation policy?",

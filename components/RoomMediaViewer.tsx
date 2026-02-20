@@ -86,7 +86,7 @@ export default function RoomMediaViewer({ room, onCloseAction }: Props) {
                     src={media.src}
                     alt={room.name}
                     fill
-                    className="object-cover"
+                    className="object-cover rounded-xl"
                   />
                 )}
               </div>

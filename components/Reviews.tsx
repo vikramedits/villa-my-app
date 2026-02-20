@@ -7,6 +7,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css/navigation";
 import Link from "next/link";
 import StarRating from "./StarRating";
+import { FcGoogle } from "react-icons/fc";
 
 /* =======================
    REVIEWS DATA
@@ -61,7 +62,7 @@ const REVIEWS = [
 ======================= */
 function ReviewCard({ review }: any) {
   return (
-    <div className=" w-5/6 sm:w-4/5 md:w-full h-96 shrink-0 rounded-lg bg-white/70 backdrop-blur-xl border border-white/40 p-6 flex flex-col shadow-xs mb-2 ">
+    <div className=" w-5/6 sm:w-4/5 md:w-full h-96 shrink-0 rounded-lg bg-white/70 backdrop-blur-xl border-2 border-white/40 p-6 flex flex-col shadow-sm mb-2 ">
       <div className="text-6xl leading-none text-black/30 font-serif mb-1">
         “
       </div>
@@ -101,15 +102,10 @@ export default function LuxuryReviewsSection() {
         <div className="mb-10 md:mb-16">
           <div className="flex justify-between">
             <div className="flex items-center gap-3">
-              {/* Google Icon */}
-              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-white">
-                <span className="text-sm font-bold text-blue-500 border-2 border-blue-500 rounded-full px-1.5">G</span>
-              </div>
-
-              {/* Google Reviews + LIVE */}
+             {/* ==== Google Icon ==== */}
+                <FcGoogle className="w-5 h-5" />
               <p className="flex items-center gap-2 text-sm md:text-base tracking-widest text-black/60 uppercase">
                 Google Reviews
-                {/* LIVE badge */}
                 <span className="relative flex items-center gap-1">
                   <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                   <span className="text-xs font-bold text-red-400 animate-live">
