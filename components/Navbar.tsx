@@ -76,9 +76,7 @@ export default function Navbar() {
             >
               <span className=" flex  items-center gap-1 text-green-200">
                 <MapPin size={24} />
-                <span className="text-lg font-medium ">
-                  On-road Location
-                </span>
+                <span className="text-lg font-medium ">On-road Location</span>
               </span>
 
               <span className="flex items-center gap-1 text-xs pl-7 text-white">
@@ -129,10 +127,10 @@ export default function Navbar() {
         </div>
       </div>
       {/* ===================================================== TOP : MOBILE ================================================= */}
-      <div className="bg-green-950 md:hidden">
+      <div className="bg-linear-to-b from-green-950 via-green-900 to-white md:hidden">
         <div className="px-4 py-4 flex flex-col gap-4">
           {/* Price Section */}
-          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-green-800 rounded-full">
+          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-green-800 rounded-full shadow-lg shadow-green-950">
             <Link
               href="https://www.google.com/maps?q=YOUR+LOCATION"
               target="_blank"
@@ -164,9 +162,9 @@ export default function Navbar() {
               <button
                 onClick={() => setContactOpen(!contactOpen)}
                 className="w-full flex items-center justify-between 
-               bg-white text-primaryBlue 
+               bg-white text-black 
                px-2 py-2 rounded-bl-xl rounded-sm font-medium text-sm
-               shadow-md active:scale-95 transition"
+               shadow-md active:scale-95 transition border-b border-green-950"
               >
                 {/* Left side: icons + text */}
                 <span className="flex items-center gap-2">
@@ -188,7 +186,7 @@ export default function Navbar() {
               {contactOpen && (
                 <div
                   className="absolute left-0 top-full mt-2 w-full 
-                 bg-white rounded-xl shadow-lg z-9999 overflow-hidden"
+                 bg-white rounded-xl shadow-md shadow-black z-9999 overflow-hidden"
                 >
                   <Link
                     href="mailto:thepushpaheritage0@gmail.com"
@@ -226,9 +224,9 @@ export default function Navbar() {
             {/* =========== RIGHT: Availability)  ========== */}
             <Link
               href="/booking"
-              className="w-1/2 text-center bg-white text-green-700
+              className="w-1/2 text-center bg-white text-green-800
                        px-4 py-2 rounded-br-xl rounded-sm font-bold text-sm
-                       shadow-md active:scale-95 transition z-20 tracking-wider"
+                       shadow-md active:scale-95 transition z-20 tracking-wider border-b border-black"
             >
               Check Availability
             </Link>
@@ -287,7 +285,7 @@ export default function Navbar() {
                text-white shadow-md hover:shadow-lg 
                transition-all duration-300"
               >
-                  <FaWhatsapp size={18} />
+                <FaWhatsapp size={18} />
               </Link>
               <span
                 className="absolute top-full mt-2 left-1/2 -translate-x-1/2
