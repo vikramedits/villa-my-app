@@ -40,7 +40,7 @@ export default function Sidebar({ activeMenu, setActiveMenu }: any) {
               <button
                 key={item.name}
                 onClick={() => setActiveMenu(item.name)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                className={`flex items-center gap-3 px-4 py-3 cursor-pointer rounded-sm transition ${
                   activeMenu === item.name ? "bg-red-500" : "hover:bg-slate-800"
                 }`}
               >
@@ -50,7 +50,10 @@ export default function Sidebar({ activeMenu, setActiveMenu }: any) {
             ))}
           </nav>
 
-          <button onClick={() => signOut({ callbackUrl: "/login" })}>
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="bg-white text-black font-sm px-3 py-2 rounded-sm tracking-wide text-center w-full cursor-pointer mt-10 transition hover:bg-black hover:text-white hover:border border-white"
+          >
             Logout
           </button>
         </div>
@@ -145,6 +148,12 @@ export default function Sidebar({ activeMenu, setActiveMenu }: any) {
                 {item.name}
               </button>
             ))}
+            <button
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              className="bg-white text-black font-sm px-3 py-2 rounded-sm tracking-wide text-center w-1/2 mx-auto mb-2 cursor-pointer mt-10 transition hover:bg-black hover:text-white hover:border border-white"
+            >
+              Logout
+            </button>
           </nav>
         </div>
       </MobilePortal>
