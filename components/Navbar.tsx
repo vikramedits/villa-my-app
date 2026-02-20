@@ -64,8 +64,9 @@ export default function Navbar() {
   return (
     <>
       {/* ===================================================== TOP : DESKTOP ================================================= */}
-      <div className="bg-gray-950 lg:bg-yellow-50 py-2">
-        <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4 bg-gray-950 rounded-full">
+      <div className="bg-gray-950 lg:bg-green-950 py-2">
+        <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4 bg-green-800 rounded-full">
+          {/* ============== Left Lottie Icon ========== */}
           <div className=" pl-6 pr-28 py-2 flex">
             <Link
               href="https://www.google.com/maps?q=YOUR+LOCATION"
@@ -73,9 +74,9 @@ export default function Navbar() {
               aria-label="Open location in Google Maps"
               className="hover:opacity-90  "
             >
-              <span className=" flex  items-center gap-1 text-red-500">
+              <span className=" flex  items-center gap-1 text-green-200">
                 <MapPin size={24} />
-                <span className="text-lg font-medium text-red-500">
+                <span className="text-lg font-medium ">
                   On-road Location
                 </span>
               </span>
@@ -89,7 +90,8 @@ export default function Navbar() {
               <CenteredVillaAnimation />
             </div>
           </div>
-          <div className="flex items-center gap-2 bg-blue-950 text-white py-2 px-4 rounded-full ">
+          {/* =========== Right Email, Availability =========== */}
+          <div className="flex items-center gap-2 bg-green-900 text-white py-2 px-4 rounded-full ">
             <Link
               href={"/"}
               className="flex items-center gap-2 tracking-wide text-white text-sm md:text-base py-2 px-3 font-medium   hover:scale-105 
@@ -127,25 +129,18 @@ export default function Navbar() {
         </div>
       </div>
       {/* ===================================================== TOP : MOBILE ================================================= */}
-      <div className="bg-gray-950 md:hidden">
+      <div className="bg-green-950 md:hidden">
         <div className="px-4 py-4 flex flex-col gap-4">
           {/* Price Section */}
-          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-gray-800 rounded-full">
-            {/* Left text */}
-            {/* <div className="w-1/2">
-              <p className="text-xs tracking-wide">Prices Starting From</p>
-              <p className="font-semibold text-xl">₹1,500 / Person*</p>
-              <p className="text-xs tracking-wide">(one night)</p>
-            </div> */}
-
+          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-green-800 rounded-full">
             <Link
               href="https://www.google.com/maps?q=YOUR+LOCATION"
               target="_blank"
               className=""
             >
-              <span className=" flex  items-center gap-1 text-red-500">
+              <span className=" flex  items-center gap-1 text-green-200">
                 <MapPin size={20} />
-                <span className="text-base font-medium text-red-500">
+                <span className="text-base font-medium text-green-200">
                   On-road Location
                 </span>
               </span>
@@ -171,7 +166,7 @@ export default function Navbar() {
                 className="w-full flex items-center justify-between 
                bg-white text-primaryBlue 
                px-2 py-2 rounded-bl-xl rounded-sm font-medium text-sm
-               shadow-sm active:scale-95 transition"
+               shadow-md active:scale-95 transition"
               >
                 {/* Left side: icons + text */}
                 <span className="flex items-center gap-2">
@@ -241,7 +236,7 @@ export default function Navbar() {
         </div>
       </div>
       {/* ===================================================== HEADER : DESKTOP & MOBILE ================================================= */}
-      <header className="sticky top-0 z-50 w-full bg-white text-primaryBlue shadow-md py-1">
+      <header className="sticky top-0 z-50 w-full bg-white  text-primaryBlue shadow-md py-1 ">
         <div className="container-fluid mx-auto flex h-12.5 md:h-16 items-center justify-between overflow-hidden">
           {/* =========== LOGO (common)  ========== */}
           <div className="flex items-center gap-1 bg-white">
@@ -270,7 +265,7 @@ export default function Navbar() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="  flex items-center gap-2 text-base font-semibold text-primaryBlue  bg-[linear-gradient(currentColor,currentColor)]  bg-no-repeat  bg-bottom-left  bg-size-[0%_2px]  transition-[background-size] duration-300 ease-out  hover:bg-size-[100%_2px]"
+                  className="  flex items-center gap-2 text-base font-semibold text-black  bg-[linear-gradient(currentColor,currentColor)]  bg-no-repeat  bg-bottom-left  bg-size-[0%_2px]  transition-[background-size] duration-300 ease-out  hover:bg-size-[100%_2px]"
                 >
                   <Icon size={16} />
                   <span>{item.label}</span>
@@ -345,10 +340,10 @@ export default function Navbar() {
 
               <SheetContent
                 side="right"
-                className="bg-gray-950 text-white"
+                className="bg-black text-white"
                 onInteractOutside={() => setSheetOpen(false)}
               >
-                <SheetHeader className="bg-gray-900  shadow shadow-gray-700 pb-10">
+                <SheetHeader className="bg-green-900  shadow shadow-gray-700 pb-10">
                   <SheetTitle className="sr-only pb-4">Navigation</SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 mt-4 px-4">

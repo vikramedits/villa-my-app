@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
@@ -22,10 +23,19 @@ export default function LoginPage() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden px-4">
-    {/* ============ Animated Red Glow Background =============== */}
+     {/* ====== Top Branding ========= */}
+      <div className="container-fluid absolute top-4 w-full  left-1/2 -translate-x-1/2 flex justify-between items-center gap-1">
+        <p className="text-white font-bold text-lg md:text-xl tracking-widest">
+          The Pushpa Heritage
+        </p>
+        <Link href="/" className="text-sm text-red-500 bg-white px-3 py-2 rounded-full hover:underline transition">
+          Go to Website
+        </Link>
+      </div>
+      {/* ============ Animated Red Glow Background =============== */}
       <div className="absolute w-full h-full bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
 
-    {/* =========== Card ============ */}
+      {/* =========== Card ============ */}
       <div className="relative w-full max-w-md bg-white/5 backdrop-blur-xl border-2 border-white/20 rounded-2xl shadow-lg shadow-white/10 p-8 md:p-10 transition-all duration-500">
         <div className="flex justify-center mb-4">
           <div className="w-14 h-14 flex items-center justify-center rounded-full bg-red-600/20 border border-red-500/40 text-red-500 text-2xl">
@@ -54,7 +64,7 @@ export default function LoginPage() {
             <div className="flex-1 h-px bg-red-500/30"></div>
           </div>
 
-         {/* ======== Email Input ========= */}
+          {/* ======== Email Input ========= */}
           <input
             placeholder="Admin Email"
             value={email}

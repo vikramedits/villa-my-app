@@ -225,10 +225,10 @@ export default function CheckBooking() {
             aria-label="Book your villa now"
             href="/booking"
             className="group inline-flex items-center gap-2
-                         bg-blue-950 text-white
+                         bg-green-950 text-white
                          px-8 py-3 rounded-full font-medium
                          transition-all duration-300 ease-out
-                         hover:bg-blue-300 hover:text-blue-950
+                         hover:bg-white hover:text-green-950 hover:border border-green-950
                          animate-ctaGlow"
           >
             <CalendarCheck

@@ -4,12 +4,12 @@ import { Instagram, Youtube, Phone, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-primaryBlue text-white ">
+    <footer className="bg-green-950 text-white ">
       {/* ================= TOP GRID ================= */}
       <div className="container mx-auto px-4 py-12 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-10">
         {/* Company */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Villa</h3>
+          <h1 className="text-lg font-semibold mb-4">Villa</h1>
           <ul className="space-y-2 text-white/80 text-sm">
             <li>
               <Link href="/about" className="hover:text-white transition">

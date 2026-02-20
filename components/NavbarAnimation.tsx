@@ -28,17 +28,26 @@ export default function CenteredVillaAnimation() {
 }
 
 /* 🔵 Named export */
+
 function MenuLottieIcon({ open }: { open: boolean }) {
   return (
-    <div
-      className={`w-6 h-6 flex flex-col justify-between transform transition-transform duration-200 ease-in-out pb-0.5
-        ${open ? "scale-125" : "scale-100"}`}
-    >
-      <span className={`h-0.5 w-full bg-current rounded block transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`} />
-      <span className={`h-0.5 w-full bg-current rounded block transition-all duration-300 ${open ? "opacity-0" : ""}`} />
-      <span className={`h-0.5 w-full bg-current rounded block transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`} />
+    <div className="w-8 h-8 flex flex-col justify-between pb-1">
+      <span
+        className={`block h-1 w-full bg-current rounded-md transition-transform duration-300 ${
+          open ? "rotate-45 translate-y-2" : ""
+        }`}
+      />
+      <span
+        className={`block h-1.5 w-1/2 mx-auto bg-current rounded-md transition-opacity duration-300 ${
+          open ? "opacity-0" : "opacity-100"
+        }`}
+      />
+      <span
+        className={`block h-1 w-full bg-current rounded-md transition-transform duration-300 ${
+          open ? "-rotate-45 -translate-y-2" : ""
+        }`}
+      />
     </div>
   );
 }
-
 export { MenuLottieIcon };

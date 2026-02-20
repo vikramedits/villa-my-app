@@ -286,8 +286,8 @@ export default function NearByLocations() {
                   className={`px-5 py-2 rounded-full whitespace-nowrap text-sm font-medium cursor-pointer  transition
                 ${
                   activeTab === key
-                    ? "bg-primaryBlue text-white border-primaryBlue"
-                    : "bg-white text-black hover:border-primaryBlue"
+                    ? "bg-green-950 text-white "
+                    : "bg-white text-green-950 hover:border border-green-950"
                 }`}
                 >
                   {key === "lakes"

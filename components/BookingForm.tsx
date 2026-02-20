@@ -8,11 +8,11 @@ export default function VillaBookingFullScreen() {
   /* ===================== STATES ===================== */
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
- const [adults, setAdults] = useState<number>(1);
-const [adultsInput, setAdultsInput] = useState<string>("1");
+  const [adults, setAdults] = useState<number>(1);
+  const [adultsInput, setAdultsInput] = useState<string>("1");
 
-const [kids, setKids] = useState<number>(0);
-const [kidsInput, setKidsInput] = useState<string>("0");
+  const [kids, setKids] = useState<number>(0);
+  const [kidsInput, setKidsInput] = useState<string>("0");
 
   const [totalMembers, setTotalMembers] = useState(1);
   const [groupName, setGroupName] = useState("");
@@ -159,8 +159,8 @@ const [kidsInput, setKidsInput] = useState<string>("0");
   return (
     <section className="bg-gray-100 mb-5 md:mb-10" id="booking-section ">
       {/* ============================================ TOP ============================================ */}
-      <div className="text-center py-3 md:py-6">
-        <p className="text-primaryBlue text-lg md:text-2xl font-medium tracking-wide">
+      <div className="text-center px-2 py-3 md:py-6">
+        <p className="text-2xl md:text-3xl font-semibold border-x-4 border-black mx-2">
           Book Your Luxury Stay
         </p>
         <p className="text-sm md:text-base tracking-wide">
@@ -237,81 +237,75 @@ const [kidsInput, setKidsInput] = useState<string>("0");
                 <label className="block font-medium mb-1 text-primaryBlue">
                   Adults
                 </label>
-               <input
-  type="number"
-  min={1}
-  max={MAX_GUESTS}
-  value={adultsInput}
-  onChange={(e) => {
-    const val = e.target.value;
+                <input
+                  type="number"
+                  min={1}
+                  max={MAX_GUESTS}
+                  value={adultsInput}
+                  onChange={(e) => {
+                    const val = e.target.value;
 
-    // allow empty (backspace)
-    if (val === "") {
-      setAdultsInput("");
-      return;
-    }
+                    // allow empty (backspace)
+                    if (val === "") {
+                      setAdultsInput("");
+                      return;
+                    }
 
-    // only numbers
-    if (!/^\d+$/.test(val)) return;
+                    // only numbers
+                    if (!/^\d+$/.test(val)) return;
 
-    const num = Number(val);
+                    const num = Number(val);
 
-    if (num > MAX_GUESTS) return;
+                    if (num > MAX_GUESTS) return;
 
-    setAdultsInput(val);
-    setAdults(num);
-  }}
-  onBlur={() => {
-    // user left input empty
-    if (adultsInput === "" || Number(adultsInput) < 1) {
-      setAdults(1);
-      setAdultsInput("1");
-    }
-  }}
-  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
-/>
-
-
-
+                    setAdultsInput(val);
+                    setAdults(num);
+                  }}
+                  onBlur={() => {
+                    // user left input empty
+                    if (adultsInput === "" || Number(adultsInput) < 1) {
+                      setAdults(1);
+                      setAdultsInput("1");
+                    }
+                  }}
+                  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
+                />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-primaryBlue">
                   Kids
                 </label>
-              <input
-  type="number"
-  min={0}
-  max={MAX_GUESTS - adults}
-  value={kidsInput}
-  onChange={(e) => {
-    const val = e.target.value;
+                <input
+                  type="number"
+                  min={0}
+                  max={MAX_GUESTS - adults}
+                  value={kidsInput}
+                  onChange={(e) => {
+                    const val = e.target.value;
 
-    if (val === "") {
-      setKidsInput("");
-      return;
-    }
+                    if (val === "") {
+                      setKidsInput("");
+                      return;
+                    }
 
-    if (!/^\d+$/.test(val)) return;
+                    if (!/^\d+$/.test(val)) return;
 
-    const num = Number(val);
-    const maxKids = MAX_GUESTS - adults;
+                    const num = Number(val);
+                    const maxKids = MAX_GUESTS - adults;
 
-    if (num > maxKids) return;
+                    if (num > maxKids) return;
 
-    setKidsInput(val);
-    setKids(num);
-  }}
-  onBlur={() => {
-    if (kidsInput === "" || Number(kidsInput) < 0) {
-      setKids(0);
-      setKidsInput("0");
-    }
-  }}
-  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
-/>
-
-
-
+                    setKidsInput(val);
+                    setKids(num);
+                  }}
+                  onBlur={() => {
+                    if (kidsInput === "" || Number(kidsInput) < 0) {
+                      setKids(0);
+                      setKidsInput("0");
+                    }
+                  }}
+                  className="w-full border-b-2 border-gray-950 focus:border-primaryBlue outline-none py-2"
+                />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-primaryBlue">
@@ -388,8 +382,8 @@ const [kidsInput, setKidsInput] = useState<string>("0");
               </div>
 
               <p className="text-xs md:text-sm text-gray-700 mt-1">
-                ₹{(totalAmount - advanceAmount).toLocaleString("en-IN")} remaining payable
-                at check-in
+                ₹{(totalAmount - advanceAmount).toLocaleString("en-IN")}{" "}
+                remaining payable at check-in
               </p>
             </div>
 
@@ -488,7 +482,7 @@ const [kidsInput, setKidsInput] = useState<string>("0");
               } catch (err: any) {
                 setApiError(
                   err.message ||
-                  "Booking failed. Please try again in a moment.",
+                    "Booking failed. Please try again in a moment.",
                 );
               } finally {
                 setLoading(false);

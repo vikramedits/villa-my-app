@@ -125,9 +125,7 @@ export default function WhyChooseUs() {
           <div className="flex justify-center mt-4 gap-3">
             {visibleCount < FEATURES.length && (
               <button
-                className="px-6 py-2 bg-blue-950 text-white rounded-md text-sm
-           hover:bg-blue-900 active:scale-95
-           transition-all duration-300"
+                 className="px-6 py-2 bg-green-950 text-white rounded-md text-sm hover:bg-white hover:border border-green-950 hover:text-green-950 transition"
                 onClick={() => setVisibleCount((prev) => prev + 2)}
               >
                 Load More

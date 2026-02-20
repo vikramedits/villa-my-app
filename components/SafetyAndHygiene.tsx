@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect } from "react";
 
 const SAFETY_DATA = [
   {
@@ -22,7 +22,7 @@ const SAFETY_DATA = [
   },
   {
     title: "24×7 Caretaker",
-    description: "On-site caretaker available for assistance anytime.",
+    description: "On-site caretaker available anytime.",
     icon: "/homenew/safety/caretaker.jpg",
   },
   {
@@ -43,158 +43,113 @@ const SAFETY_DATA = [
   },
   {
     title: "Night Lighting",
-    description:
-      "Well-lit pathways and entrances for safe night-time movement.",
+    description: "Well-lit pathways and entrances for safe night movement.",
     icon: "/homenew/safety/night-lighting.jpg",
   },
 ];
 
 export default function SafetyAndHygiene() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-  }, []);
-
-  const INITIAL_COUNT = 6;
-  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
-  const visibleItems = isMobile
-    ? SAFETY_DATA.slice(0, visibleCount)
-    : SAFETY_DATA;
-
-  const sectionRef = useRef<HTMLDivElement | null>(null);
-  const [visible, setVisible] = useState(false);
-
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [radius, setRadius] = useState(260);
 
-  // ================= Client-only animation fix =================
+  // Responsive radius handler
   useEffect(() => {
-    setVisible(true); // Animation sirf browser me chale
-  }, []);
+    const updateRadius = () => {
+      if (window.innerWidth < 768) {
+        setRadius(140);
+      } else {
+        setRadius(260);
+      }
+    };
 
-  // ================= IntersectionObserver (scroll animation) =================
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true); // animation ON
-          observer.disconnect(); // observer ko disconnect kar do, animation ek baar hi chale
-        }
-      },
-      { threshold: 0.2 }, // scroll ka percentage trigger
-    );
-
-    observer.observe(sectionRef.current);
-
-    return () => observer.disconnect();
+    updateRadius();
+    window.addEventListener("resize", updateRadius);
+    return () => window.removeEventListener("resize", updateRadius);
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-blue-50 py-10 md:py-12">
-      <div className="container-fluid">
-        {/* ================= Heading ================= */}
-        <div className="mb-6 md:mb-10 text-start md:text-left">
-          <p className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2">
+    <section className="relative bg-linear-to-b from-gray-50 to-white py-20 overflow-visible">
+      <div className="container mx-auto px-4">
+        {/* Heading */}
+        <div className="mb-16 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold border-l-4 border-black inline-block pl-3">
             Safety & Hygiene
-          </p>
-          <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
+          </h2>
+          <p className="text-gray-600 mt-3">
             Your comfort, safety and cleanliness are our top priority
           </p>
         </div>
 
-        {/* ================= Cards ================= */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {visibleItems.map((item, index) => (
-            <div
-              key={index}
-              className={`
-                         relative overflow-hidden rounded-lg border bg-black
-                          h-55 md:h-90
-                         transition-all duration-700 ease-out
-                         md:hover:shadow-lg
-                         ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-                       `}
-              style={{ transitionDelay: `${index * 100}ms` }}
-            >
-              <div className="absolute inset-0">
-                <Image
-                  src={item.icon}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-black/35" />
-              </div>
-              <div className="relative z-10 h-full flex flex-col items-center justify-end py-2 md:py-4">
-                <div
-                  className={`
-                               flex items-center gap-2
-                               text-white
-                               transition-all duration-500
-                               ${openIndex === index ? "-translate-y-20" : "translate-y-0"}
-                             `}
-                >
-                  {/* ======== Title ======== */}
-                  <p className="text-sm md:text-xl font-semibold text-center">
-                    {item.title}
-                  </p>
+        {/* Circular Layout */}
+        <div className="relative flex items-center justify-center h-[500px] md:h-[750px]">
+          {/* Center Image */}
+          <div className="absolute w-52 h-52 md:w-80 md:h-80 rounded-2xl overflow-hidden shadow-2xl z-0">
+            <Image
+              src="/homenew/standard/Room-home-image.jpeg"
+              alt="Villa"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
 
-                  {/* ========== Arrow inside white box ========== */}
-                  <span
-                    className={`flex items-center justify-center w-6 h-6 md:w-7 md:h-7 bg-white text-black rounded-sm transition-transform duration-300
-                                ${openIndex === index ? "rotate-180" : ""}`}
-                    onClick={() =>
-                      setOpenIndex(openIndex === index ? null : index)
-                    }
-                  >
-                    ⌄
-                  </span>
-                </div>
-                {/* ========== Slide-up Description ========== */}
+          {/* Circular Items */}
+          {SAFETY_DATA.map((item, index) => {
+            const angle =
+              (index / SAFETY_DATA.length) * (2 * Math.PI) - Math.PI / 2;
 
-                <div
-                  className={`
-                             absolute bottom-0 left-0 w-full
-                             bg-black/70 backdrop-blur-md
-                             text-white text-xs md:text-sm
-                             px-4 py-3
-                             transition-all duration-500 ease-in-out
-                             ${openIndex === index ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}
-                             mt-2
-                           `}
-                >
-                  <p className="text-center leading-relaxed">
-                    {item.description}
-                  </p>
+            const x = radius * Math.cos(angle);
+            const y = radius * Math.sin(angle);
+
+            return (
+              <div
+                key={index}
+                className="absolute transition-transform duration-300 z-20"
+                style={{
+                  transform: `translate(${x}px, ${y}px)`,
+                }}
+              >
+                <div className="relative flex flex-col items-center">
+                  {/* Card */}
+                  <div className="w-28 h-28 md:w-44 md:h-44 bg-white shadow-lg hover:shadow-2xl rounded-xl flex flex-col items-center justify-center text-center p-3 md:p-4 transition duration-300 hover:scale-105">
+                    <div className="relative w-8 h-8 md:w-12 md:h-12 mb-2 md:mb-3">
+                      <Image
+                        src={item.icon}
+                        alt={item.title}
+                        fill
+                        className="object-cover rounded-md"
+                      />
+                    </div>
+
+                    <p className="text-[10px] md:text-sm font-semibold leading-tight">
+                      {item.title}
+                    </p>
+
+                    <button
+                      onClick={() =>
+                        setOpenIndex(openIndex === index ? null : index)
+                      }
+                      className={`absolute bottom-2 text-xs transition-transform duration-300 ${
+                        openIndex === index ? "rotate-180" : ""
+                      }`}
+                    >
+                      ▼
+                    </button>
+                  </div>
+
+                  {/* Description Overlay */}
+                  {openIndex === index && (
+                    <div className="absolute top-full mt-3 w-48 md:w-64 bg-black text-white p-4 rounded-xl shadow-2xl z-[100] animate-fadeIn">
+                      <p className="text-xs md:text-sm leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-        {/* ================= Load More / Load Less (Mobile Only) ================= */}
-        {isMobile && visibleCount < SAFETY_DATA.length && (
-          <div className="flex justify-center mt-6 gap-3">
-            <button
-              className="px-6 py-2 bg-blue-950 text-white rounded-md text-sm hover:bg-blue-900 transition"
-              onClick={() => setVisibleCount((prev) => prev + 2)}
-            >
-              Load More
-            </button>
-          </div>
-        )}
-
-        {isMobile && visibleCount > INITIAL_COUNT && (
-          <div className="flex justify-center mt-6 gap-3">
-            <button
-              className="px-6 py-2 border bg-blue-950 text-white rounded-md text-sm hover:bg-blue-50 transition"
-              onClick={() => setVisibleCount(INITIAL_COUNT)}
-            >
-              Load Less
-            </button>
-          </div>
-        )}
       </div>
     </section>
   );

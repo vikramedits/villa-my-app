@@ -9,7 +9,7 @@ export default function Hero() {
   return (
     <section className="items-center">
       <div className=" mx-auto shadow-md overflow-hidden bg-white">
-        <div className="relative h-[45vh] md:h-[55vh]">
+        <div className="relative h-[55vh] md:h-[55vh]">
           <video
             className="absolute inset-0 w-full h-full object-cover"
             autoPlay
