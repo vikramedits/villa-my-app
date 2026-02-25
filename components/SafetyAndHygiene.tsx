@@ -68,87 +68,81 @@ export default function SafetyAndHygiene() {
   }, []);
 
   return (
-    <section className="relative bg-linear-to-b from-gray-50 to-white py-20 overflow-visible">
-      <div className="container mx-auto px-4">
-        {/* Heading */}
-        <div className="mb-16 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold border-l-4 border-black inline-block pl-3">
+    <section className="relative bg-linear-to-b from-gray-300 to-white py-20 overflow-visible">
+      <div className="container-fluid mx-auto px-4">
+        {/* ============= Heading ============== */}
+        <div className="mb-16 text-start">
+          <p className="text-2xl md:text-3xl font-bold border-l-4 border-black inline-block pl-3">
             Safety & Hygiene
-          </h2>
+          </p>
           <p className="text-gray-600 mt-3">
             Your comfort, safety and cleanliness are our top priority
           </p>
         </div>
+        {/* ============= Circular Layout ==================== */}
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-16">
+          {/* Left: Circular Layout */}
+          <div className="relative w-full md:flex-1 flex items-center justify-center h-96 md:h-[750px]">
+            {/* Center Image */}
+            <div className="absolute w-52 h-52 md:w-80 md:h-80 rounded-2xl overflow-hidden shadow-2xl z-0">
+              <Image
+                src="/homenew/standard/Room-home-image.jpeg"
+                alt="Villa"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
 
-        {/* Circular Layout */}
-        <div className="relative flex items-center justify-center h-[500px] md:h-[750px]">
-          {/* Center Image */}
-          <div className="absolute w-52 h-52 md:w-80 md:h-80 rounded-2xl overflow-hidden shadow-2xl z-0">
-            <Image
-              src="/homenew/standard/Room-home-image.jpeg"
-              alt="Villa"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
+            {/* Cards */}
+            {SAFETY_DATA.map((item, index) => {
+              const angle =
+                (index / SAFETY_DATA.length) * (2 * Math.PI) - Math.PI / 2;
+              const x = radius * Math.cos(angle);
+              const y = radius * Math.sin(angle);
 
-          {/* Circular Items */}
-          {SAFETY_DATA.map((item, index) => {
-            const angle =
-              (index / SAFETY_DATA.length) * (2 * Math.PI) - Math.PI / 2;
-
-            const x = radius * Math.cos(angle);
-            const y = radius * Math.sin(angle);
-
-            return (
-              <div
-                key={index}
-                className="absolute transition-transform duration-300 z-20"
-                style={{
-                  transform: `translate(${x}px, ${y}px)`,
-                }}
-              >
-                <div className="relative flex flex-col items-center">
-                  {/* Card */}
-                  <div className="w-28 h-28 md:w-44 md:h-44 bg-white shadow-lg hover:shadow-2xl rounded-xl flex flex-col items-center justify-center text-center p-3 md:p-4 transition duration-300 hover:scale-105">
-                    <div className="relative w-8 h-8 md:w-12 md:h-12 mb-2 md:mb-3">
-                      <Image
-                        src={item.icon}
-                        alt={item.title}
-                        fill
-                        className="object-cover rounded-md"
-                      />
-                    </div>
-
-                    <p className="text-[10px] md:text-sm font-semibold leading-tight">
-                      {item.title}
-                    </p>
-
-                    <button
-                      onClick={() =>
-                        setOpenIndex(openIndex === index ? null : index)
-                      }
-                      className={`absolute bottom-2 text-xs transition-transform duration-300 ${
-                        openIndex === index ? "rotate-180" : ""
-                      }`}
+              return (
+                <div
+                  key={index}
+                  className="absolute transition-transform duration-300 z-20"
+                  style={{ transform: `translate(${x}px, ${y}px)` }}
+                >
+                  <div className="flex flex-col items-center">
+                    <div
+                      className="w-28 h-28 md:w-44 md:h-44 bg-white shadow-lg rounded-xl flex flex-col items-center justify-center p-3 md:p-4 cursor-pointer hover:scale-105 transition"
+                      onClick={() => setOpenIndex(index)}
                     >
-                      ▼
-                    </button>
-                  </div>
-
-                  {/* Description Overlay */}
-                  {openIndex === index && (
-                    <div className="absolute top-full mt-3 w-48 md:w-64 bg-black text-white p-4 rounded-xl shadow-2xl z-[100] animate-fadeIn">
-                      <p className="text-xs md:text-sm leading-relaxed">
-                        {item.description}
+                      <div className="relative w-8 h-8 md:w-12 md:h-12 mb-2 md:mb-3">
+                        <Image
+                          src={item.icon}
+                          alt={item.title}
+                          fill
+                          className="object-cover rounded-md"
+                        />
+                      </div>
+                      <p className="text-[10px] md:text-sm font-semibold text-center">
+                        {item.title}
                       </p>
                     </div>
-                  )}
+                  </div>
                 </div>
+              );
+            })}
+          </div>
+
+          {/* Right: Info Box */}
+          <div className="w-full md:flex-1">
+            {openIndex !== null && (
+              <div className="w-full bg-black text-white p-6 rounded-xl shadow-2xl animate-fadeIn h-40 md:h-auto overflow-y-auto">
+                <p className="font-bold text-lg md:text-xl mb-2">
+                  {SAFETY_DATA[openIndex].title}
+                </p>
+                <p className="text-sm md:text-base">
+                  {SAFETY_DATA[openIndex].description}
+                </p>
               </div>
-            );
-          })}
+            )}
+          </div>
         </div>
       </div>
     </section>
