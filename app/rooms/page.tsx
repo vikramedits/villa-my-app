@@ -11,15 +11,17 @@ export default function RoomsPage() {
   const activeRoom = roomsData.find((r) => r.id === activeRoomId) || null;
 
   return (
-    <div className="container-fluid py-6 md:py-12">
-      <div className="text-center mb-6 md:mb-12 border-b border-gray-200 pb-2 mt-2 md:mt-8">
-        <p className="text-lg md:text-3xl font-bold mb-1 md:mb-2">
-          7 Luxury Bedrooms
+    <div className="container-fluid pb-6 md:pb-12">
+      <div className="text-center my-5 lg:my-10">
+        <p className="text-2xl md:text-4xl font-semibold text-gray-700 tracking-wide pb-1 lg:pb-2">
+          7 Rooms
         </p>
+
         <p className="text-sm md:text-lg text-gray-500">
           Experience unparalleled comfort and breathtaking views in each of our
           meticulously designed rooms.
         </p>
+        <div className="w-20 h-0.5 bg-green-800 mx-auto mt-3"></div>
       </div>
 
       {/* Rooms Grid / Scroll */}

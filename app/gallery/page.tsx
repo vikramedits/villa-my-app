@@ -113,13 +113,15 @@ const Page: React.FC = () => {
 
   return (
     <div className="pb-5 md:pb-8">
-      <div className="text-center my-4 md:my-8">
-        <p className="text-2xl md:text-3xl font-semibold border-x-4 border-black mx-2">
+      <div className="text-center my-5 lg:my-10">
+        <p className="text-2xl md:text-4xl font-semibold text-gray-700 tracking-wide pb-1 lg:pb-2">
           Villa Gallery
         </p>
-        <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">
+
+        <p className="text-xs uppercase tracking-widest text-gray-400">
           Comfort • Space • Serenity
         </p>
+        <div className="w-20 h-0.5 bg-green-800 mx-auto mt-3"></div>
       </div>
       <div className="container-fluid grid grid-cols-1 gap-4">
         {chunks.slice(0, visibleChunks).map((chunk, chunkIdx) => (

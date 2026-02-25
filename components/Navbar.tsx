@@ -64,8 +64,8 @@ export default function Navbar() {
   return (
     <>
       {/* ===================================================== TOP : DESKTOP ================================================= */}
-      <div className="bg-gray-950 lg:bg-green-950 py-2">
-        <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4 bg-green-800 rounded-full">
+      <div className="bg-gray-950 lg:bg-white py-2">
+        <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4 bg-green-800 rounded-full shadow-md shadow-green-950">
           {/* ============== Left Lottie Icon ========== */}
           <div className=" pl-6 pr-28 py-2 flex">
             <Link
@@ -84,9 +84,6 @@ export default function Navbar() {
                 <ArrowRight size={16} strokeWidth={3} />
               </span>
             </Link>
-            <div className=" w-48 h-10 absolute -top-3 ml-32 -translate-y-1/2">
-              <CenteredVillaAnimation />
-            </div>
           </div>
           {/* =========== Right Email, Availability =========== */}
           <div className="flex items-center gap-2 bg-green-900 text-white py-2 px-4 rounded-full ">
@@ -127,10 +124,10 @@ export default function Navbar() {
         </div>
       </div>
       {/* ===================================================== TOP : MOBILE ================================================= */}
-      <div className="bg-linear-to-b from-green-950 via-green-900 to-white md:hidden">
-        <div className="px-4 py-4 flex flex-col gap-4">
-          {/* Price Section */}
-          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-green-800 rounded-full shadow-lg shadow-green-950">
+      <div className="bg-stone-50 lg:hidden">
+        <div className="container-fluid py-4 flex flex-col gap-4">
+         
+          <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-green-800 rounded-full shadow-md shadow-green-950">
             <Link
               href="https://www.google.com/maps?q=YOUR+LOCATION"
               target="_blank"
@@ -148,85 +145,11 @@ export default function Navbar() {
                 <ArrowRight size={16} strokeWidth={3} />
               </span>
             </Link>
-
-            {/* Right animation */}
-            <div className="absolute -right-8 top-9 -translate-y-1/2 w-48 h-40">
-              <CenteredVillaAnimation />
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-2 items-center">
-            {/* LEFT: Email & Call Dropdown */}
-            <div className="relative w-1/2">
-              <button
-                onClick={() => setContactOpen(!contactOpen)}
-                className="w-full flex items-center justify-between 
-               bg-white text-black 
-               px-2 py-2 rounded-bl-xl rounded-sm font-medium text-sm
-               shadow-md active:scale-95 transition border-b border-green-950"
-              >
-                {/* Left side: icons + text */}
-                <span className="flex items-center gap-2">
-                  <Mail size={16} />
-                  <Phone size={16} />
-                  <span className="font-bold text-primaryBlue tracking-wider">
-                    Email & Call
-                  </span>
-                </span>
-
-                {/* Right side: chevron */}
-                {contactOpen ? (
-                  <ChevronUp size={16} />
-                ) : (
-                  <ChevronDown size={16} />
-                )}
-              </button>
-
-              {contactOpen && (
-                <div
-                  className="absolute left-0 top-full mt-2 w-full 
-                 bg-white rounded-xl shadow-md shadow-black z-9999 overflow-hidden"
-                >
-                  <Link
-                    href="mailto:thepushpaheritage0@gmail.com"
-                    className="flex items-center gap-2 px-4 py-3 
-                   text-sm font-medium text-primaryBlue hover:bg-gray-100"
-                    onClick={() => setContactOpen(false)}
-                  >
-                    <Mail size={16} />
-                    Email Villa
-                  </Link>
-
-                  <Link
-                    href="tel:9587380255"
-                    className="flex items-center gap-2 px-4 py-3 
-                   text-sm font-bold text-primaryBlue hover:bg-gray-100"
-                    onClick={() => setContactOpen(false)}
-                  >
-                    <Phone size={16} />
-                    9587380255
-                  </Link>
-
-                  <Link
-                    href="tel:9001069033"
-                    className="flex items-center gap-2 px-4 py-3 
-                   text-sm font-bold text-primaryBlue hover:bg-gray-100"
-                    onClick={() => setContactOpen(false)}
-                  >
-                    <Phone size={16} />
-                    9001069033
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* =========== RIGHT: Availability)  ========== */}
-            <Link
+             <Link
               href="/booking"
-              className="w-1/2 text-center bg-white text-green-800
-                       px-4 py-2 rounded-br-xl rounded-sm font-bold text-sm
-                       shadow-md active:scale-95 transition z-20 tracking-wider border-b border-black"
+              className="w-1/2 text-center bg-black text-white
+                       px-4 py-2 rounded-full font-bold text-sm
+                       shadow-lg active:scale-95 transition z-20 tracking-wider "
             >
               Check Availability
             </Link>
@@ -234,7 +157,7 @@ export default function Navbar() {
         </div>
       </div>
       {/* ===================================================== HEADER : DESKTOP & MOBILE ================================================= */}
-      <header className="sticky top-0 z-50 w-full bg-white  text-primaryBlue shadow-md py-1 ">
+      <header className="sticky top-0 z-50 w-full bg-white  text-primaryBlue shadow-md py-1  ">
         <div className="container-fluid mx-auto flex h-12.5 md:h-16 items-center justify-between overflow-hidden">
           {/* =========== LOGO (common)  ========== */}
           <div className="flex items-center gap-1 bg-white">

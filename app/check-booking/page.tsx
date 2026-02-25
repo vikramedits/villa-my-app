@@ -194,9 +194,12 @@ export default function CheckBooking() {
   /* ================= RENDER ================= */
   return (
     <div className="container-fluid my-5 md:my-10 container mx-auto ">
-      <p className="text-2xl md:text-3xl font-semibold border-x-4 text-center border-black mx-2 my-2 ">
-        Your Reservations
-      </p>
+      <div className="text-center my-5 lg:my-10">
+        <p className="text-2xl md:text-4xl font-semibold text-gray-700 tracking-wide">
+          Your Reservations
+        </p>
+        <div className="w-20 h-0.5 bg-green-800 mx-auto mt-3"></div>
+      </div>
 
       {/* ===== Empty state for direct users ===== */}
       {!bookingDetails && !ref && !phone && (

@@ -159,14 +159,17 @@ export default function VillaBookingFullScreen() {
   return (
     <section className="bg-gray-100 mb-5 md:mb-10" id="booking-section ">
       {/* ============================================ TOP ============================================ */}
-      <div className="text-center px-2 py-3 md:py-6">
-        <p className="text-2xl md:text-3xl font-semibold border-x-4 border-black mx-2">
-          Book Your Luxury Stay
+
+      <div className="text-center my-5 lg:my-10">
+        <p className="text-2xl md:text-4xl font-semibold text-gray-700 tracking-wide pb-1 lg:pb-2">
+          Book Your Stay
         </p>
+
         <p className="text-sm md:text-base tracking-wide">
           Fill in your details below to reserve your villa with 20% advance
           payment.
         </p>
+        <div className="w-20 h-0.5 bg-green-800 mx-auto mt-3"></div>
       </div>
 
       <div className="container-fluid flex flex-col md:flex-row md:gap-3 ">

@@ -23,12 +23,17 @@ export default function LoginPage() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden px-4">
-     {/* ====== Top Branding ========= */}
+      {/* ====== Top Branding ========= */}
       <div className="container-fluid absolute top-4 w-full  left-1/2 -translate-x-1/2 flex justify-between items-center gap-1">
         <p className="text-white font-bold text-lg md:text-xl tracking-widest">
           The Pushpa Heritage
         </p>
-        <Link href="/" className="text-sm text-red-500 bg-white px-3 py-2 rounded-full hover:underline transition">
+        <Link
+          href="/"
+          className="text-sm text-red-500 bg-white px-3 py-2 rounded-full 
+                      hover:text-white hover:bg-red-500 
+                        transition-all duration-300 ease-in-out font-medium"
+        >
           Go to Website
         </Link>
       </div>
