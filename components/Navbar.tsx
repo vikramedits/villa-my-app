@@ -180,7 +180,7 @@ export default function Navbar() {
       <header className="sticky top-0 z-50 w-full bg-white  text-primaryBlue shadow-md py-1  ">
         <div className="container-fluid mx-auto flex h-12.5 md:h-16 items-center justify-between overflow-hidden">
           {/* =========== LOGO (common)  ========== */}
-          <div className="flex items-center gap-1 bg-white">
+          <Link href="/" className="flex items-center gap-1 bg-white">
             <Image
               src="/homenew/logo-flower.jpeg"
               alt="Villa Logo"
@@ -195,7 +195,7 @@ export default function Navbar() {
                 7-BHK | Big Pool | 2 Gardens
               </p>
             </span>
-          </div>
+          </Link>
 
           {/* ===================================== DESKTOP NAVIGATION ======================================= */}
           <nav className="hidden lg:flex items-center gap-8">
