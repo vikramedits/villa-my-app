@@ -28,12 +28,7 @@ export default function LoginPage() {
         <p className="text-white font-bold text-lg md:text-xl tracking-widest">
           The Pushpa Heritage
         </p>
-        <Link
-          href="/"
-          className="text-sm text-red-500 bg-white px-3 py-2 rounded-full 
-                      hover:text-white hover:bg-red-500 
-                        transition-all duration-300 ease-in-out font-medium"
-        >
+        <Link href="/" className="text-sm text-red-500 bg-white px-3 py-2 font-bold border border-red-500 rounded-full hover:underline transition">
           Go to Website
         </Link>
       </div>
