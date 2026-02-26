@@ -3,7 +3,7 @@ import Link from "next/link";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { CalendarCheck } from "lucide-react";
+
 
 export default function Hero() {
   return (
@@ -35,23 +35,6 @@ export default function Hero() {
             </div>
 
             <div className="pb-8 mt-2">
-              {/* <Link
-                aria-label="Book your villa now"
-                href="/booking"
-                className="group inline-flex items-center gap-2
-               bg-white text-blue-950
-               px-8 py-3 rounded-full font-medium
-               transition-all duration-300 ease-out
-               hover:bg-blue-900 hover:text-white
-               animate-ctaGlow"
-              >
-                <CalendarCheck
-                  size={18}
-                  className="transition-transform duration-300 group-hover:rotate-6"
-                />
-
-                <span className="animate-textPulse">Book Now</span>
-              </Link> */}
               <Link
                 href="/check-booking"
                 className="group inline-flex items-center gap-2

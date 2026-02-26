@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Instagram, Youtube, Phone, Mail } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -12,7 +13,7 @@ export default function Footer() {
           <h1 className="text-lg font-semibold mb-4">Villa</h1>
           <ul className="space-y-2 text-white/80 text-sm">
             <li>
-              <Link href="/about" className="hover:text-white transition">
+              <Link href="/about-us" className="hover:text-white transition">
                 About Us
               </Link>
             </li>
@@ -38,7 +39,7 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/blog" className="hover:text-white transition">
-                Review
+                Blog
               </Link>
             </li>
           </ul>
@@ -103,11 +104,11 @@ export default function Footer() {
         <p className="text-sm text-white/70">Follow Us</p>
         <div className="flex justify-center gap-5">
           <Link
-            href="https://wa.me/917983598967"
+            href="https://wa.me/919783598967"
             target="_blank"
             className="hover:scale-110 transition"
           >
-            <Phone />
+           <FaWhatsapp size={24} />
           </Link>
           <Link
             href="https://www.instagram.com/yourprofile"

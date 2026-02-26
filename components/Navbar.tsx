@@ -13,7 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Calendar, Instagram } from "lucide-react";
+import { Calendar, FileText, Instagram, Users } from "lucide-react";
 import {
   Home,
   Info,
@@ -24,8 +24,6 @@ import {
   Phone,
   ArrowRight,
   Mail,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 import CenteredVillaAnimation, { MenuLottieIcon } from "./NavbarAnimation";
 
@@ -50,6 +48,16 @@ const navItems = [
     href: "/gallery",
     icon: GalleryHorizontal,
   },
+  {
+    label: "About Us",
+    href: "/about-us",
+    icon: Users,
+  },
+   {
+    label: "Blog",
+    href: "/blog",
+    icon: FileText ,
+  }
 ];
 
 export default function Navbar() {
