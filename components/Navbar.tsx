@@ -13,7 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Instagram } from "lucide-react";
+import { Calendar, Instagram } from "lucide-react";
 import {
   Home,
   Info,
@@ -96,11 +96,22 @@ export default function Navbar() {
             </Link>
             <p className="text-3xl items-center pb-2">|</p>
             <Link
-              href={"/booking"}
-              className="py-2 px-3 text-green-500 font-medium  hover:scale-105 
-             transition-transform duration-300 ease-in-out"
+              href="/booking"
+              className="w-1/2 
+             flex items-center justify-center gap-2
+             text-center
+             bg-black text-white
+             px-4 py-2
+             rounded-full
+             font-bold text-sm
+             shadow
+             active:scale-95
+             transition
+             tracking-wider
+             whitespace-nowrap shadow-white/20"
             >
-              Check Availability
+              <span>Check Availability</span>
+              <Calendar className="w-4 h-4 shrink-0" />
             </Link>
             <p className="text-3xl items-center pb-2">|</p>
             <p className="text-white font-medium text-base">Call:</p>
@@ -126,7 +137,6 @@ export default function Navbar() {
       {/* ===================================================== TOP : MOBILE ================================================= */}
       <div className="bg-stone-50 lg:hidden">
         <div className="container-fluid py-4 flex flex-col gap-4">
-         
           <div className="relative flex justify-between items-center w-full px-4 py-2 text-white bg-green-800 rounded-full shadow-md shadow-green-950">
             <Link
               href="https://www.google.com/maps?q=YOUR+LOCATION"
@@ -145,13 +155,23 @@ export default function Navbar() {
                 <ArrowRight size={16} strokeWidth={3} />
               </span>
             </Link>
-             <Link
+            <Link
               href="/booking"
-              className="w-1/2 text-center bg-black text-white
-                       px-4 py-2 rounded-full font-bold text-sm
-                       shadow-lg active:scale-95 transition z-20 tracking-wider "
+              className="w-1/2 
+             flex items-center justify-center gap-2
+             text-center
+             bg-black text-white
+             px-4 py-2
+             rounded-full
+             font-bold text-sm
+             shadow
+             active:scale-95
+             transition
+             tracking-wider
+             whitespace-nowrap shadow-white/20"
             >
-              Check Availability
+              <span>Check Availability</span>
+              <Calendar className="w-4 h-4 shrink-0" />
             </Link>
           </div>
         </div>

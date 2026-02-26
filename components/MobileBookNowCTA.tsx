@@ -10,7 +10,7 @@ export default function MobileBookNowCTA() {
       <Link
         href="/booking"
         className="group inline-flex items-center gap-2
-          bg-green-950 text-white px-8 py-3 rounded-full font-medium
+          bg-green-900 text-white px-8 py-3 rounded-full font-medium
           shadow-lg transition-all duration-200 ease-out
           hover:bg-white hover:text-green-950 hover:border border-green-950
           animate-slideUp"

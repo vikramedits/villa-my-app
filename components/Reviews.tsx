@@ -62,16 +62,16 @@ const REVIEWS = [
 ======================= */
 function ReviewCard({ review }: any) {
   return (
-    <div className=" w-5/6 sm:w-4/5 md:w-full h-96 shrink-0 rounded-lg bg-white/70 backdrop-blur-xl border-2 border-white/40 p-6 flex flex-col shadow-sm mb-2 ">
+    <div className=" w-5/6 lg:w-full h-96 shrink-0 rounded-lg bg-white/70 backdrop-blur-xl border-2 border-white/40 py-4 px-2 flex flex-col shadow-sm mb-2 ">
       <div className="text-6xl leading-none text-black/30 font-serif mb-1">
         “
       </div>
 
-      <div className="flex-1 text-sm text-gray-700 shadow-inner rounded-lg px-2 py-2 leading-relaxed italic overflow-y-auto pr-1">
+      <div className="flex-1 text-sm text-gray-700  shadow-inner rounded-lg p-3 leading-relaxed italic overflow-y-auto pr-1">
         {review.text}
       </div>
 
-      <div className="mt-4  px-2 py-3 bg-purple-100 rounded-lg">
+      <div className="mt-4  px-3 py-3 bg-purple-100 rounded-lg">
         <div className="">
           <p className="text-sm font-medium text-gray-900">{review.name}</p>
           <p className="text-xs text-gray-500">{review.meta.join(" → ")}</p>
@@ -100,11 +100,11 @@ export default function LuxuryReviewsSection() {
       {/* =========== Content ============ */}
       <div className="container-fluid relative">
         <div className="mb-10 md:mb-16">
-          <div className="flex justify-between">
-            <div className="flex items-center gap-3">
+          <div className="flex justify-between bg-black px-4 py-3 rounded-full">
+            <div className="flex items-center gap-3 ">
              {/* ==== Google Icon ==== */}
                 <FcGoogle className="w-5 h-5" />
-              <p className="flex items-center gap-2 text-sm md:text-base tracking-widest text-black/60 uppercase">
+              <p className="flex items-center gap-2 text-sm md:text-base tracking-widest text-white/60 uppercase">
                 Google Reviews
                 <span className="relative flex items-center gap-1">
                   <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -116,13 +116,14 @@ export default function LuxuryReviewsSection() {
             </div>
             <Link
               href={""}
-              className="text-black bg-white py-2 px-4 rounded-full text-sm md:text-base font-medium uppercase tracking-wide"
+              className="text-black bg-white py-2  px-4 rounded-full text-sm md:text-base font-medium uppercase tracking-wide
+              hover:text-green-700 border hover:border-green-500"
             >
               View All
             </Link>
           </div>
 
-          <p className="mt-3 text-xl md:text-4xl font-light text-gray-600">
+          <p className="mt-3 text-xl md:text-4xl font-light text-center text-gray-600">
             What our guests remember
           </p>
         </div>

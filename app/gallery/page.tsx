@@ -27,7 +27,7 @@ const bigIndexes = [4, 9, 10, 19];
 
 const Page: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState<GalleryItem | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [videoPlaying, setVideoPlaying] = useState<Record<string, boolean>>({});
   const [visibleChunks, setVisibleChunks] = useState(1);
 
@@ -41,16 +41,18 @@ const Page: React.FC = () => {
 
   const [modalVideoPlaying, setModalVideoPlaying] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   const openModal = (item: GalleryItem) => {
-    setVideoPlaying({}); // pause all grid videos
-    setActiveItem(item);
+    setVideoPlaying({});
+    const index = galleryData.findIndex((i) => i.id === item.id);
+    setActiveIndex(index);
     setModalOpen(true);
   };
   // =============== reset modal video ====================
   const closeModal = () => {
     setModalOpen(false);
-    setActiveItem(null);
+    setActiveIndex(null);
     setModalVideoPlaying(false);
   };
 
@@ -92,6 +94,13 @@ const Page: React.FC = () => {
     };
   }, [visibleChunks, chunks.length]);
 
+  useEffect(() => {
+    if (activeIndex !== null) {
+      const container = document.getElementById("slider");
+      const child = container?.children[activeIndex] as HTMLElement;
+      child?.scrollIntoView({ behavior: "smooth", inline: "center" });
+    }
+  }, [activeIndex]);
   // ============ Click-to-play handler for video thumbnails =================
   const handleVideoClick = (id: string) => {
     setVideoPlaying((prev) => {
@@ -113,6 +122,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="pb-5 md:pb-8">
+      {/* ======================= Heading =========================== */}
       <div className="text-center my-5 lg:my-10">
         <p className="text-2xl md:text-4xl font-semibold text-gray-700 tracking-wide pb-1 lg:pb-2">
           Villa Gallery
@@ -141,7 +151,7 @@ const Page: React.FC = () => {
 
                 const group = smallGroups.find((g) => g.includes(index));
 
-                // ==== Small group =====
+                // ======================== Small group ==========================
                 if (group && group[0] === index) {
                   group.forEach((i) => usedIndexes.add(i));
 
@@ -165,26 +175,43 @@ const Page: React.FC = () => {
                               }
                             >
                               {!isPlaying ? (
-                                <Image
-                                  src={
-                                    img.thumbnail || "/video-placeholder.jpg"
-                                  }
-                                  alt={img.alt || "Video thumbnail"}
-                                  fill
-                                  style={{ objectFit: "cover" }}
-                                  quality={75}
-                                  placeholder="blur"
-                                  blurDataURL={
-                                    img.thumbnail || "/video-placeholder.jpg"
-                                  }
-                                  loading="lazy"
-                                />
+                                <>
+                                  <Image
+                                    src={
+                                      img.thumbnail ||
+                                      "/homenew/gallery-webp/room-4.webp"
+                                    }
+                                    alt={img.alt || "Video thumbnail"}
+                                    fill
+                                    style={{ objectFit: "cover" }}
+                                    quality={75}
+                                    loading="lazy"
+                                  />
+
+                                  {/* TOP LEFT VIDEO BADGE */}
+                                  <div className="absolute top-2 left-2 bg-black text-green-500 border border-green-500 text-xs px-2 py-1 rounded-full">
+                                    VIDEO
+                                  </div>
+
+                                  {/* CENTER PLAY BUTTON */}
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleVideoClick(img.id.toString());
+                                      }}
+                                      className="bg-white/90 p-3 rounded-full shadow-md hover:scale-110 transition"
+                                    >
+                                      ▶
+                                    </button>
+                                  </div>
+                                </>
                               ) : (
                                 <video
                                   src={img.src}
                                   className="w-full h-full object-cover"
                                   muted
-                                  loop
+                                  autoPlay
                                   playsInline
                                   controls
                                   preload="none"
@@ -217,39 +244,58 @@ const Page: React.FC = () => {
                   );
                 }
 
-                // ==== Big card ====
+                // ================================ Big card ===========================
                 if (bigIndexes.includes(index)) {
                   usedIndexes.add(index);
+
                   const bigItem = chunk[index];
                   if (!bigItem) return null;
 
                   if (bigItem.type === "video") {
                     const isPlaying = videoPlaying[bigItem.id];
+
                     return (
                       <div
                         key={bigItem.id.toString()}
-                        className="w-full h-96 md:h-auto relative rounded-sm overflow-hidden shadow-md cursor-pointer group bg-gray-100"
-                        onClick={() => handleVideoClick(bigItem.id.toString())}
+                        className="w-full h-96 md:h-auto relative rounded-sm overflow-hidden shadow-md bg-gray-100"
                       >
                         {!isPlaying ? (
-                          <Image
-                            src={bigItem.thumbnail || "/video-placeholder.jpg"}
-                            alt={bigItem.alt || "Video thumbnail"}
-                            fill
-                            style={{ objectFit: "cover" }}
-                            quality={75}
-                            placeholder="blur"
-                            blurDataURL={
-                              bigItem.thumbnail || "/video-placeholder.jpg"
-                            }
-                            loading="lazy"
-                          />
+                          <>
+                            <Image
+                              src={
+                                bigItem.thumbnail || "/video-placeholder.jpg"
+                              }
+                              alt={bigItem.alt || "Video thumbnail"}
+                              fill
+                              style={{ objectFit: "cover" }}
+                              quality={75}
+                              loading="lazy"
+                            />
+
+                            {/* VIDEO BADGE */}
+                            <div className="absolute top-2 left-2 bg-green-800 text-white border border-green-500 text-xs px-4 py-1 rounded-full ">
+                              VIDEO
+                            </div>
+
+                            {/* PLAY BUTTON */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleVideoClick(bigItem.id.toString());
+                                }}
+                                className="bg-white p-4 rounded-full shadow-lg hover:scale-110 transition "
+                              >
+                                ▶
+                              </button>
+                            </div>
+                          </>
                         ) : (
                           <video
                             src={bigItem.src}
                             className="w-full h-full object-cover"
                             muted
-                            loop
+                            autoPlay
                             playsInline
                             controls
                             preload="none"
@@ -259,6 +305,7 @@ const Page: React.FC = () => {
                     );
                   }
 
+                  //  ======================== Image case - Big ================================
                   return (
                     <div
                       key={bigItem.id.toString()}
@@ -270,16 +317,13 @@ const Page: React.FC = () => {
                         alt={bigItem.alt || ""}
                         fill
                         style={{ objectFit: "cover" }}
-                        className="transition-transform duration-300 group-hover:scale-105 will-change-transform"
+                        className="transition-transform duration-300 group-hover:scale-105"
                         quality={75}
-                        placeholder="blur"
-                        blurDataURL={bigItem.placeholder || bigItem.src}
                         loading="lazy"
                       />
                     </div>
                   );
                 }
-
                 return null;
               });
             })()}
@@ -290,14 +334,14 @@ const Page: React.FC = () => {
         <div ref={loadMoreRef} className="h-4"></div>
       </div>
 
-      {/* ===== Modal ===== */}
+      {/* =========================================== Modal =========================================== */}
       <AnimatePresence>
-        {modalOpen && activeItem && (
+        {modalOpen && activeIndex !== null && (
           <motion.div
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
-            className="fixed inset-0 z-50 w-full flex items-center justify-center bg-black/70"
+            className="px-3 fixed inset-0 z-50 w-full flex items-center justify-center bg-black/70"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -305,7 +349,7 @@ const Page: React.FC = () => {
           >
             <FocusLock>
               <motion.div
-                className="relative w-full md:max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-lg overflow-hidden"
+                className="relative w-full lg:max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-lg overflow-hidden"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
@@ -318,50 +362,59 @@ const Page: React.FC = () => {
                 >
                   ✕
                 </button>
-                <div className="w-96 md:w-2xl h-[50vh] md:h-[70vh] relative">
-                  {activeItem.type === "video" && (
-                    <div
-                      className="w-full h-full relative cursor-pointer"
-                      onClick={() => setModalVideoPlaying(true)}
-                    >
-                      {!modalVideoPlaying ? (
+                {/* ================= Slider For Images ================= */}
+                <div
+                ref={sliderRef}
+                  id="slider"
+                  className="w-96 h-[50vh] flex overflow-x-auto  scroll-smooth"
+                >
+                  {galleryData
+                    .filter((item) => item.type !== "video")
+                    .map((item) => (
+                      <div
+                        key={item.id}
+                        className="w-full h-full relative snap-center shrink-0"
+                      >
                         <Image
-                          src={activeItem.thumbnail || "/video-placeholder.jpg"}
-                          alt={activeItem.alt || "Video thumbnail"}
+                          src={item.src}
+                          alt={item.alt || ""}
                           fill
-                          style={{ objectFit: "cover" }}
-                          className="rounded-t-2xl"
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                </div>
+                {/* ================= Slider For Video ================= */}
+                {/* <div
+                  id="slider"
+                  className="w-full h-[50vh] flex overflow-x-auto snap-x snap-mandatory scroll-smooth"
+                >
+                  {galleryData.map((item, index) => (
+                    <div
+                      key={item.id}
+                      className="min-w-full h-full relative snap-center shrink-0"
+                    >
+                      {item.type === "video" ? (
+                        <video
+                          src={item.src}
+                          className="w-full h-full object-contain"
+                          controls
                         />
                       ) : (
-                        <video
-                          src={activeItem.src}
-                          className="w-full h-full object-cover rounded-t-2xl"
-                          muted
-                          autoPlay
-                          loop
-                          playsInline
-                          controls
-                          preload="none"
+                        <Image
+                          src={item.src}
+                          alt={item.alt || ""}
+                          fill
+                          style={{ objectFit: "contain" }}
                         />
                       )}
-
-                      {!modalVideoPlaying && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <button
-                            className="bg-white p-2 rounded-full shadow-md"
-                            aria-label="Play video"
-                          >
-                            ▶
-                          </button>
-                        </div>
-                      )}
                     </div>
-                  )}
-                </div>
+                  ))}
+                </div> */}
 
                 <div className="p-4">
                   <p id="modal-title" className="text-xl font-bold">
-                    {activeItem.title}
+                    {activeIndex !== null && galleryData[activeIndex]?.title}
                   </p>
                 </div>
               </motion.div>

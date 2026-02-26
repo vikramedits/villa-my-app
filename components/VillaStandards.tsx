@@ -1,6 +1,7 @@
 import Image from "next/image";
 import FeaturesCarousel from "./FeaturesCarousel";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 type SingleImage = {
   type: "single";
@@ -130,7 +131,7 @@ export default function VillaExperienceStandard() {
                     <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80">
                       <span>{item.buttonText}</span>
                       <span className="inline-block transition-transform duration-500 group-hover:translate-x-2">
-                        →
+                        <ArrowRight/>
                       </span>
                     </span>
 
@@ -177,7 +178,7 @@ export default function VillaExperienceStandard() {
                         <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80">
                           <span>{img.buttonText}</span>
                           <span className="inline-block transition-transform duration-500 group-hover:translate-x-2">
-                            →
+                            <ArrowRight/>
                           </span>
                         </span>
 
