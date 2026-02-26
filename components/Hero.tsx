@@ -9,7 +9,7 @@ export default function Hero() {
   return (
     <section className="items-center">
       <div className=" mx-auto shadow-md overflow-hidden bg-white">
-        <div className="relative h-[55vh] md:h-[55vh]">
+        <div className="relative h-[55vh] lg:h-[70vh]">
           <video
             className="absolute inset-0 w-full h-full object-cover"
             autoPlay
@@ -30,18 +30,25 @@ export default function Hero() {
                 className="text-2xl md:text-4xl font-bold text-white leading-tight tracking-wider
                opacity-0 translate-y-6 animate-fadeUp"
               >
-               Book Your Stay in Minutes.
+                Book Your Stay in Minutes.
               </p>
             </div>
 
-            <div className="pb-8 mt-2">
+            <div
+              className="
+                           pb-8 mt-2
+                           lg:pb-0 lg:mt-0
+                           lg:absolute lg:top-6 lg:left-18
+                           lg:text-left
+                         "
+            >
               <Link
                 href="/check-booking"
                 className="group inline-flex items-center gap-2
                bg-white text-gray-950
                px-8 py-3 rounded-full font-medium
                transition-all duration-300 ease-out
-               hover:bg-gray-950 hover:text-white
+               hover:bg-gray-950 hover:text-white border border-black
                "
               >
                 Your Bookings

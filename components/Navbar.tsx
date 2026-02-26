@@ -53,10 +53,10 @@ const navItems = [
     href: "/about-us",
     icon: Users,
   },
-   {
+  {
     label: "Blog",
     href: "/blog",
-    icon: FileText ,
+    icon: FileText,
   }
 ];
 
@@ -72,7 +72,7 @@ export default function Navbar() {
   return (
     <>
       {/* ===================================================== TOP : DESKTOP ================================================= */}
-      <div className="bg-gray-950 lg:bg-white py-2">
+      <div className="bg-gray-950 lg:bg-stone-100 py-2">
         <div className="container-fluid mx-auto hidden md:flex justify-between items-center py-4 bg-green-800 rounded-full shadow-md shadow-green-950">
           {/* ============== Left Lottie Icon ========== */}
           <div className=" pl-6 pr-28 py-2 flex">
@@ -96,11 +96,11 @@ export default function Navbar() {
           {/* =========== Right Email, Availability =========== */}
           <div className="flex items-center gap-2 bg-green-900 text-white py-2 px-4 rounded-full ">
             <Link
-              href={"/"}
-              className="flex items-center gap-2 tracking-wide text-white text-sm md:text-base py-2 px-3 font-medium   hover:scale-105 
-             transition-transform duration-300 ease-in-out"
+              href="/"
+              className="flex items-center gap-2 whitespace-nowrap tracking-wide text-white text-base py-2 px-3 font-medium hover:scale-105 transition-transform duration-300 ease-in-out"
             >
-              <Mail size={18} /> E-Mail here
+              <Mail size={18} className="shrink-0" />
+              <span>E-Mail here</span>
             </Link>
             <p className="text-3xl items-center pb-2">|</p>
             <Link

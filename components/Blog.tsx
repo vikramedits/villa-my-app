@@ -3,7 +3,6 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 
 // ---- Blog Data ----
 interface BlogPost {
@@ -25,13 +24,14 @@ const FEATURED_ARTICLE: BlogPost = {
   link: "/blog/private-7-bhk-villa-udaipur",
 };
 
-// ---- Other Blog Posts ----
+
+
 const BLOG_POSTS: BlogPost[] = [
   {
     title: "How to Host a Birthday Party at The Pushpa Heritage",
     snippet: "DJ nights, poolside fun, terrace celebrations.",
     content:
-      "Celebrate birthdays in style at our villa. Enjoy poolside DJ nights, terrace dining, and customized birthday decor. Our staff can help arrange catering, music, and fun activities for all ages.",
+      "Celebrate birthdays in style at our villa. Enjoy poolside DJ nights, terrace dining, and customized birthday decor.",
     image: "/homenew/gallery-webp/balcony-1.webp",
     link: "/blog/host-birthday-party",
   },
@@ -39,7 +39,7 @@ const BLOG_POSTS: BlogPost[] = [
     title: "Top Things to Do Near Badi Lake",
     snippet: "Sunsets, hill views, and nearby attractions.",
     content:
-      "Explore Badi Lake and surroundings: sunset walks, hilltop photography, boating, and nearby temples. Perfect for family outings or romantic evenings. Our villa concierge can arrange guided tours and activities.",
+      "Explore Badi Lake with sunset walks, photography spots, boating, and nearby temples.",
     image: "/homenew/gallery-webp/room-11.webp",
     link: "/blog/badi-lake-things-to-do",
   },
@@ -47,27 +47,86 @@ const BLOG_POSTS: BlogPost[] = [
     title: "Why Private Villas Are Better Than Hotels",
     snippet: "Privacy, comfort, and luxury amenities for families.",
     content:
-      "Private villas offer unmatched privacy and space compared to hotels. Enjoy personalized services, private pools, exclusive terraces, and fully equipped kitchens. Perfect for large families and celebrations where comfort and exclusivity matter.",
+      "Private villas offer unmatched privacy, private pools, spacious rooms and personalized service.",
     image: "/homenew/gallery-webp/room-10.webp",
     link: "/blog/private-villa-vs-hotels",
   },
+  {
+    title: "Poolside BBQ & Party Tips",
+    snippet: "Make the most of your villa pool parties.",
+    content:
+      "Learn how to host the perfect poolside BBQ with music, lighting and private chef options.",
+    image: "/homenew/gallery-webp/pool-1.webp",
+    link: "/blog/poolside-bbq-party",
+  },
+  {
+    title: "Luxury Villa Interior Tour",
+    snippet: "Discover the elegance inside The Pushpa Heritage.",
+    content:
+      "Take a virtual tour of our luxury 7-BHK villa interiors with modern design.",
+    image: "/homenew/gallery-webp/room-4.webp",
+    link: "/blog/luxury-villa-interior-tour",
+  },
+  {
+    title: "Best Sunset Spots Near Badi Lake",
+    snippet: "Romantic and scenic photography locations.",
+    content:
+      "Explore the most breathtaking sunset viewpoints around Badi Lake.",
+    image: "/homenew/gallery-webp/pool-2.webp",
+    link: "/blog/best-sunset-spots-badi-lake",
+  },
+  {
+    title: "Family Getaway Itinerary",
+    snippet: "Perfect 3-day villa stay plan.",
+    content:
+      "A complete 3-day itinerary for families staying at The Pushpa Heritage.",
+    image: "/homenew/gallery-webp/garden-1.webp",
+    link: "/blog/family-getaway-itinerary",
+  },
+  {
+    title: "Wedding & Celebration Packages",
+    snippet: "Host memorable events at our villa.",
+    content:
+      "Plan weddings, anniversaries and special celebrations with customized decor and services.",
+    image: "/homenew/gallery-webp/room-3.webp",
+    link: "/blog/wedding-celebration-packages",
+  },
+  {
+    title: "Private Chef Experience",
+    snippet: "Gourmet meals prepared just for you.",
+    content:
+      "Enjoy personalized gourmet meals prepared by our in-house private chef.",
+    image: "/homenew/gallery-webp/room-4.webp",
+    link: "/blog/private-chef-experience",
+  },
+  {
+    title: "Villa Safety & Hygiene Standards",
+    snippet: "Ensuring a safe and clean stay.",
+    content:
+      "Daily cleaning, sanitized rooms, and strict hygiene standards for guest safety.",
+    image: "/homenew/gallery-webp/room-5.webp",
+    link: "/blog/villa-safety-hygiene-standards",
+  },
+  {
+    title: "Nearby Adventure & Activities",
+    snippet: "Boating, trekking, and local attractions.",
+    content:
+      "Discover adventure activities and local attractions near The Pushpa Heritage.",
+    image: "/homenew/gallery-webp/balcony-2.webp",
+    link: "/blog/nearby-adventure-activities",
+  },
 ];
-
 // ---- Main Component ----
 export default function BlogPage() {
   const [openPost, setOpenPost] = useState<BlogPost | null>(null);
 
-  const [showTopBtn, setShowTopBtn] = useState(false);
+  
 
-  useEffect(() => {
-    const handleScroll = () => setShowTopBtn(window.scrollY > 300);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+ 
   return (
     <main id="top" className="bg-gray-50 min-h-screen font-sans">
       {/* Featured Article */}
-      <section className="relative w-full h-125 md:h-150">
+      <section className="relative w-full l h-125 md:h-150">
         <Image
           src={FEATURED_ARTICLE.image}
           alt={FEATURED_ARTICLE.title}
@@ -75,115 +134,54 @@ export default function BlogPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-center p-8 md:p-16">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+        <div className="absolute inset-0 bg-[#F8F5F0] bg-opacity-30 flex flex-col justify-center lg:justify-start  p-8 md:p-16">
+          <h1 className="text-3xl md:text-5xl font-bold text-green-950 mb-4">
             {FEATURED_ARTICLE.title}
           </h1>
-          <p className="text-white text-lg md:text-xl mb-4">
+          <p className="text-gray-500 text-lg md:text-xl mb-4">
             {FEATURED_ARTICLE.snippet}
           </p>
           <button
             onClick={() => setOpenPost(FEATURED_ARTICLE)}
-            className="inline-block bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-6 rounded-md transition"
+            className="inline-block bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-6 rounded-md transition w-1/2 mx-auto"
             aria-label={`Read full story: ${FEATURED_ARTICLE.title}`}
           >
-            Read Full Story →
+            Full Overview →
           </button>
         </div>
       </section>
 
       {/* Blog Grid */}
-      <section className="container-fluid bg-gray-100 max-w-7xl mx-auto py-16">
+      <section className="max-w-7xl mx-auto py-16 px-4">
         <div className="grid md:grid-cols-3 gap-8">
-          {[
-            ...BLOG_POSTS,
-            {
-              title: "Poolside BBQ & Party Tips",
-              snippet: "Make the most of your villa pool parties.",
-              content:
-                "Learn how to host the perfect poolside BBQ at The Pushpa Heritage...",
-              image: "/homenew/gallery-webp/pool-1.webp",
-              link: "/blog/poolside-bbq-party",
-            },
-            {
-              title: "Luxury Villa Interior Tour",
-              snippet: "Discover the elegance inside The Pushpa Heritage.",
-              content:
-                "Take a detailed virtual tour of our 7-BHK villa interiors...",
-              image: "/homenew/gallery-webp/room-4.webp",
-              link: "/blog/luxury-villa-interior-tour",
-            },
-            {
-              title: "Best Sunset Spots Near Badi Lake",
-              snippet: "Romantic and scenic spots for photography.",
-              content:
-                "Explore the most breathtaking sunset viewpoints around Badi Lake...",
-              image: "/homenew/gallery-webp/pool-2.webp",
-              link: "/blog/best-sunset-spots-badi-lake",
-            },
-            {
-              title: "Family Getaway Itinerary",
-              snippet: "Make the most of your villa stay in 3 days.",
-              content:
-                "We suggest a 3-day itinerary for families staying at The Pushpa Heritage...",
-              image: "/homenew/gallery-webp/garden-1.webp",
-              link: "/blog/family-getaway-itinerary",
-            },
-            {
-              title: "Wedding & Celebration Packages",
-              snippet: "Host memorable events at The Pushpa Heritage.",
-              content:
-                "Plan your wedding, anniversary, or special celebration in our villa...",
-              image: "/homenew/gallery-webp/room-3.webp",
-              link: "/blog/wedding-celebration-packages",
-            },
-            {
-              title: "Private Chef Experience",
-              snippet: "Gourmet meals prepared just for you.",
-              content:
-                "Book a private chef to enjoy gourmet meals prepared at the villa...",
-              image: "/homenew/gallery-webp/room-4.webp",
-              link: "/blog/private-chef-experience",
-            },
-            {
-              title: "Villa Safety & Hygiene Standards",
-              snippet: "Ensuring a safe and clean stay for guests.",
-              content:
-                "We prioritize hygiene and safety with daily cleaning, sanitized rooms...",
-              image: "/homenew/gallery-webp/room-5.webp",
-              link: "/blog/villa-safety-hygiene-standards",
-            },
-            {
-              title: "Nearby Adventure & Activities",
-              snippet: "Boating, trekking, and local attractions.",
-              content:
-                "Discover adventure activities near The Pushpa Heritage...",
-              image: "/homenew/gallery-webp/balcony-2.webp",
-              link: "/blog/nearby-adventure-activities",
-            },
-          ].map((post) => (
+          {BLOG_POSTS.map((post) => (
             <div
               key={post.title}
-              className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition flex flex-col"
+              className="bg-white rounded-xl shadow-md hover:shadow-xl transition flex flex-col"
             >
-              <div className="relative h-60 md:h-64 w-full">
+              <div className="relative h-60 w-full">
                 <Image
                   src={post.image}
                   alt={post.title}
                   fill
-                  className="object-cover"
+                  className="object-cover rounded-t-xl"
                 />
               </div>
-              <div className="p-6 flex flex-col flex-1 justify-between">
-                <div>
-                  <h2 className="text-xl font-bold mb-2">{post.title}</h2>
-                  <p className="text-gray-700 mb-4">{post.snippet}</p>
-                </div>
+
+              <div className="p-6 flex flex-col flex-1">
+                <h2 className="text-xl font-semibold mb-2">
+                  {post.title}
+                </h2>
+
+                <p className="text-gray-600 mb-4 text-sm">
+                  {post.snippet}
+                </p>
+
                 <button
                   onClick={() => setOpenPost(post)}
-                  className="mt-auto text-green-700 font-semibold hover:underline"
+                  className="mt-auto text-green-700 font-medium hover:underline"
                 >
-                  Read More →
+                  Discover More →
                 </button>
               </div>
             </div>
@@ -265,38 +263,6 @@ export default function BlogPage() {
         <div className="md:w-2/3"></div>
       </section>
 
-      {/* Read More Modal */}
-      {openPost && (
-        <div
-          className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-4 overflow-y-auto"
-          onClick={() => setOpenPost(null)}
-          aria-modal="true"
-          role="dialog"
-        >
-          <div
-            className="bg-white rounded-xl max-w-3xl w-full p-8 relative shadow-2xl overflow-y-auto max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-2xl"
-              onClick={() => setOpenPost(null)}
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
-            <div className="relative h-64 w-full mb-6">
-              <Image
-                src={openPost.image}
-                alt={openPost.title}
-                fill
-                className="object-cover rounded-lg"
-              />
-            </div>
-            <h2 className="text-2xl font-bold mb-4">{openPost.title}</h2>
-            <p className="text-gray-700">{openPost.content}</p>
-          </div>
-        </div>
-      )}
 
       {/* Scroll to Top Button - Always Visible */}
       <button

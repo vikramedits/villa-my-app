@@ -90,7 +90,7 @@ function ReviewCard({ review }: any) {
 ======================= */
 export default function LuxuryReviewsSection() {
   return (
-    <section className="relative py-10 md:py-20 overflow-hidden">
+    <section className="relative py-10 md:py-20 overflow-hidden" id="reviews">
       {/* ============ Background  =============== */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-40 left-1/4 w-105 md:w-full h-105 bg-indigo-500/20 rounded-full blur-[140px]" />
