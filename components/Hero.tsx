@@ -17,10 +17,10 @@ export default function Hero() {
             muted
             playsInline
           >
-            <source src="/homenew/video-home.mp4" type="video/mp4" />
+            <source src="/homenew/video-one.mp4" type="video/mp4" />
           </video>
 
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-black/5"></div>
 
           <div className="relative z-10 h-full flex flex-col justify-between text-center px-4">
             <div className="flex-1 flex flex-col items-center justify-center">
