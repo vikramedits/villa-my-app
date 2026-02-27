@@ -10,7 +10,7 @@ export const metadata: Metadata = { // <- type annotation added
     title: "The Pushpa Heritage Blog",
     description:
       "Luxury villa experiences, travel guides, and celebration tips at The Pushpa Heritage, Udaipur.",
-    images: ["/villa/hero-pool-drone.jpg"],
+    images: ["/homenew/gallery-webp/balcony-1.webp"],
   },
 };
 
