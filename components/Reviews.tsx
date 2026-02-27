@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 import Link from "next/link";
 import StarRating from "./StarRating";
 import { FcGoogle } from "react-icons/fc";
+import { User } from "lucide-react";
 
 /* =======================
    REVIEWS DATA
@@ -63,8 +64,8 @@ const REVIEWS = [
 function ReviewCard({ review }: any) {
   return (
     <div className=" w-5/6 lg:w-full h-96 shrink-0 rounded-lg bg-white/70 backdrop-blur-xl border-2 border-white/40 py-4 px-2 flex flex-col shadow-sm mb-2 ">
-      <div className="text-6xl leading-none text-black/30 font-serif mb-1">
-        “
+      <div className="text-6xl leading-none text-black/40 font-serif mb-2">
+       <User size={30}/>
       </div>
 
       <div className="flex-1 text-sm text-gray-700  shadow-inner rounded-lg p-3 leading-relaxed italic overflow-y-auto pr-1">
