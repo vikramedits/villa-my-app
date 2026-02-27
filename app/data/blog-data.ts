@@ -14,7 +14,7 @@ export const FEATURED_ARTICLE: BlogPost = {
     "Experience luxury and privacy at The Pushpa Heritage..."
   ],
   image: "/homenew/gallery-webp/pool-1.webp",
-  slug: "/blog/private-7-bhk-villa-udaipur",
+  slug: "private-7-bhk-villa-udaipur",
   sn: "",
 };
 
@@ -31,7 +31,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "On-call staff support ensuring safety and smooth celebrations.",
     ],
     image: "/homenew/gallery-webp/pool-1.webp",
-    slug: "/blog/poolside-bbq-party",
+    slug: "poolside-bbq-party",
     sn: "1",
   },
   {
@@ -52,7 +52,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
 
     image: "/homenew/gallery-webp/balcony-1.webp",
-    slug: "/blog/host-birthday-party",
+    slug: "host-birthday-party",
     sn: "2",
   },
   {
@@ -72,7 +72,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "With major attractions located within a short drive, the villa provides the perfect balance of peaceful stay and easy city access.",
     ],
     image: "/homenew/gallery-webp/room-11.webp",
-    slug: "/blog/badi-lake-things-to-do",
+    slug: "badi-lake-things-to-do",
     sn: "3",
   },
   {
@@ -93,7 +93,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
 
     image: "/homenew/gallery-webp/room-10.webp",
-    slug: "/blog/private-villa-vs-hotels",
+    slug: "private-villa-vs-hotels",
     sn: "4",
   },
   {
@@ -113,7 +113,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Every corner of the villa reflects attention to detail — from textures and color palettes to lighting design — creating a luxurious yet homely atmosphere.",
     ],
     image: "/homenew/gallery-webp/room-4.webp",
-    slug: "/blog/luxury-villa-interior-tour",
+    slug: "luxury-villa-interior-tour",
     sn: "5",
   },
   {
@@ -133,7 +133,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "With so many iconic sunset points just a short drive away, the villa provides the perfect base to explore Udaipur’s most romantic evening views.",
     ],
     image: "/homenew/gallery-webp/pool-2.webp",
-    slug: "/blog/best-sunset-spots-badi-lake",
+    slug: "best-sunset-spots-badi-lake",
     sn: "6",
   },
   {
@@ -154,7 +154,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
 
     image: "/homenew/gallery-webp/garden-1.webp",
-    slug: "/blog/family-getaway-itinerary",
+    slug: "family-getaway-itinerary",
     sn: "7",
   },
   {
@@ -174,7 +174,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Located close to Udaipur’s iconic attractions, the villa offers the perfect blend of peaceful surroundings and easy city access for a seamless destination wedding experience.",
     ],
     image: "/homenew/gallery-webp/room-3.webp",
-    slug: "/blog/wedding-celebration-packages",
+    slug: "wedding-celebration-packages",
     sn: "8",
   },
   {
@@ -195,7 +195,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
 
     image: "/homenew/gallery-webp/room-4.webp",
-    slug: "/blog/private-chef-experience",
+    slug: "private-chef-experience",
     sn: "9",
   },
   {
@@ -216,7 +216,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
 
     image: "/homenew/gallery-webp/room-5.webp",
-    slug: "/blog/villa-safety-hygiene-standards",
+    slug: "villa-safety-hygiene-standards",
     sn: "10",
   },
   {
@@ -237,7 +237,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
 
     image: "/homenew/gallery-webp/balcony-2.webp",
-    slug: "/blog/nearby-adventure-activities",
+    slug: "nearby-adventure-activities",
     sn: "11",
   },
   {
@@ -259,7 +259,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
 
     image: "/homenew/gallery-webp/balcony-2.webp",
-    slug: "/blog/nearby-adventure-activities",
+    slug: "nearby-adventure-activities",
     sn: "12",
   },
   {
@@ -275,7 +275,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "If you value privacy, celebration freedom, and a peaceful environment near lakes like Badi Lake and Fateh Sagar Lake, a private villa is the better choice in Udaipur.",
     ],
     image: "/homenew/gallery-webp/room-6.webp",
-    slug: "/blog/villa-vs-resort-in-udaipur",
+    slug: "villa-vs-resort-in-udaipur",
     sn: "13",
   },
   {
@@ -291,7 +291,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "For large group stays in Udaipur, a 7 BHK private villa offers the perfect mix of space, comfort, privacy, and value.",
     ],
     image: "/homenew/gallery-webp/room-7.webp",
-    slug: "/blog/7-bhk-villa-in-udaipur-for-large-groups",
+    slug: "7-bhk-villa-in-udaipur-for-large-groups",
     sn: "14",
   },
   {
@@ -307,7 +307,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "If you’re searching for a pet-friendly villa in Udaipur, choosing a private luxury villa ensures a relaxed and memorable vacation for the whole family.",
     ],
     image: "/homenew/gallery-webp/balcony-1.webp",
-    slug: "/blog/pet-friendly-villa-in-udaipur",
+    slug: "pet-friendly-villa-in-udaipur",
     sn: "15",
   },
   {
@@ -323,7 +323,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "If you want privacy, celebration freedom, group space, and premium comfort, renting a private villa in Udaipur offers excellent value for money.",
     ],
     image: "/homenew/gallery-webp/room-8.webp",
-    slug: "/blog/cost-of-villa-in-udaipur",
+    slug: "cost-of-villa-in-udaipur",
     sn: "16",
   },
 ];
