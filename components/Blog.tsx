@@ -8,8 +8,9 @@ import {
   FEATURED_ARTICLE,
   type BlogPost,
 } from "@/app/data/blog-data";
-import { ArrowUp } from "lucide-react";
+import { ArrowBigDown, ArrowDown, ArrowUp } from "lucide-react";
 import { useEffect } from "react";
+import { BedDouble, ImageIcon, Sparkles, CalendarCheck } from "lucide-react";
 
 
 
@@ -17,51 +18,50 @@ export default function BlogPage() {
   const [openPost, setOpenPost] = useState<BlogPost | null>(null);
 
   useEffect(() => {
-  const savedPosition = sessionStorage.getItem("blogScrollPosition");
+    const savedPosition = sessionStorage.getItem("blogScrollPosition");
 
-  if (savedPosition) {
-    window.scrollTo({
-      top: parseInt(savedPosition),
-      behavior: "auto",
-    });
+    if (savedPosition) {
+      window.scrollTo({
+        top: parseInt(savedPosition),
+        behavior: "auto",
+      });
 
-    sessionStorage.removeItem("blogScrollPosition");
-  }
-}, []);
+      sessionStorage.removeItem("blogScrollPosition");
+    }
+  }, []);
 
   return (
-    <main id="top" className="bg-gray-50 font-sans pt-16 md:pt-20">
+    <main id="top" className="container-fluid bg-gray-50 font-sans pt-16 md:pt-20">
       {/* Featured Article */}
-      <section className="relative w-full h-[70vh] md:h-[85vh]">
-        <Image
-          src={FEATURED_ARTICLE.image}
-          alt={FEATURED_ARTICLE.title}
-          fill
-          className="object-cover"
-          priority
-        />
+      <section className="w-full bg-[#F8F5F0] py-16 px-6 md:px-16">
+        <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-14">
 
-        <div className="absolute inset-0 bg-[#F8F5F0]/40 flex flex-col justify-center p-6 md:p-16">
-          <h1 className="text-3xl md:text-5xl font-bold text-green-950 mb-4">
+          <span className="text-green-700 font-semibold tracking-wide uppercase text-sm">
+            Featured Article
+          </span>
+
+          <h1 className="text-3xl md:text-5xl font-bold text-green-950 mt-3 mb-6 leading-tight">
             {FEATURED_ARTICLE.title}
           </h1>
 
-          <p className="text-gray-700 text-base md:text-xl mb-6 max-w-2xl">
+          <p className="text-gray-600 text-base md:text-lg mb-8 max-w-3xl leading-relaxed">
             {FEATURED_ARTICLE.snippet}
           </p>
 
           <button
             onClick={() => setOpenPost(FEATURED_ARTICLE)}
-            className="bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-6 rounded-md transition w-full md:w-1/2"
+            className="bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 hover:shadow-lg cursor-pointer"
           >
             Full Overview →
           </button>
+
         </div>
       </section>
 
       {/* Blog Grid */}
-      <section className="max-w-7xl mx-auto py-16 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+      <section className="pt-6 lg:pt-10 pb-10 lg:pb-16">
+        <p className="flex justify-center items-center gap-2 font-medium text-gray-600 text-lg lg:text-xl mb-6">Why Stay With US <ArrowDown/></p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
           {BLOG_POSTS.map((post) => (
             <div
               key={post.title}
@@ -82,14 +82,14 @@ export default function BlogPage() {
                 <p className="text-gray-600 mb-4 text-sm">{post.snippet}</p>
 
                 <Link
-  href={`/blog/${post.slug}`}
-  onClick={() => {
-    sessionStorage.setItem("blogScrollPosition", window.scrollY.toString());
-  }}
-  className="mt-auto text-green-700 font-medium hover:underline"
->
-  Discover More →
-</Link>
+                  href={`/blog/${post.slug}`}
+                  onClick={() => {
+                    sessionStorage.setItem("blogScrollPosition", window.scrollY.toString());
+                  }}
+                  className="mt-auto text-green-700 font-medium hover:underline"
+                >
+                  Read More →
+                </Link>
               </div>
             </div>
           ))}
@@ -134,51 +134,89 @@ export default function BlogPage() {
       )}
 
       {/* Sidebar + Quick Booking */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row gap-8 mb-16">
-        <aside className="md:w-1/3 flex flex-col gap-6 md:sticky md:top-24">
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h3 className="font-bold text-xl mb-4">Quick Booking</h3>
-            <p className="text-gray-700 mb-4">Starting From ₹25,000/night</p>
 
-            <button className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-md mb-3 transition">
-              Book Now
-            </button>
 
-            <button className="w-full border border-green-700 text-green-700 hover:bg-green-50 font-semibold py-3 rounded-md transition">
-              WhatsApp / Call
-            </button>
+      <section className="max-w-6xl mx-auto px-4 md:px-8 mb-20">
+        <h2 className="text-2xl md:text-3xl font-bold text-center text-green-950 mb-10">
+          Quick Links
+        </h2>
 
-            <div className="relative h-40 w-full mt-4">
-              <Image
-                src="/villa/quick-booking-thumb.jpg"
-                alt="Villa"
-                fill
-                className="object-cover rounded-md"
-              />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+          {/* Rooms */}
+          <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div>
+              <BedDouble className="text-green-700 mb-4" size={32} />
+              <h3 className="font-semibold text-lg mb-2">Rooms</h3>
+              <p className="text-gray-600 text-sm">
+                Explore our luxurious 7-BHK rooms.
+              </p>
             </div>
+
+            <Link
+              href="/rooms"
+              className="mt-6 text-green-700 font-semibold flex items-center gap-1 hover:gap-2 transition-all"
+            >
+              Visit →
+            </Link>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h3 className="font-bold text-xl mb-4">Popular Posts</h3>
+          {/* Amenities */}
+          <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div>
+              <Sparkles className="text-green-700 mb-4" size={32} />
+              <h3 className="font-semibold text-lg mb-2">Amenities</h3>
+              <p className="text-gray-600 text-sm">
+                Private pool, garden & luxury services.
+              </p>
+            </div>
 
-            <ul className="flex flex-col gap-3">
-              {[FEATURED_ARTICLE, ...BLOG_POSTS].map((post) => (
-                <li key={post.title}>
-                  <button
-                    onClick={() => setOpenPost(post)}
-                    className="text-gray-700 hover:text-green-700 transition text-left"
-                  >
-                    {post.title}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <Link
+              href="/amenities"
+              className="mt-6 text-green-700 font-semibold flex items-center gap-1 hover:gap-2 transition-all"
+            >
+              Visit →
+            </Link>
           </div>
-        </aside>
 
-        <div className="md:w-2/3"></div>
+          {/* Images & Videos */}
+          <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div>
+              <ImageIcon className="text-green-700 mb-4" size={32} />
+              <h3 className="font-semibold text-lg mb-2">Images & Videos</h3>
+              <p className="text-gray-600 text-sm">
+                Take a virtual tour of the villa.
+              </p>
+            </div>
+
+            <Link
+              href="/gallery"
+              className="mt-6 text-green-700 font-semibold flex items-center gap-1 hover:gap-2 transition-all"
+            >
+              Visit →
+            </Link>
+          </div>
+
+          {/* Book Now */}
+          <div className="bg-green-700 text-white rounded-2xl shadow-md p-6 flex flex-col justify-between hover:bg-green-800 transition-all duration-300 hover:-translate-y-1">
+            <div>
+              <CalendarCheck className="mb-4" size={32} />
+              <h3 className="font-semibold text-lg mb-2">Book Now</h3>
+              <p className="text-sm opacity-90">
+                Reserve your stay instantly.
+              </p>
+            </div>
+
+            <Link
+              href="/booking"
+              className="mt-6 font-semibold flex items-center gap-1 hover:gap-2 transition-all"
+            >
+              Visit →
+            </Link>
+          </div>
+
+        </div>
       </section>
-
       {/* Scroll To Top */}
       <button
         onClick={() => {
@@ -189,7 +227,7 @@ export default function BlogPage() {
         }}
         className="flex gap-2 items-center fixed bottom-6 left-8 z-50 bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-full shadow-lg transition hover:-translate-y-1"
       >
-        Top <ArrowUp size={18}/>
+        Top <ArrowUp size={18} />
       </button>
     </main>
   );
