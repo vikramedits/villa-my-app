@@ -9,7 +9,7 @@ export interface BlogPost {
 export const FEATURED_ARTICLE: BlogPost = {
   title: "Best 7-BHK Private Pool Villa in Udaipur for Families & Celebrations",
   snippet:
-    "Planning a group getaway? Discover why private villas like The Pushpa Heritage are better than hotels for large groups.",
+    "Planning a group getaway? Discover why  The Pushpa Heritage is better than hotels for large the groups.",
   content: [
     "Udaipur is one of the most beautiful destinations in Rajasthan, known for its lakes, heritage architecture, and royal charm. If you are planning a family trip, celebration, or group getaway, staying in a private villa can completely transform your experience. Unlike traditional hotels, a private villa offers space, privacy, and a personalized environment where everyone can relax and enjoy together.",
 
