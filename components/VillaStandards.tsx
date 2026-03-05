@@ -29,7 +29,7 @@ type StackImage = {
 type VillaImage = SingleImage | StackImage;
 
 const features = [
-   { icon: "/homenew/icons/games.png", title: "Games & Recreation" },
+  { icon: "/homenew/icons/games.png", title: "Games & Recreation" },
   { icon: "/homenew/icons/garden.png", title: "Two Big Gardens" },
   { icon: "/homenew/icons/entrance.png", title: "3 Entrance" },
   {
@@ -100,7 +100,7 @@ export default function VillaExperienceStandard() {
         <FeaturesCarousel features={features} />
         <div className="mt-5 md:mt-8 flex md:grid md:grid-cols-3 gap-2 overflow-x-auto md:overflow-x-visible">
           {villaImages.map((item, index) => {
-            // Single large images (left/right)
+            // =================== Single large images (left/right) ======================
             if (item.type === "single") {
               return (
                 <div
@@ -115,28 +115,17 @@ export default function VillaExperienceStandard() {
                   />
                   <Link
                     href={item.href}
-                    className="
-                                 absolute bottom-0 left-0 w-full
-                                 text-white
-                                 px-5 pb-4 pt-10
-                                 bg-linear-to-t from-black/80 via-black/40 to-transparent
-                               "
+                    className="absolute bottom-2 left-2 mx-auto md:px-8 px-4 text-black bg-white rounded-full py-2 transition-all duration-300 ease-in-out hover:bg-black hover:text-white flex items-center justify-center gap-2"
                   >
-                    {/* Title layer */}
-                    <span className="block text-lg md:text-xl font-semibold leading-tight">
+                    {/* Title layer (centered) */}
+                    <span className="block text-sm md:text-xl font-semibold leading-tight flex-1 text-center">
                       {item.title}
                     </span>
 
-                    {/* Micro CTA */}
-                    <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80">
-                      <span>{item.buttonText}</span>
-                      <span className="inline-block transition-transform duration-500 group-hover:translate-x-2">
-                        <ArrowRight/>
-                      </span>
+                    {/* Micro CTA (centered) */}
+                    <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80 justify-center">
+                      <ArrowRight size={18} />
                     </span>
-
-                    {/* Bottom accent line */}
-                    <span className="mt-3 block h-px w-10 bg-white/40" />
                   </Link>
                 </div>
               );
@@ -162,28 +151,17 @@ export default function VillaExperienceStandard() {
                       />
                       <Link
                         href={img.href}
-                        className="
-                                 absolute bottom-0 left-0 w-full
-                                 text-white
-                                 px-5 pb-4 pt-10
-                                 bg-linear-to-t from-black/80 via-black/40 to-transparent
-                               "
+                        className="absolute bottom-2 left-2 mx-auto md:px-8 px-4 text-black bg-white rounded-full py-2 transition-all duration-300 ease-in-out hover:bg-black hover:text-white flex items-center justify-center gap-2"
                       >
-                        {/* Title layer */}
-                        <span className="block text-lg md:text-xl font-semibold leading-tight">
+                        {/* Title layer (centered) */}
+                        <span className="block text-sm md:text-xl font-semibold leading-tight flex-1 text-center">
                           {img.title}
                         </span>
 
-                        {/* Micro CTA */}
-                        <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80">
-                          <span>{img.buttonText}</span>
-                          <span className="inline-block transition-transform duration-500 group-hover:translate-x-2">
-                            <ArrowRight/>
-                          </span>
+                        {/* Micro CTA (centered) */}
+                        <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80 justify-center">
+                          <ArrowRight size={18} />
                         </span>
-
-                        {/* Bottom accent line */}
-                        <span className="mt-3 block h-px w-10 bg-white/40" />
                       </Link>
                     </div>
                   ))}

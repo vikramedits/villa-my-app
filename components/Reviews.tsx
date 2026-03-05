@@ -17,7 +17,7 @@ const REVIEWS = [
   {
     id: 1,
     text: "Our stay at this private villa was absolutely wonderful. The place was very clean, peaceful, and beautifully maintained. It felt like a perfect escape from daily routine. The rooms were spacious, the surroundings were calm, and the privacy made the vacation even more special. The staff/host was very supportive and always available when needed. Truly a memorable vacation and I would love to visit again. Highly recommended! 🌿✨.",
-    name: "RONY MODI",
+    name: "Rony Modi",
     meta: ["Family stay", "Verified", "Gujarat"],
     rating: 5.0,
   },
@@ -63,18 +63,18 @@ const REVIEWS = [
 ======================= */
 function ReviewCard({ review }: any) {
   return (
-    <div className=" w-5/6 lg:w-full h-96 shrink-0 rounded-lg bg-white/70 backdrop-blur-xl border-2 border-white/40 py-4 px-2 flex flex-col shadow-sm mb-2 ">
-      <div className="text-6xl leading-none text-black/40 font-serif mb-2">
-       <User size={30}/>
+    <div className=" w-5/6 lg:w-full h-96 shrink-0 rounded-lg bg-white backdrop-blur-xl border-2 border-gray-200 py-4 px-2 flex flex-col shadow-xl mb-6 ">
+      <div className="text-6xl leading-none text-black font-serif mb-2">
+       <User size={40}/>
       </div>
 
       <div className="flex-1 text-sm text-gray-700  shadow-inner rounded-lg p-3 leading-relaxed italic overflow-y-auto pr-1">
         {review.text}
       </div>
 
-      <div className="mt-4  px-3 py-3 bg-purple-100 rounded-lg">
+      <div className="mt-4  px-3 py-3  rounded-lg">
         <div className="">
-          <p className="text-sm font-medium text-gray-900">{review.name}</p>
+          <p className="text-lg font-medium text-gray-900">{review.name}</p>
           <p className="text-xs text-gray-500">{review.meta.join(" → ")}</p>
         </div>
 
@@ -93,10 +93,10 @@ export default function LuxuryReviewsSection() {
   return (
     <section className="relative py-10 md:py-20 overflow-hidden" id="reviews">
       {/* ============ Background  =============== */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-40 left-1/4 w-105 md:w-full h-105 bg-indigo-500/20 rounded-full blur-[140px]" />
         <div className="absolute bottom-0 -right-40 w-105 md:w-full h-105 bg-purple-500/10 rounded-full blur-[140px]" />
-      </div>
+      </div> */}
 
       {/* =========== Content ============ */}
       <div className="container-fluid relative">

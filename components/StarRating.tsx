@@ -31,7 +31,7 @@ export default function StarRating({
       </div>
 
       {showValue && (
-        <span className="text-xs text-gray-600 font-medium">
+        <span className="text-sm text-gray-600 font-medium">
           {safeRating.toFixed(1)}
         </span>
       )}

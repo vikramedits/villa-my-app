@@ -22,9 +22,9 @@ export default function Hero() {
 
           <div className="absolute inset-0 bg-black/5"></div>
 
-          <div className="relative z-10 h-full flex flex-col justify-between text-center px-4">
+          <div className="relative z-10 h-full flex flex-col justify-between text-center px-4 ">
             <div className="flex-1 flex flex-col items-center justify-center">
-              <p className="text-2xl md:text-4xl font-bold text-white leading-tight
+              <p className="text-2xl md:text-4xl font-bold text-green-700 leading-tight
                opacity-0 translate-y-6 animate-fadeUp tracking-wider">Hello!</p>
               <p
                 className="text-2xl md:text-4xl font-bold text-white leading-tight tracking-wider
@@ -48,7 +48,7 @@ export default function Hero() {
                bg-white text-gray-950
                px-8 py-3 rounded-full font-medium
                transition-all duration-300 ease-out
-               hover:bg-gray-950 hover:text-white border border-black
+               hover:bg-gray-950 hover:text-white border border-black/50
                "
               >
                 Your Bookings
