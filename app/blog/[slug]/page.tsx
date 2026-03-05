@@ -1,43 +1,23 @@
+// app/blog/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { BLOG_POSTS } from "@/app/data/blog-data";
-import { ArrowRight } from "lucide-react";
-import BackButton from "@/components/BackButton";
+import BlogPostContent from "@/components/BlogPostContent";
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: { slug: string } | Promise<{ slug: string }>; // Next.js 16.1 strict
 };
 
-export default async function BlogPost({ params }: Props) {
-  // ✅ UNWRAP params
-  const { slug } = await params;
+// ✅ Server Component (async optional because params can be Promise)
+export default async function BlogPostPage({ params }: Props) {
+  // 1️⃣ Unwrap params if it's a Promise
+  const { slug } = params instanceof Promise ? await params : params;
 
+  // 2️⃣ Find the post
   const post = BLOG_POSTS.find((p) => p.slug === slug);
 
+  // 3️⃣ 404 fallback
   if (!post) return notFound();
 
-  return (
-    <>
-      <BackButton />
-      <div className="mx-4 lg:max-w-4xl p-8 my-10 bg-white shadow-2xl rounded-2xl border border-gray-200 transition-all duration-300 hover:shadow-2xl">
-        {/* Title */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-semibold text-green-900 pb-3 border-b-4 border-black">
-            {post.title}
-          </h1>
-        </div>
-
-        {/* Content */}
-        <div className="space-y-6">
-          {post.content.map((para, i) => (
-            <div key={i} className="flex items-start gap-4">
-              <span className="mt-2">
-                <ArrowRight size={18} />
-              </span>
-              <p className="text-gray-700 text-lg leading-relaxed">{para}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
+  // 4️⃣ Render Client Component
+  return <BlogPostContent post={post} />;
 }

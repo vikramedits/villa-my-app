@@ -11,13 +11,24 @@ export const FEATURED_ARTICLE: BlogPost = {
   snippet:
     "Planning a group getaway? Discover why private villas like The Pushpa Heritage are better than hotels for large groups.",
   content: [
-    "Experience luxury and privacy at The Pushpa Heritage..."
+    "Udaipur is one of the most beautiful destinations in Rajasthan, known for its lakes, heritage architecture, and royal charm. If you are planning a family trip, celebration, or group getaway, staying in a private villa can completely transform your experience. Unlike traditional hotels, a private villa offers space, privacy, and a personalized environment where everyone can relax and enjoy together.",
+
+    "The Pushpa Heritage is a luxurious 7-BHK private pool villa in Udaipur designed especially for families, friends, and small celebrations. With spacious bedrooms, modern interiors, and peaceful surroundings, it provides the perfect balance of comfort and elegance. Whether you are planning a weekend getaway or a special event, the villa offers a relaxing atmosphere away from crowded tourist areas.",
+
+    "One of the biggest advantages of choosing a private villa over a hotel is privacy. When you book the entire villa, the space belongs completely to your group. You can enjoy late-night conversations, music, pool time, and celebrations without worrying about disturbing other guests. This makes private villas ideal for birthday parties, anniversaries, reunions, and pre-wedding gatherings.",
+
+    "The villa features a private swimming pool where guests can relax, unwind, and enjoy quality time together. Imagine starting your morning with a refreshing swim or ending the day with a peaceful poolside evening under the stars. The outdoor spaces, garden areas, and comfortable seating create the perfect setting for memorable moments with your loved ones.",
+
+    "Another reason travelers prefer villas like The Pushpa Heritage is the spacious layout. With seven well-designed bedrooms, large living areas, and open spaces, the villa comfortably accommodates large groups. Everyone can stay together under one roof while still enjoying their own private space and comfort.",
+
+    "Location also plays an important role when choosing a place to stay. The Pushpa Heritage offers easy access to popular attractions in Udaipur while still providing a peaceful retreat away from the busy city center. Guests can explore famous spots like Badi Lake, Sajjangarh Monsoon Palace, and the beautiful lakes of Udaipur, then return to a calm and luxurious private space.",
+
+    "For travelers looking for a unique stay experience in Udaipur, a private pool villa offers something truly special. It combines luxury, comfort, privacy, and flexibility — everything you need for a memorable trip. Whether you are visiting with family, friends, or planning a small celebration, The Pushpa Heritage provides the perfect setting for unforgettable moments."
   ],
   image: "/homenew/gallery-webp/pool-1.webp",
   slug: "private-7-bhk-villa-udaipur",
   sn: "",
 };
-
 export const BLOG_POSTS: BlogPost[] = [
   {
     title: "Poolside BBQ & Parties",
@@ -259,7 +270,7 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
 
     image: "/homenew/gallery-webp/balcony-2.webp",
-    slug: "nearby-adventure-activities",
+    slug: "best-time-to-visit-udaipur",
     sn: "12",
   },
   {
