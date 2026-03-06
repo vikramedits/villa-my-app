@@ -28,13 +28,8 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-white transition">
-                Get in Touch
-              </Link>
-            </li>
-            <li>
-              <Link href="/reviews" className="hover:text-white transition">
-                Customer Stories
+              <Link href="/policies" className="hover:text-white transition">
+                Policies
               </Link>
             </li>
             <li>
