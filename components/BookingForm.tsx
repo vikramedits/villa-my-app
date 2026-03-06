@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import CheckAvailability from "./AvailabilityCalender";
 import BookingConfirmation from "@/components/BookingConfirmation";
+import TermsAndCondition from "./Terms&Condition";
 
 export default function VillaBookingFullScreen() {
   /* ===================== STATES ===================== */
@@ -157,11 +158,11 @@ export default function VillaBookingFullScreen() {
   }, [adults, kids, MAX_GUESTS]);
 
   return (
-    <section className="bg-gray-100 mb-5 md:mb-10" id="booking-section ">
+    <section className="bg-gray-100 mb-5 md:mb-10 py-2" id="booking-section ">
       {/* ============================================ TOP ============================================ */}
 
       <div className="text-center my-5 lg:my-10">
-        <p className="text-2xl md:text-4xl font-semibold text-gray-700 tracking-wide pb-1 lg:pb-2">
+        <p className="text-2xl md:text-4xl font-semibold text-gray-700 tracking-wide pb-1  lg:pb-2">
           Book Your Stay
         </p>
 
@@ -391,7 +392,7 @@ export default function VillaBookingFullScreen() {
             </div>
 
             {/* Tooltip */}
-            <div className="relative mt-2 md:mt-4">
+            <div className="relative my-2 md:mt-4">
               <button
                 type="button"
                 className="flex items-center gap-2 text-blue-600 font-medium"
@@ -411,7 +412,7 @@ export default function VillaBookingFullScreen() {
               )}
             </div>
 
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-gray-500 my-2">
               *Please carry ID proof at check-in
             </p>
             {apiError && (
@@ -444,6 +445,8 @@ export default function VillaBookingFullScreen() {
                 {loading ? "Processing..." : "PROCEED →"}
               </span>
             </button>
+            {/* ================ Terms & Condition ==================== */}
+            <TermsAndCondition/>
           </form>
 
           <BookingConfirmation

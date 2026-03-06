@@ -47,10 +47,10 @@ export default function FAQs() {
       <div className="container-fluid">
         {/* ================= Heading ================= */}
         <div className="text-center mb-8 md:mb-12">
-          <p className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950 border-x-4 border-black pl-2">
+          <p className="text-lg md:text-2xl font-bold font-ubuntu md:font-medium tracking-wide text-gray-950 border-x-4 border-black pl-2">
             Frequently Asked Questions
           </p>
-          <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
+          <p className="text-xs md:text-base mt-2 font-ubuntu text-gray-600 tracking-wide">
             Everything you need to know before booking your stay
           </p>
         </div>

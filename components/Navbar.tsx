@@ -66,6 +66,14 @@ export default function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
+  if (sheetOpen) {
+    document.body.classList.add("menu-open");
+  } else {
+    document.body.classList.remove("menu-open");
+  }
+}, [sheetOpen]);
+
+  useEffect(() => {
     setSheetOpen(false);
   }, [pathname]);
 
@@ -197,9 +205,9 @@ export default function Navbar() {
               priority
               className="rounded-full w-16 md:w-20 h-16 md:h-20 object-cover object-center pt-1"
             />
-            <span className="text-sm md:text-lg font-bold md:font-semibold tracking-wide text-yellow-700 ">
+            <span className="text-xs md:text-lg font-boldonse font-light  md:font-semibold tracking-wide text-yellow-700 ">
               The Pushpa Heritage
-              <p className="text-xs md:text-sm text-orange-950 shadow-2xl rounded-l-full rounded-r-full">
+              <p className="text-xs md:text-sm font-ubuntu font-bold text-orange-950 shadow-2xl rounded-l-full rounded-r-full">
                 7-BHK | Big Pool | 2 Gardens
               </p>
             </span>

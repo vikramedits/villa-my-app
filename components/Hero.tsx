@@ -25,9 +25,9 @@ export default function Hero() {
           <div className="relative z-10 h-full flex flex-col justify-between text-center px-4 ">
             <div className="flex-1 flex flex-col items-center justify-center">
               <p className="text-2xl md:text-4xl font-bold text-green-700 leading-tight
-               opacity-0 translate-y-6 animate-fadeUp tracking-wider">Hello!</p>
+               opacity-0 translate-y-6 animate-fadeUp tracking-wider font-ubuntu">Hello!</p>
               <p
-                className="text-2xl md:text-4xl font-bold text-white leading-tight tracking-wider
+                className="text-2xl md:text-4xl font-bold font-ubuntu text-white leading-tight tracking-wider
                opacity-0 translate-y-6 animate-fadeUp"
               >
                 Book Your Stay in Minutes.
@@ -47,7 +47,7 @@ export default function Hero() {
                 className="group inline-flex items-center gap-2
                bg-white text-gray-950
                px-8 py-3 rounded-full font-medium
-               transition-all duration-300 ease-out
+               transition-all duration-300 ease-out font-barlow
                hover:bg-gray-950 hover:text-white border border-black/50
                "
               >

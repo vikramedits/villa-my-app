@@ -79,10 +79,10 @@ export default function SafetyAndHygiene() {
       <div className="container-fluid mx-auto px-4">
         {/* ============= Heading ============== */}
         <div className="mb-16 text-start">
-          <p className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2">
+          <p className="text-lg md:text-2xl font-ubuntu font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2">
             Safety & Hygiene
           </p>
-          <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
+          <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide font-ubuntu">
             Your comfort, safety and cleanliness are our top priority
           </p>
         </div>

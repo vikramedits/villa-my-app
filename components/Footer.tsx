@@ -29,7 +29,12 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/policies" className="hover:text-white transition">
-                Policies
+                Terms & Condition
+              </Link>
+            </li>
+            <li>
+              <Link href="/check-booking" className="hover:text-white transition">
+                Your Booking
               </Link>
             </li>
             <li>

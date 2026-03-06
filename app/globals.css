@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Boldonse&display=swap');
+
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -363,4 +369,38 @@ body {
   animation: slideUp 0.5s ease-out forwards;
 }
 
+/* ================================================ Google Font ======================================== */
 
+
+.font-ubuntu {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.font-dosis {
+  font-family: 'Dosis', sans-serif;
+}
+
+.font-audiowide {
+  font-family: "Audiowide", sans-serif;
+}
+
+.font-cinzel {
+  font-family: "Cinzel", sans-serif;
+}
+
+.font-boldonse {
+  font-family: "Boldonse", sans-serif;
+}
+
+
+
+
+.menu-open main {
+  transform: translateX(-180px) scale(0.98);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  border-radius: 16px;
+}
+main {
+  transition: transform 0.3s ease;
+}

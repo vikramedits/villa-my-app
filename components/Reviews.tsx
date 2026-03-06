@@ -105,7 +105,7 @@ export default function LuxuryReviewsSection() {
             <div className="flex items-center gap-3 ">
              {/* ==== Google Icon ==== */}
                 <FcGoogle className="w-5 h-5" />
-              <p className="flex items-center gap-2 text-sm md:text-base tracking-widest text-white/60 uppercase">
+              <p className="flex items-center gap-2 text-sm md:text-base tracking-widest text-white/60 uppercase font-ubuntu">
                 Google Reviews
                 <span className="relative flex items-center gap-1">
                   <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -124,7 +124,7 @@ export default function LuxuryReviewsSection() {
             </Link>
           </div>
 
-          <p className="mt-3 text-xl md:text-4xl font-light text-center text-gray-600">
+          <p className="mt-3 text-xl md:text-4xl font-light text-center text-gray-600 font-ubuntu">
             What our guests remember
           </p>
         </div>

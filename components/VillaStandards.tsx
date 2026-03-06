@@ -58,7 +58,7 @@ const villaImages: VillaImage[] = [
     images: [
       {
         src: "/homenew/standard/standard-2.jpeg",
-        title: "Explore the  villa",
+        title: "Things To Know",
         buttonText: "View all",
         alt: "Dining",
         href: "/blog",
@@ -89,7 +89,7 @@ export default function VillaExperienceStandard() {
       <div className="container-fluid pt-5 md:pt-10">
         {/* Heading */}
         <div className="py-3 md:py-6 ">
-          <p className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2">
+          <p className="text-lg md:text-2xl font-ubuntu font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2">
             Our Prestige
           </p>
           <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
@@ -113,18 +113,28 @@ export default function VillaExperienceStandard() {
                     fill
                     className="object-cover"
                   />
+
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/5 to-transparent"></div>
+
                   <Link
                     href={item.href}
-                    className="absolute bottom-2 left-2 mx-auto md:px-8 px-4 text-black bg-white rounded-full py-2 transition-all duration-300 ease-in-out hover:bg-black hover:text-white flex items-center justify-center gap-2"
+                    className="group absolute bottom-4 left-4 right-4 flex items-center justify-between text-white "
                   >
-                    {/* Title layer (centered) */}
-                    <span className="block text-sm md:text-xl font-semibold leading-tight flex-1 text-center">
+                    {/* Title */}
+                    <span className="text-lg md:text-xl font-semibold">
                       {item.title}
                     </span>
 
-                    {/* Micro CTA (centered) */}
-                    <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80 justify-center">
-                      <ArrowRight size={18} />
+                    {/* Explore CTA */}
+                    <span
+                      className="flex items-center gap-2 text-sm font-medium 
+                                       translate-x-4 
+                                      transition-all duration-300  text-white
+                                      group-hover:opacity-100 group-hover:translate-x-0 mr-3"
+                    >
+                      Explore
+                      <ArrowRight size={16} />
                     </span>
                   </Link>
                 </div>
@@ -149,18 +159,27 @@ export default function VillaExperienceStandard() {
                         fill
                         className="object-cover"
                       />
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/5 to-transparent"></div>
+
                       <Link
                         href={img.href}
-                        className="absolute bottom-2 left-2 mx-auto md:px-8 px-4 text-black bg-white rounded-full py-2 transition-all duration-300 ease-in-out hover:bg-black hover:text-white flex items-center justify-center gap-2"
+                        className="group absolute bottom-4 left-4 right-4 flex items-center justify-between text-white "
                       >
-                        {/* Title layer (centered) */}
-                        <span className="block text-sm md:text-xl font-semibold leading-tight flex-1 text-center">
+                        {/* Title */}
+                        <span className="text-lg md:text-xl font-semibold">
                           {img.title}
                         </span>
 
-                        {/* Micro CTA (centered) */}
-                        <span className="mt-1 flex items-center gap-2 text-sm font-medium opacity-80 justify-center">
-                          <ArrowRight size={18} />
+                        {/* Explore CTA */}
+                        <span
+                          className="flex items-center gap-2 text-sm font-medium 
+                                       translate-x-4 
+                                      transition-all duration-300  text-white
+                                      group-hover:opacity-100 group-hover:translate-x-0 mr-3"
+                        >
+                          Explore
+                          <ArrowRight size={16} />
                         </span>
                       </Link>
                     </div>

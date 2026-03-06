@@ -81,7 +81,7 @@ export default function BlogPage() {
           <span className="text-green-700 font-semibold tracking-wide uppercase text-sm">
             Featured Article
           </span>
-          <h1 className="text-3xl md:text-5xl font-serif text-green-950 mt-3 mb-6 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-ubuntu text-green-950 mt-3 mb-6 leading-tight">
             {FEATURED_ARTICLE.title}
           </h1>
           <p className="text-gray-600 text-base md:text-lg mb-8 max-w-3xl leading-relaxed">

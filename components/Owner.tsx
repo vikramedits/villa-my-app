@@ -47,10 +47,10 @@ export default function OwnersNote() {
       <div className="container-fluid">
         
         <div className="pb-4 md:pb-8">
-          <p className="text-lg md:text-2xl font-bold md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2 ">
+          <p className="text-lg md:text-2xl font-bold font-ubuntu md:font-medium tracking-wide text-gray-950 border-l-4 border-black pl-2 ">
             Note By Host & Co-Host
           </p>
-          <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide">
+          <p className="text-xs md:text-base mt-2 text-gray-600 tracking-wide font-ubuntu">
             A few words from your hosts to ensure a memorable and hassle-free
             stay.
           </p>

@@ -10,7 +10,7 @@ export default function MobileBookNowCTA() {
       <Link
         href="/booking"
         className="group inline-flex items-center gap-2
-          bg-green-900 text-white px-8 py-3 rounded-full font-medium
+          bg-green-800 text-white px-8 py-3 rounded-full font-medium
           shadow-lg transition-all duration-200 ease-out
           hover:bg-white hover:text-green-950 hover:border border-green-950
           animate-slideUp"
@@ -28,7 +28,7 @@ export default function MobileBookNowCTA() {
         <Link
           href="tel:9587380255"
           className="flex items-center gap-2
-            bg-black border border-gray-400 text-white p-4 rounded-full font-semibold
+            bg-green-600   text-white p-4 rounded-full font-semibold
             shadow-lg active:scale-95 transition-all duration-200 "
         >
           <Phone size={18} />
