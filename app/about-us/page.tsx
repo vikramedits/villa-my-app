@@ -1,3 +1,4 @@
+import { Bed, BedDouble, Trees, Waves } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -52,21 +53,30 @@ export default function AboutPage() {
 
       {/* ================= QUICK HIGHLIGHTS ================= */}
       <section className="bg-[#1E3A34] text-white py-14">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-start">
           <div>
-            <h3 className="text-3xl font-bold">7</h3>
+            <h3 className="text-3xl font-bold flex items-center gap-3">
+              7<Bed size={28} />
+            </h3>
             <p>Luxury Bedrooms</p>
           </div>
           <div>
-            <h3 className="text-3xl font-bold">2</h3>
+            <h3 className="text-3xl font-bold flex items-center gap-3">
+              2 <Trees size={28} />
+            </h3>
             <p>Beautiful Gardens</p>
           </div>
           <div>
-            <h3 className="text-3xl font-bold">1</h3>
+            <h3 className="text-3xl font-bold flex items-center gap-3">
+              1<Waves size={28} />
+            </h3>
             <p>Private Swimming Pool</p>
           </div>
           <div>
-            <h3 className="text-3xl font-bold">24x7</h3>
+            <h3 className="text-3xl font-bold flex items-center gap-3">
+              24x7
+              <BedDouble size={28} />
+            </h3>
             <p>Premium Room Service</p>
           </div>
         </div>
@@ -96,7 +106,10 @@ export default function AboutPage() {
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition"
+                className="bg-white rounded-xl border border-gray-100
+                            p-6
+                            hover:shadow-xl hover:-translate-y-1
+                            transition"
               >
                 <p className="text-lg font-medium">{item}</p>
               </div>

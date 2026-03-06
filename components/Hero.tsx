@@ -48,7 +48,7 @@ export default function Hero() {
                bg-white text-gray-950
                px-8 py-3 rounded-full font-medium
                transition-all duration-300 ease-out font-barlow
-               hover:bg-gray-950 hover:text-white border border-black/50
+               hover:bg-gray-950 hover:text-white shadow-2xl
                "
               >
                 Your Bookings
