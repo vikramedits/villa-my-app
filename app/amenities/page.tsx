@@ -5,7 +5,7 @@ import { amenitiesCategories } from "../data/amenities-data";
 
 export default function AmenitiesPage() {
   return (
-    <section className="lg:pb-12 bg-gray-50">
+    <section className="lg:pb-12">
       <div className="container-fluid">
         {/* =============== Heading ==================== */}
 
