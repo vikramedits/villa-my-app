@@ -45,7 +45,7 @@ export default function Hero() {
               <Link
                 href="/check-booking"
                 className="group inline-flex items-center gap-2
-               bg-white text-gray-950
+               bg-yellow-700 text-white
                px-8 py-3 rounded-full font-medium
                transition-all duration-300 ease-out font-barlow
                hover:bg-gray-950 hover:text-white shadow-2xl
