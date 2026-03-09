@@ -24,7 +24,7 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
-    "framer-motion": "^12.34.0",
+    "framer-motion": "^12.35.1",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.562.0",
     "mongoose": "^9.2.1",

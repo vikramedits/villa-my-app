@@ -1,65 +1,56 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import React, { useEffect, useRef, useState, useMemo } from "react";
-import FocusLock from "react-focus-lock";
-import { motion, AnimatePresence } from "framer-motion";
-import useEmblaCarousel from "embla-carousel-react";
-import { galleryData, GalleryItem } from "@/app/data/galleryData";
+import Image from "next/image"
+import { useState, useMemo, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import FocusLock from "react-focus-lock"
+import useEmblaCarousel from "embla-carousel-react"
+import { galleryData, GalleryItem } from "@/app/data/galleryData"
 
-const chunkArray = <T,>(array: T[], size: number): T[][] => {
-  const result: T[][] = [];
-  for (let i = 0; i < array.length; i += size) {
-    result.push(array.slice(i, i + size));
-  }
-  return result;
-};
+type TabType = "all" | "images" | "videos"
 
-// ============= Small group indexes in 20-item pattern =============
-const smallGroups = [
-  [0, 1, 2, 3],
-  [5, 6, 7, 8],
-  [11, 12, 13, 14],
-  [15, 16, 17, 18],
-];
+export default function Gallery() {
 
-// ========= Big card indexes ===========
-const bigIndexes = [4, 9, 10, 19];
+  const [tab, setTab] = useState<TabType>("all")
+  const [modalOpen, setModalOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState<number>(0)
+  const [videoPlaying, setVideoPlaying] = useState<Record<string, boolean>>({})
 
-const Gallery: React.FC = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [videoPlaying, setVideoPlaying] = useState<Record<string, boolean>>({});
-  const [visibleChunks, setVisibleChunks] = useState(1);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
-  const imageItems = useMemo(
-    () => galleryData.filter((item) => item.type !== "video"),
-    [],
-  );
-  const INITIAL_ITEMS_PER_CHUNK = 12;
-  const CHUNK_INCREMENT = 6;
+  const [activeSlide, setActiveSlide] = useState(0)
 
-  const chunks = useMemo(() => chunkArray(galleryData, 20), []);
-  const [visibleItemsPerChunk, setVisibleItemsPerChunk] = useState<number[]>(
-    chunks.map(() => INITIAL_ITEMS_PER_CHUNK),
-  );
 
-  // const [modalVideoPlaying, setModalVideoPlaying] = useState(false);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const [startIndex, setStartIndex] = useState(0)
 
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true, startIndex: startIndex
+  })
+
+  const images = useMemo(
+    () => galleryData.filter(i => i.type === "image"),
+    []
+  )
+
+  const videos = useMemo(
+    () => galleryData.filter(i => i.type === "video"),
+    []
+  )
+
+  const filtered = useMemo(() => {
+    if (tab === "images") return images
+    if (tab === "videos") return videos
+    return galleryData
+  }, [tab, images, videos])
 
   useEffect(() => {
     if (!emblaApi) return;
 
     const onSelect = () => {
-      setActiveSlideIndex(emblaApi.selectedScrollSnap());
+      setActiveSlide(emblaApi.selectedScrollSnap());
     };
 
     emblaApi.on("select", onSelect);
-    onSelect(); // initialize
+    onSelect();
 
     return () => {
       emblaApi.off("select", onSelect);
@@ -67,83 +58,47 @@ const Gallery: React.FC = () => {
   }, [emblaApi]);
 
   const openModal = (item: GalleryItem) => {
-    setVideoPlaying({});
-    const index = imageItems.findIndex((i) => i.id === item.id);
-    setActiveIndex(index);
-    setModalOpen(true);
-  };
-  // =============== reset modal video ====================
-  const closeModal = () => {
-    setModalOpen(false);
-    setActiveIndex(null);
-    // setModalVideoPlaying(false);
-  };
+    const index = images.findIndex(i => i.id === item.id)
 
-  // =============== Keyboard Escape ======================
-  const handleKey = (e: KeyboardEvent) => {
-    if (e.key === "Escape") closeModal();
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, []);
-
-  // ============= IntersectionObserver for infinite scroll ======================
-  useEffect(() => {
-    let ticking = false;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!ticking && entries[0].isIntersecting) {
-          ticking = true;
-          setVisibleItemsPerChunk((prev) =>
-            prev.map((count, idx) =>
-              idx === visibleChunks - 1 ? count + CHUNK_INCREMENT : count,
-            ),
-          );
-          if (visibleChunks < chunks.length) {
-            setVisibleChunks((prev) => prev + 1);
-          }
-
-          setTimeout(() => (ticking = false), 200);
-        }
-      },
-      { rootMargin: "200px" },
-    );
-
-    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
-    return () => {
-      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
-    };
-  }, [visibleChunks, chunks.length]);
-
-  useEffect(() => {
-    if (modalOpen && emblaApi && activeIndex !== null) {
-      emblaApi.scrollTo(activeIndex, false);
-    }
-  }, [modalOpen, emblaApi, activeIndex]);
-
-  // ============ Click-to-play handler for video thumbnails =================
-  const handleVideoClick = (id: string) => {
-    setVideoPlaying((prev) => {
-      const newState: Record<string, boolean> = {};
-      Object.keys(prev).forEach((key) => {
-        newState[key] = false; // sab videos pause
-      });
-      newState[id] = true; // clicked video play
-      return newState;
-    });
-  };
-  if (!galleryData || galleryData.length === 0) {
-    return (
-      <div className="text-center p-8 text-gray-500">
-        No gallery items found.
-      </div>
-    );
+    setStartIndex(index)   // slider start yaha se
+    setActiveSlide(index)  // progress bar yaha se
+    setModalOpen(true)
   }
 
+  const closeModal = () => {
+    setModalOpen(false)
+  }
+
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeModal()
+    }
+    window.addEventListener("keydown", key)
+    return () => window.removeEventListener("keydown", key)
+  }, [])
+
+  const playVideo = (id: string) => {
+    setVideoPlaying(prev => {
+      const obj: Record<string, boolean> = {}
+      Object.keys(prev).forEach(k => obj[k] = false)
+      obj[id] = true
+      return obj
+    })
+  }
+
+  useEffect(() => {
+    if (!emblaApi) return
+    if (modalOpen) {
+      emblaApi.scrollTo(startIndex, true)
+    }
+  }, [modalOpen, emblaApi, startIndex])
+
   return (
-    <div className="container-fluid pb-5 md:pb-8">
+
+    <div className="container mx-auto px-4 pb-16">
+
+      {/* ================= Heading ================= */}
+
       {/* ======================= Heading =========================== */}
       <div className="text-center my-5 lg:my-10">
         <p className="text-2xl md:text-4xl font-semibold text-gray-700 tracking-wide pb-1 lg:pb-2">
@@ -155,285 +110,400 @@ const Gallery: React.FC = () => {
         </p>
         <div className="w-20 h-0.5 bg-green-800 mx-auto mt-3"></div>
       </div>
-      <div className=" grid grid-cols-1 gap-4">
-        {chunks.slice(0, visibleChunks).map((chunk, chunkIdx) => (
-          <div
-            key={chunkIdx}
-            className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full"
-          >
-            {(() => {
-              const usedIndexes = new Set<number>();
-              const itemsToRender = chunk.slice(
-                0,
-                visibleItemsPerChunk[chunkIdx],
-              );
 
-              return itemsToRender.map((item, index) => {
-                if (usedIndexes.has(index)) return null;
+      {/* ================= Tabs ================= */}
 
-                const group = smallGroups.find((g) => g.includes(index));
+      <div className="flex justify-center mb-12">
 
-                // ======================== Small group ==========================
-                if (group && group[0] === index) {
-                  group.forEach((i) => usedIndexes.add(i));
+        <div className="flex gap-2 bg-gray-100 p-1 rounded-full shadow-inner">
 
-                  return (
-                    <div
-                      key={`group-${index}`}
-                      className="grid grid-cols-2 gap-2"
-                    >
-                      {group.map((i) => {
-                        const img = chunk[i];
-                        if (!img) return null;
+          {["all", "images", "videos"].map((t) => {
 
-                        if (img.type === "video") {
-                          const isPlaying = videoPlaying[img.id];
-                          return (
-                            <div
-                              key={img.id.toString()}
-                              className="aspect-square relative w-full rounded-sm overflow-hidden shadow-md cursor-pointer group bg-gray-100"
-                              onClick={() =>
-                                handleVideoClick(img.id.toString())
-                              }
-                            >
-                              {!isPlaying ? (
-                                <>
-                                  <Image
-                                    src={
-                                      img.thumbnail ||
-                                      "/homenew/gallery-webp/room-4.webp"
-                                    }
-                                    alt={img.alt || "Video thumbnail"}
-                                    fill
-                                    style={{ objectFit: "cover" }}
-                                    quality={75}
-                                    loading="lazy"
-                                  />
+            const active = tab === t
 
-                                  {/* TOP LEFT VIDEO BADGE */}
-                                  <div className="absolute top-2 left-2 bg-black text-green-500 border border-green-500 text-xs px-2 py-1 rounded-full">
-                                    VIDEO
-                                  </div>
+            return (
 
-                                  {/* CENTER PLAY BUTTON */}
-                                  <div className="absolute inset-0 flex items-center justify-center">
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleVideoClick(img.id.toString());
-                                      }}
-                                      className="bg-white/90 p-3 rounded-full shadow-md hover:scale-110 transition"
-                                    >
-                                      ▶
-                                    </button>
-                                  </div>
-                                </>
-                              ) : (
-                                <video
-                                  src={img.src}
-                                  className="w-full h-full object-cover"
-                                  muted
-                                  autoPlay
-                                  playsInline
-                                  controls
-                                  preload="none"
-                                />
-                              )}
-                            </div>
-                          );
-                        }
+              <button
+                key={t}
+                onClick={() => setTab(t as TabType)}
+                className={`relative px-6 py-2 text-sm font-medium rounded-full transition-all duration-300 capitalize
+          ${active
+                    ? "bg-white text-green-700 shadow-md"
+                    : "text-gray-500 hover:text-gray-800"
+                  }`}
+              >
 
-                        return (
-                          <div
-                            key={img.id.toString()}
-                            className="aspect-square relative w-full rounded-sm overflow-hidden shadow-md cursor-pointer"
-                            onClick={() => openModal(img)}
-                          >
-                            <Image
-                              src={img.src}
-                              alt={img.alt || ""}
-                              fill
-                              style={{ objectFit: "cover" }}
-                              quality={75}
-                              placeholder="blur"
-                              blurDataURL={img.placeholder || img.src}
-                              loading="lazy"
-                            />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                }
+                {t}
 
-                // ================================ Big card ===========================
-                if (bigIndexes.includes(index)) {
-                  usedIndexes.add(index);
+              </button>
 
-                  const bigItem = chunk[index];
-                  if (!bigItem) return null;
+            )
 
-                  if (bigItem.type === "video") {
-                    const isPlaying = videoPlaying[bigItem.id];
+          })}
 
-                    return (
-                      <div
-                        key={bigItem.id.toString()}
-                        className="w-full h-96 md:h-auto relative rounded-sm overflow-hidden shadow-md bg-gray-100"
-                      >
-                        {!isPlaying ? (
-                          <>
-                            <Image
-                              src={
-                                bigItem.thumbnail || "/video-placeholder.jpg"
-                              }
-                              alt={bigItem.alt || "Video thumbnail"}
-                              fill
-                              style={{ objectFit: "cover" }}
-                              quality={75}
-                              loading="lazy"
-                            />
+        </div>
 
-                            {/* VIDEO BADGE */}
-                            <div className="absolute top-2 left-2 bg-green-800 text-white border border-green-500 text-xs px-4 py-1 rounded-full ">
-                              VIDEO
-                            </div>
-
-                            {/* PLAY BUTTON */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleVideoClick(bigItem.id.toString());
-                                }}
-                                className="bg-white p-4 rounded-full shadow-lg hover:scale-110 transition "
-                              >
-                                ▶
-                              </button>
-                            </div>
-                          </>
-                        ) : (
-                          <video
-                            src={bigItem.src}
-                            className="w-full h-full object-cover"
-                            muted
-                            autoPlay
-                            playsInline
-                            controls
-                            preload="none"
-                          />
-                        )}
-                      </div>
-                    );
-                  }
-
-                  //  ======================== Image case - Big ================================
-                  return (
-                    <div
-                      key={bigItem.id.toString()}
-                      className="w-full h-96 md:h-auto relative rounded-sm overflow-hidden shadow-md cursor-pointer group"
-                      onClick={() => openModal(bigItem)}
-                    >
-                      <Image
-                        src={bigItem.src}
-                        alt={bigItem.alt || ""}
-                        fill
-                        style={{ objectFit: "cover" }}
-                        className="transition-transform duration-300 group-hover:scale-105"
-                        quality={75}
-                        loading="lazy"
-                      />
-                    </div>
-                  );
-                }
-                return null;
-              });
-            })()}
-          </div>
-        ))}
-
-        {/* ==== Scroll trigger ===== */}
-        <div ref={loadMoreRef} className="h-4"></div>
       </div>
 
-      {/* =========================================== Modal =========================================== */}
-      <AnimatePresence >
-        {modalOpen && activeIndex !== null && (
+      {/* ===================== GALLERY CONTENT ===================== */}
+
+      {/* ---------- ALL TAB (Masonry Layout) ---------- */}
+
+      {tab === "all" && (
+
+        <div className="columns-2 md:columns-3 lg:columns-4 gap-2">
+
+          {filtered.map((item, index) => {
+
+            const aspectStyles = [
+              "aspect-[4/5]",
+              "aspect-[3/4]",
+              "aspect-[1/1]",
+              "aspect-[4/6]"
+            ]
+
+            const aspect = aspectStyles[index % aspectStyles.length]
+
+            if (item.type === "video") {
+
+              const playing = videoPlaying[item.id]
+
+              return (
+
+                <div
+                  key={item.id}
+                  className="group relative break-inside-avoid mb-2 overflow-hidden rounded-md shadow-md hover:shadow-2xl transition-all duration-300 bg-black"
+                >
+
+                  {!playing ? (
+
+                    <>
+                      <div className={`relative w-full ${aspect}`}>
+
+                        <Image
+                          src={item.thumbnail || "/video-thumb.webp"}
+                          alt={item.title || ""}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:brightness-75"
+                          loading="lazy"
+                        />
+
+                      </div>
+
+                      <div className="absolute inset-0 bg-linar-to-t from-black/70 via-black/20 to-transparent" />
+
+                      <div className="absolute inset-0 flex items-center justify-center">
+
+                        <button
+                          onClick={() => playVideo(String(item.id))}
+                          className="bg-white/90 backdrop-blur-md p-4 rounded-full shadow-xl transition-transform duration-300 group-hover:scale-110"
+                        >
+                          ▶
+                        </button>
+
+                      </div>
+
+                      <div className="absolute top-3 left-3 bg-black/70 text-green-400 text-xs px-3 py-1 rounded-full">
+                        VIDEO
+                      </div>
+
+                      {item.title && (
+
+                        <div className="absolute bottom-3 left-3 right-3 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition">
+
+                          {item.title}
+
+                        </div>
+
+                      )}
+
+                    </>
+
+                  ) : (
+
+                    <video
+                      src={item.src}
+                      className="w-full h-auto"
+                      controls
+                      autoPlay
+                      playsInline
+                    />
+
+                  )}
+
+                </div>
+
+              )
+
+            }
+
+            return (
+
+              <div
+                key={item.id}
+                className="group relative break-inside-avoid mb-2 cursor-pointer overflow-hidden rounded-md shadow-md hover:shadow-2xl transition-all duration-300"
+                onClick={() => openModal(item)}
+              >
+
+                <div className={`relative w-full ${aspect}`}>
+
+                  <Image
+                    src={item.src}
+                    alt={item.alt || ""}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:brightness-90"
+                    quality={75}
+                    loading="lazy"
+                  />
+
+                </div>
+
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
+
+                {item.title && (
+
+                  <div className="absolute bottom-3 left-3 right-3 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition">
+
+                    {item.title}
+
+                  </div>
+
+                )}
+
+              </div>
+
+            )
+
+          })}
+
+        </div>
+
+      )}
+
+      {/* ---------- IMAGES TAB (Staggered Grid) ---------- */}
+
+      {tab === "images" && (
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[180px] md:auto-rows-[220px] gap-2">
+
+          {images.map((item, index) => {
+
+            const pattern = [
+              "md:col-span-1 md:row-span-1",
+              "md:col-span-1 md:row-span-1",
+              "md:col-span-2 md:row-span-2",
+              "md:col-span-1 md:row-span-1",
+              "md:col-span-1 md:row-span-2",
+              "md:col-span-1 md:row-span-1"
+            ]
+
+            const size = pattern[index % pattern.length]
+
+            return (
+
+              <div
+                key={item.id}
+                className={`group relative col-span-1 row-span-1 ${size} overflow-hidden rounded-md shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer`}
+                onClick={() => openModal(item)}
+              >
+
+                <Image
+                  src={item.src}
+                  alt={item.alt || ""}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:brightness-90"
+                  quality={75}
+                  loading="lazy"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                {item.title && (
+
+                  <div className="absolute bottom-3 left-3 right-3 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition">
+
+                    {item.title}
+
+                  </div>
+
+                )}
+
+              </div>
+
+            )
+
+          })}
+
+        </div>
+
+      )}
+      {/* ---------- VIDEOS TAB ---------- */}
+
+      {tab === "videos" && (
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+
+          {videos.map(item => {
+
+            const playing = videoPlaying[item.id]
+
+            return (
+
+              <div
+                key={item.id}
+                className="group relative overflow-hidden rounded-md shadow-md hover:shadow-2xl transition-all duration-300 bg-black"
+              >
+
+                {!playing ? (
+
+                  <>
+                    <div className="relative w-full aspect-square">
+
+                      <Image
+                        src={item.thumbnail || "/video-thumb.webp"}
+                        alt={item.title || ""}
+                        fill
+                        className="object-cover"
+                      />
+
+                    </div>
+
+                    <div className="absolute inset-0 flex items-center justify-center">
+
+                      <button
+                        onClick={() => playVideo(String(item.id))}
+                        className="bg-white/90 backdrop-blur-md p-4 rounded-full shadow-xl transition-transform duration-300 group-hover:scale-110"
+                      >
+                        ▶
+                      </button>
+
+                    </div>
+
+                    <div className="absolute top-3 left-3 bg-black/70 text-green-400 text-xs px-3 py-1 rounded-full">
+                      VIDEO
+                    </div>
+
+                  </>
+
+                ) : (
+
+                  <div className="relative w-full aspect-square">
+
+                    <video
+                      src={item.src}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      controls
+                      autoPlay
+                      playsInline
+                    />
+
+                  </div>
+
+                )}
+
+              </div>
+
+            )
+
+          })}
+
+        </div>
+
+      )}
+
+      {/* ================= Modal ================= */}
+
+      <AnimatePresence>
+
+        {modalOpen && (
+
           <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-title"
-            className="fixed inset-0 z-50 w-full  flex items-center justify-center bg-black/70 "
+            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 rounded-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
           >
+
             <FocusLock>
+
               <motion.div
-                className="relative w-screen mx-auto lg:w-125 h-[70%]  md:h-auto bg-white rounded-lg overflow-hidden "
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ duration: 0.25 }}
+                className="relative w-[95vw] aspect-square md:w-225 md:h-[80vh] bg-black md:rounded-lg overflow-hidden"
+                initial={{ scale: .9 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: .9 }}
               >
+
                 <button
                   onClick={closeModal}
-                  aria-label="Close modal"
-                  className="absolute top-2 right-4 z-50 font-medium text-black bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition"
+                  className="absolute top-3 right-3 bg-gray-200 rounded-full p-2 z-50"
                 >
                   ✕
                 </button>
-                {/* ================= Slider For Images ================= */}
-                <div className="relative w-full h-[55vh] overflow-hidden ">
-                  <div className="overflow-hidden" ref={emblaRef}>
-                    <div className="flex gap-2">
-                      {imageItems.map((item) => (
-                        <div
-                          key={item.id}
-                          className="min-w-full h-[55vh] relative"
-                        >
-                          <Image
-                            src={item.src}
-                            alt={item.alt || ""}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
+
+               <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-sm text-white text-xs md:text-sm px-3 py-1.5 rounded-full z-50 font-medium">
+  {activeSlide + 1} / {images.length}
+</div>
+
+                <div className="overflow-hidden h-full" ref={emblaRef}>
+
+                  <div className="flex h-full">
+
+                    {images.map(img => (
+
+                      <div key={img.id} className="min-w-full relative h-full flex items-center justify-center">
+
+                        <Image
+                          src={img.src}
+                          alt={img.alt || ""}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width:768px) 100vw, 900px rounded-xl"
+                          priority
+                        />
+
+                      </div>
+
+                    ))}
+
                   </div>
 
-                {/* =============== Progress bar =============== */}
-                  <div className="absolute bottom-2 left-0 w-full px-4">
-                    <div className="h-2 bg-gray-300 rounded-full overflow-hidden">
-                      <div
-                        className="h-2 bg-green-600 rounded-full transition-all duration-300"
-                        style={{
-                          width: `${((activeSlideIndex + 1) / imageItems.length) * 100}%`,
-                        }}
-                      ></div>
-                    </div>
+                </div>
+
+                {/* progress bar */}
+
+                <div className="absolute bottom-0 left-0 w-full p-4">
+
+                  <div className="h-2 bg-gray-300 rounded-full overflow-hidden">
+
+                    <div
+                      className="h-2 bg-green-600 transition-all duration-500 ease-out"
+                      style={{
+                        width: `${((activeSlide + 1) / images.length) * 100}%`
+                      }}
+                    />
+
                   </div>
 
-                  {/* ============ Slide counter =========== */}
-                  <p className="absolute top-4 left-4 text-white bg-black/50 px-2 py-1 rounded-md text-sm">
-                    {activeSlideIndex + 1} / {imageItems.length}
+                  <p className="text-sm mt-2 text-gray-700 bg-white py-2 px-4 rounded-full w-1/2 mx-auto text-center">
+
+                    {images[activeSlide]?.title}
+
                   </p>
+
                 </div>
-                {/* ============= Title =========== */}
-                <div className="p-4">
-                  <p id="modal-title" className="text-xl font-bold text-black ">
-                    {imageItems[activeSlideIndex]?.title || "Gallery Image"}
-                  </p>
-                </div>
+
               </motion.div>
-            </FocusLock>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
 
-export default Gallery;
+            </FocusLock>
+
+          </motion.div>
+
+        )}
+
+      </AnimatePresence>
+
+    </div>
+
+  )
+
+}
