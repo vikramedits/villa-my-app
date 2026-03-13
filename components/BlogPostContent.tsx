@@ -9,42 +9,78 @@ type Props = { post: BlogPost };
 export default function BlogPostContent({ post }: Props) {
   const router = useRouter();
 
-  const goBack = () => router.back(); // scroll restore handled in blog.tsx
+  const goBack = () => router.back();
 
   return (
-    <div className="relative">
-      <div className="container-fluid lg:max-w-4xl lg:mx-auto p-8 my-6 lg:my-10 pb-20">
-        {/* ============== Heading =============== */}
-        <div className="mb-12 flex items-center gap-4 border-b-2 border-black pb-6 px-2">
-          <span className="w-1/5 bg-black text-white text-3xl lg:text-5xl font-serif font-bold px-4 h-16 flex items-center justify-center rounded-lg">
-            {`#${post.sn}`}
-          </span>
+    <div className="relative min-h-screen bg-black">
+      {/* Subtle green top accent line */}
+      <div className="w-full h-1 bg-linear-to-r from-transparent via-green-500 to-transparent" />
 
-          <h1 className="w-4/5 text-xl lg:text-5xl font-extrabold text-black leading-tight tracking-wider">
-            {post.title}
-          </h1>
+      <div className="container-fluid lg:max-w-4xl lg:mx-auto p-6 lg:p-12 my-4 lg:my-8 pb-32">
+
+        {/* ============== Heading =============== */}
+        <div className="mb-12 flex items-center gap-5 border-b border-green-700/50 pb-8">
+          {/* Serial Number Badge */}
+          <div className="relative shrink-0">
+            <span className="w-16 h-16 lg:w-20 lg:h-20 bg-green-500 text-black text-2xl lg:text-3xl font-serif font-black flex items-center justify-center rounded-xl tracking-tight shadow-lg shadow-green-500/20">
+              {`#${post.sn}`}
+            </span>
+          </div>
+
+          {/* Title */}
+          <div className="flex flex-col gap-1">
+            <span className="text-green-500 text-xs font-semibold uppercase tracking-[0.2em]">
+              Blog Post
+            </span>
+            <h1 className="text-xl lg:text-4xl font-extrabold text-white leading-tight tracking-wide">
+              {post.title}
+            </h1>
+          </div>
         </div>
 
-        <div className="space-y-6 pb-5">
+        {/* ============== Content =============== */}
+        <div className="space-y-5 pb-6">
           {post.content.map((para, i) => (
-            <div key={i} className="flex items-start gap-4">
-              <span className="mt-2">
-                <ArrowRight size={18} />
+            <div
+              key={i}
+              className="group flex items-start gap-4 bg-white/10 hover:bg-white/10 border border-white/5 hover:border-green-700/40 rounded-xl px-5 py-4 transition-all duration-300"
+            >
+              {/* Arrow icon */}
+              <span className="mt-1 shrink-0 text-green-500 group-hover:translate-x-0.5 transition-transform duration-200">
+                <ArrowRight size={16} strokeWidth={2.5} />
               </span>
-              <p className="text-gray-700 text-lg leading-relaxed">{para}</p>
+
+              {/* Paragraph */}
+              <p className="text-gray-300 group-hover:text-gray-100 text-base lg:text-lg leading-relaxed transition-colors duration-200">
+                {para}
+              </p>
             </div>
           ))}
         </div>
+
+        {/* Decorative bottom rule */}
+        <div className="mt-10 flex items-center gap-4">
+          <div className="flex-1 h-px bg-white/10" />
+          <span className="w-2 h-2 rounded-full bg-green-500 opacity-60" />
+          <div className="flex-1 h-px bg-white/10" />
+        </div>
       </div>
 
-      {/* Sticky Back Button Navbar */}
-      <div className="fixed bottom-0 left-0 w-full bg-black shadow-xl p-6 flex justify-center items-center rounded-t-2xl border-t-4 border-gray-800">
+      {/* ====== Sticky Back Button Navbar ====== */}
+      <div className="fixed bottom-0 left-0 w-full bg-black/90 backdrop-blur-md border-t border-green-700/30 shadow-2xl shadow-black p-5 flex justify-center items-center rounded-t-2xl">
+        {/* Subtle glow line on top */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-px bg-green-500/60" />
+
         <button
           onClick={goBack}
-          className="flex items-center gap-4 bg-white text-black font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-800 hover:text-white transition-all duration-300 transform hover:scale-105"
+          className="group flex items-center gap-3 bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-green-500/20 hover:shadow-green-400/30"
         >
-          <ArrowLeft size={20} />
-          <span className="text-lg">Back</span>
+          <ArrowLeft
+            size={18}
+            strokeWidth={2.5}
+            className="group-hover:-translate-x-0.5 transition-transform duration-200"
+          />
+          <span className="text-base tracking-wide">Back</span>
         </button>
       </div>
     </div>

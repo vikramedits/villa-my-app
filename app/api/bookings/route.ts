@@ -31,10 +31,15 @@ export async function POST(req: Request) {
       ),
       1,
     );
+    const PAYMENT_WINDOW_MINUTES = 30; // 30 min payment window
+
+    const paymentExpiry = new Date(
+      Date.now() + PAYMENT_WINDOW_MINUTES * 60 * 1000,
+    );
 
     const PRICE_PER_PERSON = body.pricePerPerson || 1500;
     const totalAmount = body.guests * nights * PRICE_PER_PERSON;
-    const ADVANCE_PERCENT = 0.3; // 30% advance
+    const ADVANCE_PERCENT = 0.2; // 20% advance
     const advanceAmount = Math.round(totalAmount * ADVANCE_PERCENT);
 
     const bookingRef = "BP" + uuidv4().slice(0, 8).toUpperCase();
@@ -47,6 +52,7 @@ export async function POST(req: Request) {
       bookingRef,
       status: "PENDING",
       paymentStatus: "NOT_STARTED",
+      paymentExpiry,
     });
 
     return NextResponse.json(booking);

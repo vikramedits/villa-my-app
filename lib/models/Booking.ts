@@ -20,6 +20,7 @@ export interface IBooking extends Document {
   approvedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
+   paymentExpiry?: Date;
 }
 
 const BookingSchema = new Schema<IBooking>(
@@ -51,6 +52,8 @@ const BookingSchema = new Schema<IBooking>(
     },
 
     approvedAt: Date,
+        paymentExpiry: { type: Date },
+
   },
   { timestamps: true },
 );

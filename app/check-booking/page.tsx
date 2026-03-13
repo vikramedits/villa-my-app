@@ -257,13 +257,13 @@ export default function CheckBooking() {
               value={ref}
               onChange={(e) => setRef(e.target.value)}
               placeholder="Booking ID"
-              className="w-full border border-gray-200 shadow-md p-3 rounded-sm placeholder:text-gray-200"
+              className="w-full border border-gray-200 shadow-md p-3 rounded-sm text-white placeholder:text-gray-200"
             />
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Password  ( Write Your Phone Number* )"
-              className="w-full border border-gray-200 shadow-md p-3 rounded-sm placeholder:text-gray-200"
+              className="w-full border border-gray-200 shadow-md p-3 rounded-sm text-white placeholder:text-gray-200"
             />
 
             <button
