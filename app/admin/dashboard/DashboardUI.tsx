@@ -7,6 +7,7 @@ import BookingsView from "./BookingsView";
 import EarningsView from "./EarningsView";
 import SettingsView from "./SettingsView";
 import CalenderTab from "./CalenderTab";
+import Confirmation from "./Confirmation";
 
 export default function DashboardPage() {
   const [activeMenu, setActiveMenu] = useState("Statistics");
@@ -25,7 +26,9 @@ export default function DashboardPage() {
           {activeMenu === "Bookings" && <BookingsView />}
           {activeMenu === "Calendar" && <CalenderTab />}
           {activeMenu === "Earnings" && <EarningsView />}
+          {activeMenu === "Confirmation" && <Confirmation />}
           {activeMenu === "Villa Settings" && <SettingsView />}
+
         </main>
       </div>
     </div>

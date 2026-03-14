@@ -21,7 +21,7 @@ const MAIN_MENU = [
 
 const EXTRA_MENU = [
   { name: "Villa Settings", icon: Settings },
-  { name: "Help & Support", icon: HelpCircle },
+  { name: "Confirmation", icon: HelpCircle },
 ];
 
 export default function Sidebar({ activeMenu, setActiveMenu }: any) {
