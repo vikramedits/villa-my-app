@@ -346,7 +346,7 @@ export default function BookingConfirmation({
               <button
                 onClick={() =>
                   window.open(
-                    `/check-booking?ref=${data?.bookingRef}`,
+                    `/payment?ref=${data?.bookingRef}`,
                     "_blank",
                   )
                 }

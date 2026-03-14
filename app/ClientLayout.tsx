@@ -14,7 +14,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
 
   // Pages jaha footer/navbar hide karna hai
-  const hideFooter = ["/login", "/signup"].includes(pathname) || pathname.startsWith("/blog/") && pathname !== "/blog";
+  const hideFooter = ["/login", "/signup","/booking","/payment"].includes(pathname) || pathname.startsWith("/blog/") && pathname !== "/blog";
 const hideNavbar = ["/login", "/signup"].includes(pathname) || pathname.startsWith("/blog/") && pathname !== "/blog";
 
   return (

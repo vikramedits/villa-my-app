@@ -394,13 +394,12 @@ body {
 
 
 
-
 .menu-open main {
-  transform: translateX(-180px) scale(0.98);
-  transform-origin: left center;
+  transform: translateX(-180px); 
   transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
   border-radius: 16px;
 }
+
 main {
   transition: transform 0.3s ease;
 }

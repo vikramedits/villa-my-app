@@ -14,8 +14,8 @@ declare global {
 /* ══════════════════════════════════════════════════════════════
    Constants
 ══════════════════════════════════════════════════════════════ */
-const STORAGE_KEY = "tph_booking";      // sessionStorage key
-const POLL_INTERVAL = 10_000;           // 10 seconds
+const STORAGE_KEY = "tph_booking";
+const POLL_INTERVAL = 10_000;
 
 /* ══════════════════════════════════════════════════════════════
    Helpers
@@ -30,7 +30,6 @@ const fmtDate = (d: string) =>
 const calcNights = (ci: string, co: string) =>
   Math.round((new Date(co).getTime() - new Date(ci).getTime()) / 86_400_000);
 
-/* ── sessionStorage helpers (safe SSR) ── */
 function ssGet(key: string): string | null {
   if (typeof window === "undefined") return null;
   try { return sessionStorage.getItem(key); } catch { return null; }
@@ -56,26 +55,20 @@ function useClock() {
   const h = time.getHours();
   return {
     greet:
-      h >= 6 && h < 12
-        ? "Good Morning"
-        : h >= 12 && h < 15
-          ? "Good Afternoon"
-          : h >= 15 && h < 21
-            ? "Good Evening"
-            : "Good Night",
+      h >= 6 && h < 12 ? "Good Morning"
+      : h >= 12 && h < 15 ? "Good Afternoon"
+      : h >= 15 && h < 21 ? "Good Evening"
+      : "Good Night",
     day: time.toLocaleDateString("en-US", { weekday: "long" }),
     clock: time.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
+      hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
     }),
     isDay: h >= 6 && h < 18,
   };
 }
 
 /* ══════════════════════════════════════════════════════════════
-   Clock Block (reusable in left panels)
+   Clock Block
 ══════════════════════════════════════════════════════════════ */
 function ClockBlock() {
   const { greet, day, clock, isDay } = useClock();
@@ -84,11 +77,7 @@ function ClockBlock() {
       <p className="text-xl font-bold text-gray-400 tracking-widest uppercase">{day}</p>
       <div className="flex items-center gap-2 justify-end">
         <p className="text-lg font-mono font-bold text-black">{clock}</p>
-        {isDay ? (
-          <Sun size={28} className="text-yellow-400" />
-        ) : (
-          <Moon size={28} className="text-indigo-400" />
-        )}
+        {isDay ? <Sun size={28} className="text-yellow-400" /> : <Moon size={28} className="text-indigo-400" />}
       </div>
       <p className="text-md font-bold text-green-600">{greet}</p>
     </div>
@@ -96,23 +85,13 @@ function ClockBlock() {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   LEFT — Check Booking (no ref in URL, no booking yet)
+   LEFT — Check Booking
 ══════════════════════════════════════════════════════════════ */
 function LeftCheckBooking({
-  loading,
-  error,
-  bookingRef,
-  phone,
-  setBookingRef,
-  setPhone,
-  onSubmit,
+  loading, error, bookingRef, phone, setBookingRef, setPhone, onSubmit,
 }: {
-  loading: boolean;
-  error: string | null;
-  bookingRef: string;
-  phone: string;
-  setBookingRef: (v: string) => void;
-  setPhone: (v: string) => void;
+  loading: boolean; error: string | null; bookingRef: string; phone: string;
+  setBookingRef: (v: string) => void; setPhone: (v: string) => void;
   onSubmit: (e: React.FormEvent) => void;
 }) {
   return (
@@ -125,9 +104,7 @@ function LeftCheckBooking({
             </p>
             <h1 className="text-xl flex flex-col font-black text-green-500 tracking-wide">
               Hello
-              <span className="text-xl font-black text-black tracking-wide">
-                Check your booking
-              </span>
+              <span className="text-xl font-black text-black tracking-wide">Check your booking</span>
             </h1>
           </div>
           <ClockBlock />
@@ -140,7 +117,6 @@ function LeftCheckBooking({
       </p>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-4 md:gap-5">
-        {/* Booking ID */}
         <div className="group">
           <label className="block text-[11px] md:text-[12px] font-semibold tracking-widest uppercase text-gray-400 mb-1.5 group-focus-within:text-green-600 transition-colors">
             Booking ID
@@ -150,12 +126,9 @@ function LeftCheckBooking({
             value={bookingRef}
             onChange={(e) => setBookingRef(e.target.value.toUpperCase())}
             placeholder="TPH-2024-001"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-black text-sm font-mono tracking-widest outline-none
-                 focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400 shadow-sm"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-black text-sm font-mono tracking-widest outline-none focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400 shadow-sm"
           />
         </div>
-
-        {/* Phone */}
         <div className="group">
           <label className="block text-[11px] md:text-[12px] font-semibold tracking-widest uppercase text-gray-400 mb-1.5 group-focus-within:text-green-600 transition-colors">
             Phone Number
@@ -166,11 +139,9 @@ function LeftCheckBooking({
             onChange={(e) => setPhone(e.target.value)}
             placeholder="10-digit mobile number"
             maxLength={10}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-black text-sm outline-none
-                 focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400 shadow-sm"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-black text-sm outline-none focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400 shadow-sm"
           />
         </div>
-
         {error && (
           <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs md:text-sm font-medium shadow-sm">
             <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0" fill="none">
@@ -180,15 +151,12 @@ function LeftCheckBooking({
             {error}
           </div>
         )}
-
         <button
           type="submit"
           disabled={loading}
-          className={`mt-2 w-full py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 flex items-center justify-center gap-2
-      ${loading
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-black text-white hover:bg-gray-900 active:scale-95 shadow-lg"
-            }`}
+          className={`mt-2 w-full py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 flex items-center justify-center gap-2 ${
+            loading ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-black text-white hover:bg-gray-900 active:scale-95 shadow-lg"
+          }`}
         >
           {loading ? (
             <>
@@ -203,7 +171,6 @@ function LeftCheckBooking({
           )}
         </button>
       </form>
-
       <p className="text-[11px] text-gray-300 text-center mt-6">
         Your phone number is used as your password
       </p>
@@ -212,17 +179,9 @@ function LeftCheckBooking({
 }
 
 /* ══════════════════════════════════════════════════════════════
-   LEFT — Login (ref in URL, need password to load)
+   LEFT — Login
 ══════════════════════════════════════════════════════════════ */
-function LeftLogin({
-  loading,
-  error,
-  bookingRef,
-  password,
-  setBookingRef,
-  setPassword,
-  onSubmit,
-}: any) {
+function LeftLogin({ loading, error, bookingRef, password, setBookingRef, setPassword, onSubmit }: any) {
   return (
     <div className="px-3 md:px-5 flex flex-col bg-white">
       <div className="my-4 md:my-8">
@@ -233,9 +192,7 @@ function LeftLogin({
             </p>
             <h1 className="text-xl flex flex-col font-black text-green-500 tracking-wide">
               Hello
-              <span className="text-xl font-black text-black tracking-wide">
-                View your booking
-              </span>
+              <span className="text-xl font-black text-black tracking-wide">View your booking</span>
             </h1>
           </div>
           <ClockBlock />
@@ -258,11 +215,9 @@ function LeftLogin({
             value={bookingRef}
             onChange={(e) => setBookingRef(e.target.value.toUpperCase())}
             placeholder="TPH-2024-001"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-black text-sm font-mono tracking-widest outline-none
-                 focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-500 placeholder:tracking-wider shadow-sm"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-black text-sm font-mono tracking-widest outline-none focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-500 placeholder:tracking-wider shadow-sm"
           />
         </div>
-
         <div className="group">
           <label className="block text-[11px] md:text-[12px] font-semibold tracking-widest uppercase text-gray-400 mb-1.5 group-focus-within:text-green-600 transition-colors">
             Password
@@ -272,11 +227,9 @@ function LeftLogin({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-black text-sm outline-none
-                 focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-500 shadow-sm"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-black text-sm outline-none focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-500 shadow-sm"
           />
         </div>
-
         {error && (
           <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs md:text-sm font-medium shadow-sm">
             <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0" fill="none">
@@ -286,15 +239,12 @@ function LeftLogin({
             {error}
           </div>
         )}
-
         <button
           type="submit"
           disabled={loading}
-          className={`mt-2 w-full py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 flex items-center justify-center gap-2
-      ${loading
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-black text-white hover:bg-gray-900 active:scale-95 shadow-lg"
-            }`}
+          className={`mt-2 w-full py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 flex items-center justify-center gap-2 ${
+            loading ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-black text-white hover:bg-gray-900 active:scale-95 shadow-lg"
+          }`}
         >
           {loading ? (
             <>
@@ -309,7 +259,6 @@ function LeftLogin({
           )}
         </button>
       </form>
-
       <p className="text-[11px] text-gray-300 text-center mt-6">
         Credentials sent via WhatsApp / SMS
       </p>
@@ -319,68 +268,164 @@ function LeftLogin({
 
 /* ══════════════════════════════════════════════════════════════
    LEFT — Greeting (booking loaded)
+   MOBILE: compact strip instead of full panel
 ══════════════════════════════════════════════════════════════ */
 function LeftGreeting({ booking }: { booking: any }) {
   const { greet, day, clock, isDay } = useClock();
+  const [expanded, setExpanded] = useState(false);
+
+  const statusBg =
+    booking.status === "APPROVED" ? "bg-green-600 border-green-600"
+    : booking.status === "PAID" ? "bg-emerald-700 border-emerald-700"
+    : "bg-yellow-500 border-yellow-500";
+
+  const statusLabel =
+    booking.status === "APPROVED" ? "✓ Approved — Pay Now"
+    : booking.status === "PAID" ? "✓ Confirmed"
+    : "⏳ Awaiting Approval";
 
   return (
-    <div className="flex flex-col h-full p-4 md:p-10 bg-white">
-      <div>
-        <div className="flex justify-between items-start mb-6 border border-gray-200 p-5 md:p-8 rounded-xl shadow-xl">
-          <div>
-            <p className="flex justify-center items-center gap-1 text-xs font-semibold tracking-wider uppercase text-gray-600 mb-3 bg-gray-200 px-2 py-2 rounded-md">
-              <Shield size={16} /> Secure Payment
-            </p>
-            <h1 className="text-xl flex flex-col font-medium text-green-500 tracking-wide">
-              Welcome,
-              <span className="text-2xl md:text-3xl font-bold text-gray-900 tracking-wide capitalize">
-                {`Mr./Mrs. ${booking.name.split(" ")[0]}`}
-              </span>
-            </h1>
-          </div>
-          <div className="text-right">
-            <p className="text-xl font-bold text-gray-400 tracking-widest uppercase">{day}</p>
-            <div className="flex items-center gap-2 justify-end">
-              <p className="text-lg font-mono font-bold text-black">{clock}</p>
-              {isDay ? <Sun size={28} className="text-yellow-400" /> : <Moon size={28} className="text-indigo-400" />}
+    <>
+      {/* ════ MOBILE ONLY — collapsible ════ */}
+      <div className="lg:hidden bg-white border-b border-gray-200 shadow-sm">
+
+        {/* Slim bar — always visible, tap to toggle */}
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="w-full flex items-center justify-between px-4 py-3 text-left"
+        >
+          <div className="flex items-center gap-2.5">
+            <div className={`px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide text-white ${
+              booking.status === "APPROVED" ? "bg-green-600"
+              : booking.status === "PAID" ? "bg-emerald-700"
+              : "bg-yellow-500"
+            }`}>
+              {booking.status === "APPROVED" ? "✓ Approved"
+                : booking.status === "PAID" ? "✓ Confirmed"
+                : "⏳ Pending"}
             </div>
-            <p className="text-md font-bold text-green-600">{greet}</p>
+            <span className="text-sm font-bold text-gray-900 capitalize">
+              {booking.name.split(" ")[0]}
+            </span>
           </div>
-        </div>
+          {/* Arrow — rotates when expanded */}
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            className={`w-5 h-5 text-gray-400 transition-transform duration-200 shrink-0 ${expanded ? "rotate-180" : ""}`}
+          >
+            <path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
 
-        <p className="text-sm md:text-base text-gray-600 md:max-w-md leading-relaxed mb-8">
-          We're delighted to have you here.
-          <span className="block mt-2">
-            Please confirm your{" "}
-            <span className="font-semibold text-gray-800">advance payment</span> below to secure your reservation.
-          </span>
-          <span className="block mt-2 text-gray-500">We look forward to welcoming you soon.</span>
-        </p>
+        {/* Expandable full panel */}
+        {expanded && (
+          <div className="px-4 pb-5 pt-1 border-t border-gray-100">
+            <div className="flex justify-between items-start mb-4 border border-gray-200 p-4 rounded-xl shadow-sm">
+              <div>
+                <p className="flex items-center gap-1 text-xs font-semibold tracking-wider uppercase text-gray-600 mb-2 bg-gray-200 px-2 py-1.5 rounded-md w-fit">
+                  <Shield size={14} /> Secure Payment
+                </p>
+                <h1 className="text-lg flex flex-col font-medium text-green-500 tracking-wide">
+                  Welcome,
+                  <span className="text-xl font-bold text-gray-900 capitalize">
+                    {`Mr./Mrs. ${booking.name.split(" ")[0]}`}
+                  </span>
+                </h1>
+              </div>
+              <div className="text-right">
+                <p className="text-xs font-bold text-gray-400 tracking-widest uppercase">{day}</p>
+                <div className="flex items-center gap-1.5 justify-end mt-0.5">
+                  <p className="text-sm font-mono font-bold text-black">{clock}</p>
+                  {isDay ? <Sun size={16} className="text-yellow-400" /> : <Moon size={16} className="text-indigo-400" />}
+                </div>
+                <p className="text-xs font-bold text-green-600">{greet}</p>
+              </div>
+            </div>
 
-        <div className="flex gap-3">
-          <div className="flex-1 p-4 rounded-xl bg-gray-100 border border-gray-100">
-            <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Property |</p>
-            <p className="text-sm font-bold text-black">The Pushpa Heritage</p>
-          </div>
-          <div className={`flex-1 p-4 rounded-xl border ${
-            booking.status === "APPROVED"
-              ? "bg-green-600 border-green-600"
-              : booking.status === "PAID"
-                ? "bg-emerald-700 border-emerald-700"
-                : "bg-yellow-500 border-yellow-500"
-          }`}>
-            <p className="text-xs font-bold uppercase tracking-wider text-white/70 mb-1">Status |</p>
-            <p className="text-sm font-bold tracking-wider text-white">
-              {booking.status === "APPROVED"
-                ? "✓ Approved — Pay Now"
-                : booking.status === "PAID"
-                  ? "✓ Confirmed"
-                  : "⏳ Awaiting Approval"}
+            <p className="text-sm text-gray-600 leading-relaxed mb-4">
+              We&apos;re delighted to have you here.
+              <span className="block mt-1">
+                Please confirm your{" "}
+                <span className="font-semibold text-gray-800">advance payment</span> below to secure your reservation.
+              </span>
+              <span className="block mt-1 text-gray-500">We look forward to welcoming you soon.</span>
             </p>
+
+            <div className="flex gap-2">
+              <div className="flex-1 p-3 rounded-xl bg-gray-100 border border-gray-100">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-0.5">Property |</p>
+                <p className="text-xs font-bold text-black">The Pushpa Heritage</p>
+              </div>
+              <div className={`flex-1 p-3 rounded-xl border ${statusBg}`}>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-white/70 mb-0.5">Status |</p>
+                <p className="text-xs font-bold tracking-wider text-white">{statusLabel}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ════ DESKTOP — completely unchanged ════ */}
+      <div className="hidden lg:flex flex-col h-full p-4 md:p-10 bg-white">
+        <div>
+          <div className="flex justify-between items-start mb-6 border border-gray-200 p-5 md:p-8 rounded-xl shadow-xl">
+            <div>
+              <p className="flex justify-center items-center gap-1 text-xs font-semibold tracking-wider uppercase text-gray-600 mb-3 bg-gray-200 px-2 py-2 rounded-md">
+                <Shield size={16} /> Secure Payment
+              </p>
+              <h1 className="text-xl flex flex-col font-medium text-green-500 tracking-wide">
+                Welcome,
+                <span className="text-2xl md:text-3xl font-bold text-gray-900 tracking-wide capitalize">
+                  {`Mr./Mrs. ${booking.name.split(" ")[0]}`}
+                </span>
+              </h1>
+            </div>
+            <div className="text-right">
+              <p className="text-xl font-bold text-gray-400 tracking-widest uppercase">{day}</p>
+              <div className="flex items-center gap-2 justify-end">
+                <p className="text-lg font-mono font-bold text-black">{clock}</p>
+                {isDay ? <Sun size={28} className="text-yellow-400" /> : <Moon size={28} className="text-indigo-400" />}
+              </div>
+              <p className="text-md font-bold text-green-600">{greet}</p>
+            </div>
+          </div>
+
+          <p className="text-sm md:text-base text-gray-600 md:max-w-md leading-relaxed mb-8">
+            We&apos;re delighted to have you here.
+            <span className="block mt-2">
+              Please confirm your{" "}
+              <span className="font-semibold text-gray-800">advance payment</span> below to secure your reservation.
+            </span>
+            <span className="block mt-2 text-gray-500">We look forward to welcoming you soon.</span>
+          </p>
+
+          <div className="flex gap-3">
+            <div className="flex-1 p-4 rounded-xl bg-gray-100 border border-gray-100">
+              <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Property |</p>
+              <p className="text-sm font-bold text-black">The Pushpa Heritage</p>
+            </div>
+            <div className={`flex-1 p-4 rounded-xl border ${
+              booking.status === "APPROVED"
+                ? "bg-green-600 border-green-600"
+                : booking.status === "PAID"
+                  ? "bg-emerald-700 border-emerald-700"
+                  : "bg-yellow-500 border-yellow-500"
+            }`}>
+              <p className="text-xs font-bold uppercase tracking-wider text-white/70 mb-1">Status |</p>
+              <p className="text-sm font-bold tracking-wider text-white">
+                {booking.status === "APPROVED"
+                  ? "✓ Approved — Pay Now"
+                  : booking.status === "PAID"
+                    ? "✓ Confirmed"
+                    : "⏳ Awaiting Approval"}
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -392,10 +437,7 @@ function RightPlaceholder() {
     <div className="relative flex flex-col items-center justify-center h-full bg-[#0a0a0a] overflow-hidden">
       <div
         className="absolute inset-0 opacity-[0.15]"
-        style={{
-          backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
+        style={{ backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)", backgroundSize: "28px 28px" }}
       />
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full pointer-events-none"
@@ -410,7 +452,7 @@ function RightPlaceholder() {
           </svg>
         </div>
         <h3 className="text-[17px] font-bold text-white mb-2">Booking Details</h3>
-        <p className="text-[12px] text-white/30 leading-relaxed max-w-[180px] mx-auto">
+        <p className="text-[12px] text-white/30 leading-relaxed max-w-45 mx-auto">
           Enter your booking ID and phone number to view your reservation
         </p>
         <div className="flex justify-center gap-1.5 mt-7">
@@ -424,18 +466,16 @@ function RightPlaceholder() {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   RIGHT — Status Panel (PENDING status)
+   RIGHT — Status Panel (PENDING)
 ══════════════════════════════════════════════════════════════ */
 function RightStatusPanel({ booking }: { booking: any }) {
   const ci = booking.checkIn ? fmtDate(booking.checkIn) : null;
   const co = booking.checkOut ? fmtDate(booking.checkOut) : null;
   const n = booking.checkIn && booking.checkOut ? calcNights(booking.checkIn, booking.checkOut) : null;
   const remaining = (booking.totalAmount ?? 0) - (booking.advanceAmount ?? 0);
-
   const [timeLeft, setTimeLeft] = useState<number>(30 * 60);
 
   useEffect(() => {
-    // Use sessionStorage for timer (tab-level, not cross-device)
     const key = `timerStart_${booking.bookingRef}`;
     const existing = ssGet(key);
     if (!existing) ssSet(key, Date.now().toString());
@@ -457,7 +497,7 @@ function RightStatusPanel({ booking }: { booking: any }) {
   const ss = String(timeLeft % 60).padStart(2, "0");
 
   return (
-    <div className="relative flex flex-col justify-center h-full bg-[#0a0a0a] overflow-hidden">
+    <div className="relative flex flex-col justify-center min-h-full bg-[#0a0a0a] overflow-hidden">
       <div
         className="absolute inset-0 opacity-[0.12]"
         style={{ backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)", backgroundSize: "28px 28px" }}
@@ -467,7 +507,7 @@ function RightStatusPanel({ booking }: { booking: any }) {
         style={{ background: "radial-gradient(circle, rgba(234,179,8,0.08) 0%, transparent 65%)" }}
       />
 
-      <div className="relative p-4 md:p-8 flex flex-col gap-4">
+      <div className="relative p-5 md:p-8 flex flex-col gap-4">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/30 mb-1">Booking</p>
@@ -574,24 +614,16 @@ function RightStatusPanel({ booking }: { booking: any }) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   RIGHT — Payment Panel (APPROVED, ready to pay)
+   RIGHT — Payment Panel (APPROVED)
 ══════════════════════════════════════════════════════════════ */
-function RightPanel({
-  booking,
-  onPay,
-  paying,
-}: {
-  booking: any;
-  onPay: () => void;
-  paying: boolean;
-}) {
+function RightPanel({ booking, onPay, paying }: { booking: any; onPay: () => void; paying: boolean }) {
   const ci = booking.checkIn ? fmtDate(booking.checkIn) : null;
   const co = booking.checkOut ? fmtDate(booking.checkOut) : null;
   const n = booking.checkIn && booking.checkOut ? calcNights(booking.checkIn, booking.checkOut) : null;
   const remaining = (booking.totalAmount ?? 0) - (booking.advanceAmount ?? 0);
 
   return (
-    <div className="relative flex flex-col justify-center h-full bg-[#0a0a0a] overflow-hidden">
+    <div className="relative flex flex-col justify-center min-h-full bg-[#0a0a0a] overflow-hidden">
       <div
         className="absolute inset-0 opacity-[0.12]"
         style={{ backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)", backgroundSize: "28px 28px" }}
@@ -601,7 +633,7 @@ function RightPanel({
         style={{ background: "radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 65%)" }}
       />
 
-      <div className="relative p-4 md:p-8 flex flex-col gap-4 h-full">
+      <div className="relative p-5 md:p-8 flex flex-col gap-4">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/30 mb-1">Booking</p>
@@ -670,20 +702,18 @@ function RightPanel({
               <p className="text-[11px] font-black text-green-400 uppercase tracking-wider mb-0.5">Pay Now</p>
               <p className="text-[10px] text-white/25">Secures your reservation</p>
             </div>
-            <div className="text-right">
-              <p className="text-[28px] font-black text-white leading-none">₹{fmt(booking.advanceAmount)}</p>
-            </div>
+            <p className="text-[28px] font-black text-white leading-none">₹{fmt(booking.advanceAmount)}</p>
           </div>
         </div>
 
         <button
           onClick={onPay}
           disabled={paying}
-          className={`w-full py-4 rounded-xl text-[14px] font-black tracking-wide transition-all duration-150 flex items-center justify-center gap-2
-            ${paying
+          className={`w-full py-4 rounded-xl text-[14px] font-black tracking-wide transition-all duration-150 flex items-center justify-center gap-2 ${
+            paying
               ? "bg-white/6 text-white/20 cursor-not-allowed"
               : "bg-green-500 text-white hover:bg-green-400 active:scale-[0.98] shadow-[0_0_0_0_rgba(34,197,94,0)] hover:shadow-[0_8px_30px_rgba(34,197,94,0.4)]"
-            }`}
+          }`}
         >
           {paying ? (
             <>
@@ -729,11 +759,6 @@ function RightPanel({
 
 /* ══════════════════════════════════════════════════════════════
    MAIN — PaymentContent
-   Changes vs original:
-   ① sessionStorage se booking restore on page reload
-   ② Server = source of truth (fresh fetch on every load)
-   ③ Credentials stored in ref so polling always has them
-   ④ sessionStorage clear when booking is PAID / on success
 ══════════════════════════════════════════════════════════════ */
 function PaymentContent() {
   const params = useSearchParams();
@@ -743,22 +768,18 @@ function PaymentContent() {
   const [paying, setPaying] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [pageError, setPageError] = useState<string | null>(null);
-
   const [mode, setMode] = useState<"url-login" | "check">("url-login");
 
-  // URL-login state
   const [bookingRef, setBookingRef] = useState("");
   const [password, setPassword] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  // Check-booking state
   const [checkRef, setCheckRef] = useState("");
   const [checkPhone, setCheckPhone] = useState("");
   const [checkLoading, setCheckLoading] = useState(false);
   const [checkError, setCheckError] = useState<string | null>(null);
 
-  // ── refs so polling closure always has fresh credentials ──
   const modeRef = useRef<"url-login" | "check">("url-login");
   const checkPhoneRef = useRef("");
   const passwordRef = useRef("");
@@ -768,61 +789,35 @@ function PaymentContent() {
   useEffect(() => { checkPhoneRef.current = checkPhone; }, [checkPhone]);
   useEffect(() => { passwordRef.current = password; }, [password]);
 
-  /* ── Helper: save booking to sessionStorage ── */
   const persistBooking = (data: any, creds: { mode: "url-login" | "check"; ref: string; password?: string; phone?: string }) => {
     ssSet(STORAGE_KEY, JSON.stringify({ booking: data, creds, savedAt: Date.now() }));
   };
-
-  /* ── Helper: clear persisted booking ── */
   const clearPersistedBooking = () => ssDel(STORAGE_KEY);
-
-  /* ── Helper: redirect to success + clear storage ── */
   const redirectSuccess = (ref: string) => {
     clearPersistedBooking();
     router.replace(`/booking-success?ref=${ref}`);
   };
 
-  /* ── Initial load ──
-     Priority order:
-     1. If ref in URL → try to restore from sessionStorage (same ref, APPROVED/PENDING, <30 min old)
-     2. If restored & server confirms same status → show booking directly (no password prompt)
-     3. Else → show login form
-     4. If no ref in URL → check sessionStorage for "check" mode booking
-  ── */
   useEffect(() => {
     const ref = params.get("ref");
-
-    // ── Try to restore from sessionStorage first ──
     const raw = ssGet(STORAGE_KEY);
     if (raw) {
       try {
         const saved = JSON.parse(raw);
         const ageMin = (Date.now() - (saved.savedAt ?? 0)) / 60_000;
         const matchesRef = ref ? saved.creds?.ref === ref : true;
-
         if (matchesRef && ageMin < 30 && saved.booking?.bookingRef) {
-          // Restore credentials into state/refs immediately
           const c = saved.creds;
           if (c.mode === "url-login") {
-            setMode("url-login");
-            setBookingRef(c.ref ?? "");
-            setPassword(c.password ?? "");
+            setMode("url-login"); setBookingRef(c.ref ?? ""); setPassword(c.password ?? "");
             passwordRef.current = c.password ?? "";
           } else {
-            setMode("check");
-            setCheckRef(c.ref ?? "");
-            setCheckPhone(c.phone ?? "");
+            setMode("check"); setCheckRef(c.ref ?? ""); setCheckPhone(c.phone ?? "");
             checkPhoneRef.current = c.phone ?? "";
           }
           bookingRefForPoll.current = saved.booking.bookingRef;
           modeRef.current = c.mode;
-
-          // Show cached booking immediately (fast UI)
-          if (saved.booking.status !== "PAID") {
-            setBooking(saved.booking);
-          }
-
-          // Then verify with server in background (source of truth)
+          if (saved.booking.status !== "PAID") setBooking(saved.booking);
           (async () => {
             try {
               let res: Response;
@@ -831,43 +826,18 @@ function PaymentContent() {
               } else {
                 res = await fetch(`/api/bookings/status?ref=${c.ref}&phone=${c.phone ?? ""}`);
               }
-              if (!res.ok) {
-                // Session expired or booking gone — clear and show login
-                clearPersistedBooking();
-                setBooking(null);
-                setFetching(false);
-                return;
-              }
+              if (!res.ok) { clearPersistedBooking(); setBooking(null); setFetching(false); return; }
               const data = await res.json();
-              if (data.status === "PAID") {
-                redirectSuccess(data.bookingRef);
-                return;
-              }
-              setBooking(data);
-              persistBooking(data, c);
-            } catch {
-              // Network error — keep showing cached booking, polling will update
-            } finally {
-              setFetching(false);
-            }
+              if (data.status === "PAID") { redirectSuccess(data.bookingRef); return; }
+              setBooking(data); persistBooking(data, c);
+            } catch { } finally { setFetching(false); }
           })();
-          return; // Early exit — handled above
+          return;
         }
-      } catch {
-        ssDel(STORAGE_KEY); // Corrupt data — clear it
-      }
+      } catch { ssDel(STORAGE_KEY); }
     }
-
-    // ── No valid sessionStorage — normal flow ──
-    if (!ref) {
-      setMode("check");
-      setFetching(false);
-      return;
-    }
-
-    setMode("url-login");
-    setBookingRef(ref);
-
+    if (!ref) { setMode("check"); setFetching(false); return; }
+    setMode("url-login"); setBookingRef(ref);
     (async () => {
       try {
         const res = await fetch(`/api/bookings/by-ref?ref=${ref}`);
@@ -875,141 +845,79 @@ function PaymentContent() {
         if (res.status === 410) throw new Error("This payment link has expired");
         if (!res.ok) throw new Error("Something went wrong");
         const data = await res.json();
-        if (data.status === "PAID") {
-          redirectSuccess(ref);
-          return;
-        }
-        // Booking loaded without password (public endpoint) — show booking
-        setBooking(data);
-        bookingRefForPoll.current = data.bookingRef;
+        if (data.status === "PAID") { redirectSuccess(ref); return; }
+        setBooking(data); bookingRefForPoll.current = data.bookingRef;
       } catch (err: any) {
         setPageError(err.message ?? "Booking not found or expired");
-      } finally {
-        setFetching(false);
-      }
+      } finally { setFetching(false); }
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
-  /* ── URL-login submit ── */
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!bookingRef.trim() || !password.trim()) {
-      setLoginError("Please fill in both fields");
-      return;
-    }
-    setLoginLoading(true);
-    setLoginError(null);
+    if (!bookingRef.trim() || !password.trim()) { setLoginError("Please fill in both fields"); return; }
+    setLoginLoading(true); setLoginError(null);
     try {
-      const res = await fetch(
-        `/api/bookings/by-ref?ref=${bookingRef.trim()}&password=${password.trim()}`
-      );
+      const res = await fetch(`/api/bookings/by-ref?ref=${bookingRef.trim()}&password=${password.trim()}`);
       if (res.status === 401) throw new Error("Invalid booking ID or password");
       if (res.status === 404) throw new Error("Booking not found");
       if (!res.ok) throw new Error("Something went wrong");
       const data = await res.json();
-      if (data.status === "PAID") {
-        redirectSuccess(data.bookingRef);
-        return;
-      }
-      bookingRefForPoll.current = data.bookingRef;
-      passwordRef.current = password.trim();
-      modeRef.current = "url-login";
+      if (data.status === "PAID") { redirectSuccess(data.bookingRef); return; }
+      bookingRefForPoll.current = data.bookingRef; passwordRef.current = password.trim(); modeRef.current = "url-login";
       persistBooking(data, { mode: "url-login", ref: bookingRef.trim(), password: password.trim() });
       setBooking(data);
-    } catch (err: any) {
-      setLoginError(err.message ?? "Unable to fetch booking");
-    } finally {
-      setLoginLoading(false);
-    }
+    } catch (err: any) { setLoginError(err.message ?? "Unable to fetch booking"); }
+    finally { setLoginLoading(false); }
   };
 
-  /* ── Phone-based check submit ── */
   const handleCheckBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimRef = checkRef.trim();
     const trimPhone = checkPhone.replace(/\D/g, "").slice(-10);
-
-    if (!trimRef || !trimPhone) {
-      setCheckError("Please fill in both fields");
-      return;
-    }
-    if (!/^\d{10}$/.test(trimPhone)) {
-      setCheckError("Enter a valid 10-digit phone number");
-      return;
-    }
-
-    setCheckLoading(true);
-    setCheckError(null);
-
+    if (!trimRef || !trimPhone) { setCheckError("Please fill in both fields"); return; }
+    if (!/^\d{10}$/.test(trimPhone)) { setCheckError("Enter a valid 10-digit phone number"); return; }
+    setCheckLoading(true); setCheckError(null);
     try {
-      const res = await fetch(
-        `/api/bookings/status?ref=${trimRef}&phone=${trimPhone}`
-      );
+      const res = await fetch(`/api/bookings/status?ref=${trimRef}&phone=${trimPhone}`);
       if (!res.ok) throw new Error("No booking found with these details");
       const data = await res.json();
       if (!data?.bookingRef) throw new Error("No booking found");
-
-      if (data.status === "PAID") {
-        redirectSuccess(data.bookingRef);
-        return;
-      }
-      bookingRefForPoll.current = data.bookingRef;
-      checkPhoneRef.current = trimPhone;
-      modeRef.current = "check";
+      if (data.status === "PAID") { redirectSuccess(data.bookingRef); return; }
+      bookingRefForPoll.current = data.bookingRef; checkPhoneRef.current = trimPhone; modeRef.current = "check";
       persistBooking(data, { mode: "check", ref: trimRef, phone: trimPhone });
       setBooking(data);
-    } catch (err: any) {
-      setCheckError(err.message ?? "Could not find booking");
-    } finally {
-      setCheckLoading(false);
-    }
+    } catch (err: any) { setCheckError(err.message ?? "Could not find booking"); }
+    finally { setCheckLoading(false); }
   };
 
-  /* ── Polling: re-fetch every 10s until PAID ──
-     Uses refs so the closure always has fresh credentials,
-     even after a page reload that restored from sessionStorage.
-  ── */
   useEffect(() => {
-    if (!booking) return;
-    if (booking.status === "PAID") return;
-
+    if (!booking || booking.status === "PAID") return;
     const poll = async () => {
       try {
         let res: Response;
         if (modeRef.current === "check") {
-          const phone = checkPhoneRef.current;
-          res = await fetch(`/api/bookings/status?ref=${bookingRefForPoll.current}&phone=${phone}`);
+          res = await fetch(`/api/bookings/status?ref=${bookingRefForPoll.current}&phone=${checkPhoneRef.current}`);
         } else {
           res = await fetch(`/api/bookings/by-ref?ref=${bookingRefForPoll.current}&password=${passwordRef.current}`);
         }
         if (!res.ok) return;
         const data = await res.json();
         if (!data?.bookingRef) return;
-
-        if (data.status === "PAID") {
-          redirectSuccess(data.bookingRef);
-          return;
-        }
-
-        // Update state + re-persist fresh data
+        if (data.status === "PAID") { redirectSuccess(data.bookingRef); return; }
         setBooking(data);
-        const creds =
-          modeRef.current === "check"
-            ? { mode: "check" as const, ref: bookingRefForPoll.current, phone: checkPhoneRef.current }
-            : { mode: "url-login" as const, ref: bookingRefForPoll.current, password: passwordRef.current };
+        const creds = modeRef.current === "check"
+          ? { mode: "check" as const, ref: bookingRefForPoll.current, phone: checkPhoneRef.current }
+          : { mode: "url-login" as const, ref: bookingRefForPoll.current, password: passwordRef.current };
         persistBooking(data, creds);
-      } catch {
-        // silently ignore poll errors
-      }
+      } catch { }
     };
-
     const interval = setInterval(poll, POLL_INTERVAL);
     return () => clearInterval(interval);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booking?.bookingRef, booking?.status]);
 
-  /* ── Payment ── */
   const handlePayment = async () => {
     if (!booking) return;
     setPaying(true);
@@ -1017,54 +925,33 @@ function PaymentContent() {
       const res = await fetch("/api/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookingRef: booking.bookingRef,
-          amount: booking.advanceAmount,
-        }),
+        body: JSON.stringify({ bookingRef: booking.bookingRef, amount: booking.advanceAmount }),
       });
       if (!res.ok) throw new Error("Order creation failed");
       const order = await res.json();
-
       const razorpay = new window.Razorpay({
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: "INR",
-        name: "The Pushpa",
-        description: "Advance Payment",
+        amount: order.amount, currency: "INR",
+        name: "The Pushpa", description: "Advance Payment",
         order_id: order.id,
         prefill: { name: booking.name, contact: booking.phone },
         theme: { color: "#22c55e" },
         handler: async (response: any) => {
           try {
             await fetch("/api/bookings/mark-paid", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                bookingRef: booking.bookingRef,
-                paymentId: response.razorpay_payment_id,
-              }),
+              method: "POST", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ bookingRef: booking.bookingRef, paymentId: response.razorpay_payment_id }),
             });
-          } catch (err) {
-            console.error("mark-paid failed:", err);
-          } finally {
-            redirectSuccess(booking.bookingRef);
-          }
+          } catch (err) { console.error("mark-paid failed:", err); }
+          finally { redirectSuccess(booking.bookingRef); }
         },
         modal: { ondismiss: () => setPaying(false) },
       });
-      razorpay.on("payment.failed", (r: any) => {
-        alert(`Payment failed: ${r.error.description}`);
-        setPaying(false);
-      });
+      razorpay.on("payment.failed", (r: any) => { alert(`Payment failed: ${r.error.description}`); setPaying(false); });
       razorpay.open();
-    } catch (err) {
-      console.error(err);
-      alert("Could not initiate payment. Please try again.");
-      setPaying(false);
-    }
+    } catch (err) { console.error(err); alert("Could not initiate payment. Please try again."); setPaying(false); }
   };
 
-  /* ── Loading ── */
   if (fetching)
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
@@ -1075,7 +962,6 @@ function PaymentContent() {
       </div>
     );
 
-  /* ── Error ── */
   if (pageError)
     return (
       <div className="min-h-screen flex items-center justify-center bg-white p-4">
@@ -1088,17 +974,13 @@ function PaymentContent() {
           </div>
           <h2 className="text-lg font-black text-black mb-1">Link Unavailable</h2>
           <p className="text-sm text-gray-400 mb-5">{pageError}</p>
-          <button
-            onClick={() => router.replace("/")}
-            className="px-7 py-3 rounded-xl bg-black text-white text-sm font-bold tracking-wide hover:bg-gray-900 transition-all"
-          >
+          <button onClick={() => router.replace("/")} className="px-7 py-3 rounded-xl bg-black text-white text-sm font-bold tracking-wide hover:bg-gray-900 transition-all">
             Go Home
           </button>
         </div>
       </div>
     );
 
-  /* ── Determine panels ── */
   const showPaymentPanel = booking && booking.status === "APPROVED" && booking.advanceAmount > 0;
   const showStatusPanel = booking && !showPaymentPanel;
 
@@ -1106,36 +988,47 @@ function PaymentContent() {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
 
-      <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-        {/* LEFT */}
-        <div className="min-h-[60vh] lg:min-h-screen">
+      {/*
+        ── LAYOUT STRATEGY ──
+        Desktop (lg+): side-by-side grid, unchanged from original
+        Mobile: single column
+          • No booking loaded → only LEFT form shown, RIGHT hidden
+          • Booking loaded    → compact LEFT bar on top, RIGHT panel below (full width)
+      */}
+      <div className="md:min-h-screen md:grid md:grid-cols-2">
+
+        {/* ── LEFT ── */}
+        <div className={`
+          lg:min-h-screen
+          ${booking
+            ? "block"           /* always show when booking loaded (compact bar on mobile) */
+            : "min-h-screen"    /* full screen on mobile when no booking */
+          }
+        `}>
           {booking ? (
             <LeftGreeting booking={booking} />
           ) : mode === "check" ? (
             <LeftCheckBooking
-              loading={checkLoading}
-              error={checkError}
-              bookingRef={checkRef}
-              phone={checkPhone}
-              setBookingRef={setCheckRef}
-              setPhone={setCheckPhone}
+              loading={checkLoading} error={checkError}
+              bookingRef={checkRef} phone={checkPhone}
+              setBookingRef={setCheckRef} setPhone={setCheckPhone}
               onSubmit={handleCheckBooking}
             />
           ) : (
             <LeftLogin
-              loading={loginLoading}
-              error={loginError}
-              bookingRef={bookingRef}
-              password={password}
-              setBookingRef={setBookingRef}
-              setPassword={setPassword}
+              loading={loginLoading} error={loginError}
+              bookingRef={bookingRef} password={password}
+              setBookingRef={setBookingRef} setPassword={setPassword}
               onSubmit={handleLogin}
             />
           )}
         </div>
 
-        {/* RIGHT */}
-        <div className="min-h-[60vh] lg:min-h-screen">
+        {/* ── RIGHT ── */}
+        <div className={`
+          lg:min-h-screen
+          ${!booking ? "hidden lg:block" : "block"}
+        `}>
           {showPaymentPanel ? (
             <RightPanel booking={booking} onPay={handlePayment} paying={paying} />
           ) : showStatusPanel ? (
@@ -1144,6 +1037,7 @@ function PaymentContent() {
             <RightPlaceholder />
           )}
         </div>
+
       </div>
     </>
   );
